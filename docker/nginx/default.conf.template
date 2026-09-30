@@ -1,0 +1,43 @@
+server {
+    listen 80;
+    server_name ${SERVER_NAME};
+    root /var/www/public;
+    index index.php index.html;
+
+    client_max_body_size 256M;
+    keepalive_timeout 3600s;
+    client_header_timeout 3600s;
+    client_body_timeout 3600s;
+    send_timeout 3600s;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml text/plain text/xml;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+        gzip_static on;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass ${PHP_FPM_HOST}:${PHP_FPM_PORT};
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_read_timeout 3600s;
+        fastcgi_send_timeout 3600s;
+    }
+
+    location ~ /\.(?!well-known) { deny all; }
+}

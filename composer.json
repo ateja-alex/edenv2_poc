@@ -15,7 +15,6 @@
         "danielebarbaro/laravel-vat-eu-validator": "^2.0",
         "doctrine/dbal": "^3.0",
         "spatie/laravel-ignition": "^2.0",
-        "docusign/esign-client": "^5.7",
         "google/apiclient": "^2.10",
         "grofgraf/laravel-pdf-merger": "^1.0",
         "intervention/validation": "^4.6",
