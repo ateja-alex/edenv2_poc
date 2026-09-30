@@ -149,52 +149,6 @@ class Maintenance_controller extends Controller {
 
     }
 
-    /**
-     *
-     * Permet de lancer les migrations lors de l'installation de la projet
-     *
-     */
-    public function migrations_installation(){
-
-		define("migration_en_cours", true);
-		ini_set('memory_limit', -1);
-		set_time_limit(0);
-
-        $les_fonctions = [
-            'mise_a_jour_composer',
-            'lancement_script_avant',
-            'generer_tables_champs_libres',
-            'maj_vue_sql',
-            'maj_rapports_libres',
-            'generer_listes_libres',
-            'maj_formulaires_libres',
-            'maj_sous_formulaires',
-			'maj_version_eden',
-          	'maj_traductions',
-            'maj_crons',
-            'maj_utilisateurs_easydev',
-            'generer_licences',
-			'lancement_script_apres'
-        ];
-
-		try {
-			foreach($les_fonctions as $la_fonction){
-
-				Cache_management::vider_tout();
-
-				Maintenance_management::$la_fonction();
-			}
-
-			Cache_management::vider_tout();
-		}
-		catch(\Exception | \Throwable $erreur){
-			return response()->json(['success' => false, 'erreur' => $erreur->getMessage() ?: class_basename($erreur), 'ligne_erreur' => $erreur->getLine(), 'fichier_erreur' => $erreur->getFile()]); 
-		}
-
-		return response()->json(['success' => true]);
-        
-    }
-
 	/**
 	 *
 	 * Défini toutes les colonnes de toutes les tables en nullable

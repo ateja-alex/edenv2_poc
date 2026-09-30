@@ -2,8 +2,6 @@
 
 Route::name('maintenance.')->prefix('eden/maintenance')->namespace('Eden\Controllers')->group(function() {
 
-    Route::get('migrations_installation', 'Maintenance_controller@migrations_installation')->name('migrations_installation');
-
     Route::middleware(['eden_middleware', 'editeur'])->group(function () {
 
         Route::get('', 'Maintenance_controller@index')->name('index');

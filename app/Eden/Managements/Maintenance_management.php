@@ -41,6 +41,56 @@ use App\Eden\Exceptions\Eden_exception;
 class Maintenance_management {
 
     /**
+     * Étapes de la mise à jour de la structure, à chaque déploiement, dans l'ordre.
+     * Idempotentes : seules les migrations non appliquées sont jouées.
+     * Base existante requise : une base vide n'est pas prise en charge (partir d'un dump).
+     * Pas de mise_a_jour_composer : les dépendances sont installées au build de l'image.
+     */
+    public const ETAPES_MIGRATIONS = [
+        'lancement_script_avant',
+        'generer_tables_champs_libres',
+        'maj_vue_sql',
+        'maj_rapports_libres',
+        'generer_listes_libres',
+        'maj_formulaires_libres',
+        'maj_sous_formulaires',
+        'maj_version_eden',
+        'maj_traductions',
+        'maj_crons',
+        'maj_utilisateurs_easydev',
+        'generer_licences',
+        'lancement_script_apres',
+    ];
+
+    /**
+     * Lance toutes les étapes de migration (commande eden:migrate).
+     * Le cache est vidé une seule fois, à la fin ; une exception interrompt la suite.
+     *
+     * @param callable|null $sur_etape appelée avec le nom de l'étape avant son lancement
+     */
+    public static function lancer_migrations(?callable $sur_etape = null) {
+
+        if(!defined('migration_en_cours'))
+            define('migration_en_cours', true);
+
+        ini_set('memory_limit', -1);
+        set_time_limit(0);
+
+        foreach(self::ETAPES_MIGRATIONS as $etape) {
+
+            if($sur_etape !== null)
+                $sur_etape($etape);
+
+            self::$etape();
+        }
+
+        Cache_management::vider_tout();
+
+        // les workers rechargent le paramétrage généré
+        Artisan::call('queue:restart');
+    }
+
+    /**
      *
      * Mise à jour des champs libres (migrations / seeds)
      *
@@ -3310,6 +3360,11 @@ class Maintenance_management {
     }
 
     public static function lancement_script_avant() {
+        // Base vide (installation) : pas de données à reprendre, et eden_parametres,
+        // qui trace les scripts déjà joués, n'est créée qu'à l'étape suivante
+        if(!Schema::hasTable('eden_parametres'))
+            return;
+
         Script_management::lancer_scripts('Avant_migrations');
     }
 

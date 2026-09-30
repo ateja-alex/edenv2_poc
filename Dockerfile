@@ -52,7 +52,9 @@ COPY . .
 
 RUN set -eux; \
     chmod +x /usr/local/bin/entrypoint.sh; \
-    composer dump-autoload --no-dev --optimize --classmap-authoritative --no-scripts; \
+    # --optimize sans --classmap-authoritative : les scripts de migration propres au
+    # client (App\\Migrations\\Scripts, sur le volume partage) se chargent en PSR-4
+    composer dump-autoload --no-dev --optimize --no-scripts; \
     mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache app/Migrations; \
     php artisan package:discover --ansi; \
     # Lien relatif, cree au build : il est copie tel quel dans l'image web

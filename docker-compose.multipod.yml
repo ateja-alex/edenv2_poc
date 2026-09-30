@@ -28,7 +28,10 @@ x-app: &app
   volumes: &shared
     - storage_app:/var/www/storage/app
     - migrations:/var/www/app/Migrations
-  depends_on: [db, redis]
+  depends_on:
+    db: { condition: service_healthy }
+    redis: { condition: service_started }
+    migrate: { condition: service_completed_successfully }
 
 x-web: &web
   image: eden-web:dev
@@ -48,6 +51,16 @@ services:
     <<: *web
     environment: { PHP_FPM_HOST: app2 }
     depends_on: [app2]
+
+  # Migrations EDEN : une seule fois, avant les pods (= Job Kubernetes)
+  migrate:
+    <<: *app
+    user: www-data
+    command: ["php", "artisan", "eden:migrate"]
+    restart: "no"
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_started }
 
   worker:
     <<: *app
@@ -81,6 +94,10 @@ services:
       MARIADB_RANDOM_ROOT_PASSWORD: "1"
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 30
   redis:
     image: redis:7-alpine
 
