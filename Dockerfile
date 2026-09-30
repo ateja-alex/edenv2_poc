@@ -16,6 +16,7 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         git unzip zip \
+        ghostscript \
         libpng-dev libjpeg-dev libwebp-dev libfreetype6-dev \
         libonig-dev libxml2-dev libzip-dev libicu-dev libgmp-dev; \
     docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype; \
@@ -39,9 +40,10 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 # ---------------------------------------------------------------- app
 FROM php-base AS app
 WORKDIR /var/www
-ENV COMPOSER_ALLOW_SUPERUSER=1 REDIS_CLIENT=phpredis
+ENV COMPOSER_ALLOW_SUPERUSER=1 REDIS_CLIENT=phpredis LOG_CHANNEL=stderr
 
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/zz-eden.ini
+COPY docker/php/opcache-blacklist.txt /usr/local/etc/php/opcache-blacklist.txt
 COPY docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/zz-eden.conf
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 
@@ -51,9 +53,11 @@ COPY . .
 RUN set -eux; \
     chmod +x /usr/local/bin/entrypoint.sh; \
     composer dump-autoload --no-dev --optimize --classmap-authoritative --no-scripts; \
-    mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache; \
+    mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache app/Migrations; \
     php artisan package:discover --ansi; \
-    chown -R www-data:www-data storage bootstrap/cache
+    # Lien relatif, cree au build : il est copie tel quel dans l'image web
+    ln -sfn ../storage/app/public public/storage; \
+    chown -R www-data:www-data storage bootstrap/cache app/Migrations
 
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["php-fpm"]

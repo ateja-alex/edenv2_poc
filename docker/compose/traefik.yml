@@ -1,0 +1,16 @@
+# Configuration dynamique Traefik du compose multipod : simule l'ingress du
+# cluster (TLS termine ici, certificat auto-signe par defaut de Traefik) et
+# repartit les requetes entre les 2 "pods" a chaque requete.
+http:
+  routers:
+    eden:
+      rule: "PathPrefix(`/`)"
+      entryPoints: [websecure]
+      service: eden
+      tls: {}
+  services:
+    eden:
+      loadBalancer:
+        servers:
+          - url: "http://web1:80"
+          - url: "http://web2:80"

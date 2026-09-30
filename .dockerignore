@@ -20,3 +20,4 @@ tests
 *.md
 Dockerfile
 docker-compose.build.yml
+docker-compose.multipod.yml

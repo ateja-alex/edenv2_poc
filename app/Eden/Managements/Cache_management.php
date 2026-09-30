@@ -479,9 +479,6 @@ class Cache_management {
      *
      */
     public static function genere_fichiers_composants() {
-        if((empty($_SERVER['HTTPS']) ||  $_SERVER['HTTPS'] == 'off') && env('APP_ENV') != 'local'){
-            dd('Pour la génération des composants, le HTTPS est obligatoire');
-        }
 
         Cache_management::genere_valeurs_champs_listes();
         Cache_management::genere_fichier_css();
@@ -493,9 +490,6 @@ class Cache_management {
     }
 
     public static function genere_fichiers_composants_modules() {
-        if((empty($_SERVER['HTTPS']) ||  $_SERVER['HTTPS'] == 'off') && env('APP_ENV') != 'local'){
-            dd('Pour la génération des composants, le HTTPS est obligatoire');
-        }
 
         Cache_management::genere_valeurs_champs_listes();
         Cache_management::genere_fichier_css();
@@ -509,9 +503,6 @@ class Cache_management {
 
         self::vider();
 
-        if((empty($_SERVER['HTTPS']) ||  $_SERVER['HTTPS'] == 'off') && env('APP_ENV') != 'local'){
-            dd('Pour la génération des composants, le HTTPS est obligatoire');
-        }
 
         Cache_management::generation_liste_libre();
 

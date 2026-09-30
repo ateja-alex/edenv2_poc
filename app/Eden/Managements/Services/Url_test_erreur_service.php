@@ -52,13 +52,8 @@ class Url_test_erreur_service {
 				$urls[] = 'eden/fiche/'.$fiche_type_element.'/'.$id_element->id;
 		}
 
-        $a_supprimer = '';
-        if(empty($_SERVER['HTTPS']))
-            $a_supprimer = 'http://';
-        else
-            $a_supprimer = 'https://';
-
-        $a_supprimer .= $_SERVER['SERVER_NAME'].'/';
+        // Schema et hote vus par le client (derriere l'ingress : X-Forwarded-*)
+        $a_supprimer = request()->getSchemeAndHttpHost().'/';
 
 		// on ajoute les documents de gestion commerciale
 		foreach(\App\Eden\Variables::$documents_gescom as $type_element) {

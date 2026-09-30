@@ -1,0 +1,2 @@
+/var/www/storage/app/
+/var/www/app/Migrations/

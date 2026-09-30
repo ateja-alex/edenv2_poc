@@ -1,0 +1,90 @@
+# Simulation locale de 2 pods EDEN pour un meme client (POC Kubernetes) :
+# chaque "pod" = web (nginx) + app (php-fpm) ; volumes partages = RWX.
+# Verifie : sessions Redis, parametrage visible sur les 2 pods, /storage servi,
+# HTTPS derriere un proxy (Traefik, TLS termine en amont, HTTP redirige).
+#   docker compose -f docker-compose.multipod.yml up --build
+#   https://localhost:8443 (certificat auto-signe) ; http://localhost:8080 redirige
+#   docker compose -f docker-compose.multipod.yml logs -f web1 web2
+name: eden-poc-multipod
+
+x-app: &app
+  image: eden-app:dev
+  build: { context: ., target: app }
+  environment: &env
+    APP_ENV: production
+    APP_DEBUG: "false"
+    APP_URL: https://localhost:8443
+    APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+    TRUSTED_PROXIES: "*"
+    DB_HOST: db
+    DB_DATABASE: eden
+    DB_USERNAME: eden
+    DB_PASSWORD: eden
+    REDIS_HOST: redis
+    REDIS_PREFIX: poc_client_
+    CACHE_DRIVER: redis
+    SESSION_DRIVER: redis
+    QUEUE_CONNECTION: database
+  volumes: &shared
+    - storage_app:/var/www/storage/app
+    - migrations:/var/www/app/Migrations
+  depends_on: [db, redis]
+
+x-web: &web
+  image: eden-web:dev
+  build: { context: ., target: web }
+  volumes:
+    # nginx sert /storage (lien public/storage -> storage/app/public)
+    - storage_app:/var/www/storage/app:ro
+
+services:
+  app1: *app
+  app2: *app
+  web1:
+    <<: *web
+    environment: { PHP_FPM_HOST: app1 }
+    depends_on: [app1]
+  web2:
+    <<: *web
+    environment: { PHP_FPM_HOST: app2 }
+    depends_on: [app2]
+
+  worker:
+    <<: *app
+    user: www-data
+    restart: unless-stopped   # redemarre tant que MariaDB n'est pas prete
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+
+  traefik:
+    image: traefik:v3.5
+    command:
+      - --entrypoints.websecure.address=:443
+      # HTTP -> HTTPS, comme sur l'ingress cible (port local de l'HTTPS)
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=:${WEB_PORT:-8443}
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      - --providers.file.filename=/etc/traefik/dynamic.yml
+      - --log.level=INFO
+      - --accesslog=true
+    ports: ["${WEB_PORT:-8443}:443", "${HTTP_PORT:-8080}:80"]
+    volumes:
+      - ./docker/compose/traefik.yml:/etc/traefik/dynamic.yml:ro
+    depends_on: [web1, web2]
+
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: eden
+      MARIADB_USER: eden
+      MARIADB_PASSWORD: eden
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - db:/var/lib/mysql
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  storage_app:
+  migrations:
+  db:

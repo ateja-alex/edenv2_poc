@@ -15,6 +15,24 @@ class TrustProxies extends Middleware
     protected $proxies;
 
     /**
+     * Derriere l'ingress Kubernetes (Traefik), le TLS est termine en amont :
+     * sans proxy de confiance, X-Forwarded-Proto est ignore et
+     * request()->secure() renvoie false.
+     * TRUSTED_PROXIES : "*" ou liste de CIDR separes par des virgules
+     * (ex. "10.2.0.0/16"). Vide = aucun proxy (comportement historique).
+     */
+    public function __construct()
+    {
+        $proxies = trim((string) env('TRUSTED_PROXIES', ''));
+
+        if ($proxies === '*') {
+            $this->proxies = '*';
+        } elseif ($proxies !== '') {
+            $this->proxies = array_map('trim', explode(',', $proxies));
+        }
+    }
+
+    /**
      * The headers that should be used to detect proxies.
      *
      * @var int
