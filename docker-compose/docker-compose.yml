@@ -1,0 +1,44 @@
+name: ${COMPOSE_PROJECT:-eden-dev}
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    # container_name supprimé — Compose nomme automatiquement <projet>-app-1
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ../:/var/www
+    # ... (le reste de app inchangé) ...
+    depends_on:
+      - redis
+    networks:
+      - eden-network
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    networks:
+      - eden-network
+  web:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    # container_name supprimé
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-80}:80"
+    volumes:
+      - ../:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - eden-network
+networks:
+  eden-network:
+    driver: bridge
+volumes:
+  dbdata:
+  redisdata:

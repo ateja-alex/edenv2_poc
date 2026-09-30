@@ -1,0 +1,1 @@
+@include('eden::fiches.include.gestion_images')

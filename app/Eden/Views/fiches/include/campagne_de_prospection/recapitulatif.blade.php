@@ -1,0 +1,1 @@
+<recapitulatif_campagne_prospection :campagne_id="element_id"></recapitulatif_campagne_prospection>

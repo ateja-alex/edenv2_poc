@@ -1,0 +1,1 @@
+<historique ref="historique" :type_element="$root.type_element" :element_id="$root.element_id"></historique>

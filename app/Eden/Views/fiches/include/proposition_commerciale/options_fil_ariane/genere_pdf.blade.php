@@ -1,0 +1,1 @@
+<a :href="'{{ URL::to('eden/fiche') }}/proposition_commerciale/'+element_id+'/genere_pdf'" target="_blank" class="css_action_icon primaire fa fa-fw fa-file-pdf" title="{{traduction('module_sur_fiche.fiche.proposition_commerciale.generer_pdf')}}" data-toggle="tooltip"></a>

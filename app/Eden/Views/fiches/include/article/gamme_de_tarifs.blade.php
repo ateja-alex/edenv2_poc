@@ -1,0 +1,1 @@
+<gamme-de-tarifs :article_id="article.id"></gamme-de-tarifs>

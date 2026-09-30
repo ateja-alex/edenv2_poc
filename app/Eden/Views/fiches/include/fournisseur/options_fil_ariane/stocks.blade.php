@@ -1,0 +1,1 @@
+<a :href="'{{ route('stocks.afficher') }}?fournisseur_id='+fournisseur.id" class="css_action_icon primaire fa fa-fw fa-boxes" role="submit" title="{{ traduction('module_sur_fiche.fiche.fournisseur.afficher_les_stocks') }}" data-toggle="tooltip" target="_blank"></a>

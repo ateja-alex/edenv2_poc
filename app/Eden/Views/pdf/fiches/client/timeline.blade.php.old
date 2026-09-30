@@ -1,0 +1,21 @@
+<h3>La timeline</h3>
+
+@if($donnees->isNotEmpty())
+
+<table class="css_tableau_donnees_fiche_pdf">
+		<tbody>
+			<tr>
+				<td><b>Test</b></td>
+			</tr>
+			@foreach($donnees as $donnee)
+				<tr>
+					<td>{{ $donnee->id }}</td>
+
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
+
+@else
+	<h4>Pas de données pour les timeline</h4>
+@endif

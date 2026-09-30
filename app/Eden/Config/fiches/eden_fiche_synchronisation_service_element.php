@@ -1,0 +1,87 @@
+<?php
+
+return [
+
+    'modules' => [
+        [
+            'module' => 'formulaire_edition_element',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => '1',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 0',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_6',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 2',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_1',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 0',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_2',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 1',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_3',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 2',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_4',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 3',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_champs_5',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => 'synchronisation_service_element.type_synchronisation == 3',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_element_historique',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => '1',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+        [
+            'module' => 'fiche_synchronisation_service_element_synchronisation_service_element_erreur',
+            'afficher_par_defaut' => true,
+            'cacher_bloc_v_if' => '1',
+            'taille_avant' => 0,
+            'taille' => 12,
+            'taille_apres' => 0,
+        ],
+    ],
+];

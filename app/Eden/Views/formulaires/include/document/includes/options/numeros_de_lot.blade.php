@@ -1,0 +1,1 @@
+<span class="mb-1 css_btn_action_article_document" href="javascript:;" @click="ajout_lot_document(article_sur_document)" :title="traduction('interface.document.tableau_des_articles.ajouter_lot')"><i class="fa fa-folder-plus"></i></span>

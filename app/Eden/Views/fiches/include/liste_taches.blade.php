@@ -1,0 +1,1 @@
+<taches :afficher_par_defaut="{{ $afficher_par_defaut  == '1' ? 'true' : 'false' }}" :type_element="type_element" :element_id="element_id"></taches>

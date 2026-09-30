@@ -1,0 +1,1 @@
+<a :href="'eden/document/devis_vente/avec_element/client_id/'+contact.client_id" class="css_action_icon primaire fa fa-fw fa-file-invoice" title="{{ traduction('module_sur_fiche.fiche.contact.nouveau_devis') }}" data-toggle="tooltip"></a>

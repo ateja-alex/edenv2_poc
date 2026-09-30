@@ -1,0 +1,1 @@
+@include('eden::listes.includes.actions.js.js_supprimer', ['action' => 'supprimer_documents'])

@@ -1,0 +1,1 @@
+<span class="css_btn_action_article_document" @click="supprimer_article_du_document(article_sur_document, article_sur_document.index_article)" :title="traduction('interface.document.tableau_des_articles.supprimer_ligne')"><i class="far fa-trash-alt"></i></span>

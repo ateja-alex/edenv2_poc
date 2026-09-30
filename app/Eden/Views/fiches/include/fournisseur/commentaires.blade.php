@@ -1,0 +1,1 @@
+<section-commentaires :type_element_parent="'fournisseur'" :champ_parent="'fournisseur_id'" :parent_id="{{$management_element->modele->id}}" ></section-commentaires>

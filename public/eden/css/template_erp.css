@@ -1,0 +1,749 @@
+a.nav-link {
+
+	color: var(--couleur_texte_menus)!important;
+}
+
+.nav-link-collapse:after{
+
+	color: var(--couleur_texte_menus)!important;
+}
+
+#mainNav.navbar-dark .navbar-collapse .navbar-sidenav li.active a {
+	color: var(--couleur_texte_menus)!important;
+}
+
+.modal-xl {
+	max-width: 1000px;
+}
+
+::placeholder {
+	color: #b8b8b8;
+}
+
+body {
+
+	color: #363636;
+}
+
+#recherche_globale_sur_appli {
+
+	background: transparent;
+	border: 0px;
+	border-bottom: 1px solid white;
+	color: white;
+	outline: none;
+}
+
+#recherche_globale_sur_appli::placeholder {
+
+	color: white;
+}
+
+.table.css_fin_padding > tbody > tr > td {
+
+	padding: 5px;
+}
+
+table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable th:last-child, table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
+
+	border-right-width: 1px;
+}
+
+#mainNav.fixed-top .sidenav-toggler {
+
+	margin-top: calc(100vh - 46px);
+}
+
+/**
+Gestion des checkbox
+*/
+.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbox label::before {
+
+	content: "";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	width: 17px;
+	height: 17px;
+	left: 0;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	background-color: #fff;
+	-webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+	-o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+	transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+	background-color: white;
+	border-color: #4e9de6;
+}
+
+.checkbox-primary input[type="checkbox"]:checked + label::after, .checkbox-primary input[type="radio"]:checked + label::after {
+
+	color: #ffffff;
+
+}
+
+.checkbox input[type="checkbox"]:checked + label::after, .checkbox input[type="radio"]:checked + label::after,
+.checkbox label:has(input[type="checkbox"]:checked)::before, .checkbox label:has(input[type="radio"]:checked)::before {
+
+	font-family: "FontAwesome";
+	content: "\f00c";
+    background-color: var(--success);
+    color: white;
+}
+
+.checkbox label::after {
+	display: inline-block;
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 0;
+	top: 0;
+	margin-left: 15px;
+	padding-left: 3px;
+	padding-top: 1px;
+	font-size: calc(var(--taille_police) *  11px);
+	color: #555555;
+}
+
+.checkbox input[type="checkbox"], .checkbox input[type="radio"] {
+
+	opacity: 0;
+	z-index: 1;
+}
+
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+
+	position: absolute;
+	margin-left: -20px;
+}
+
+/***** LOADER STYLES *****/
+
+#loading {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.9);
+	padding-top: 45vh;
+	z-index: 1060;
+	/*display: none;*/
+	top: 0;
+	left: 0;
+}
+
+#loading img {
+	height: 80px;
+}
+
+
+
+.css_liste_ligne_selectionnee {
+
+	background: #eee;
+}
+
+.css_fiche_suppression_image_conteneur {
+	
+	border: 1px solid #eee;
+	margin: 0px -10px;
+	height: 265px;
+	background: white;
+	box-shadow: 1px 1px 5px #c3c3c3;
+}
+
+.css_fiche_suppression_image_conteneur:hover .css_fiche_suppression_image,
+.css_fiche_suppression_image_conteneur:hover .css_fiche_ouverture_piece_jointe {
+	
+	display: block;
+}
+
+.css_fiche_suppression_image {
+	position: absolute;
+	width: 90%;
+	top: 60px;
+	display: none;
+	background: rgba(189, 189, 189, 0.7);
+	left: 5%;
+	padding: 5px;
+	color: #212121;
+}
+
+.css_fiche_ouverture_piece_jointe {
+	position: absolute;
+	width: 90%;
+	top: 95px;
+	display: none;
+	background: rgba(189, 189, 189, 0.7);
+	left: 5%;
+	padding: 5px;
+	color: #212121;
+}
+
+.css_fiche_suppression_image:hover {
+	
+	background: rgba(220, 220, 220, 0.7);
+}
+
+.css_type_document {
+
+	background: #f1f1f1;
+	font-size: calc(var(--taille_police) *  21px);
+	padding: 0px 14px !important;
+	color: #777472;
+	width: 49px;
+	text-align: center;
+}
+
+
+
+/* test avec les headers de bloc gris */
+.card {
+	margin-left: 1px;
+	box-shadow: 1px 1px 5px #aaa;
+	border-radius: 0px;
+	background: var(--card_background);
+}
+.card-header {
+	/* background: #EFEFEF; */
+	background: var(--card_header);
+	border-radius: 0px !important;
+}
+
+.card-header h4 {
+
+	color: #737373;
+	line-height: calc(var(--taille_police) *  23px);
+}
+.css_indicateur {
+	
+	background: #dcdcdc;
+	line-height: 14px;
+}
+/* fin du test avec les headers de bloc gris */
+
+.table.css_table_fin_padding > thead > tr > th, .table.css_table_fin_padding > tbody > tr > td {
+	
+	padding: 5px;
+}
+.table.css_table_fin_padding > thead > tr > th {
+	
+	font-weight: calc(var(--poids_police) + 700);
+}
+
+#header_ajouter_popup_lien {
+	
+	color: white;
+}
+
+#header_ajouter_popup {
+	
+	position: absolute;
+	right: 10px;
+	background: white;
+	padding: 10px;
+	border: 1px solid #aaa;
+	top: 61px;
+	display: none;
+}
+
+.css_parametrage_formulaire .css_parametrage_formulaire_champ {
+	
+	background: #eee;
+}
+
+.css_parametrage_formulaire_champ:hover  {
+	
+	background: #eee;
+}
+
+.css_parametrage_formulaire_champ > div  {
+	
+	/* display: none; */
+}
+
+.css_parametrage_formulaire_champ:hover > div, .css_parametrage_formulaire_champ > div:hover {
+	
+	/* display: block; */
+	/*
+	border: 1px dashed blue;
+	*/
+	border-top: 1px solid black;
+}
+
+.css_timeline_icone {
+	
+	background: #eee;
+	padding: 9px;
+	float: right;
+	margin-top: -36px;
+	margin-right: -16px;
+	border: 1px solid #d4d4d4;
+}
+
+.timeline-item .css_timeline_date {
+	
+	text-align: right;
+	width: 110px;
+	position: relative;
+	padding-top: 30px;
+	border-right: 1px solid #d4d4d4;
+}
+
+.timeline-item .css_timeline_details {
+	
+	border-bottom: 1px solid #d4d4d4;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+.timeline-item:last-of-type .css_timeline_details {
+	
+	border-bottom: 0px solid #d4d4d4;
+}
+
+.css_fiche_commentaire_commentaire {
+	
+	border-bottom: 1px solid #e8e8e8;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+.css_dropdown_sans_fleche_vers_le_bas::after {
+	
+	display: none !important;
+}
+
+.css_rapport_filtre_et_options {
+	
+	display: inline-block;
+	margin: 0px 5px;
+}
+
+.css_rapport_filtre_et_options .fa{
+
+	font-size: calc(var(--taille_police) *  25px);
+	cursor: pointer;
+	color: #4d4d4d;
+}
+
+.css_rapport_filtre_et_options .css_btn_recherche_liste .fa{
+
+	font-size: calc(var(--taille_police) *  15px);
+	cursor: pointer;
+	color: white;
+}
+
+.css_badge_sur_filtre_et_option {
+	
+	padding: 5px;
+	position: relative;
+	left: -11px;
+	top: 6px;
+	margin-right: -11px;
+}
+
+.css_actualisation_rapport_en_cours {
+	
+	text-align: center;
+	font-size: calc(var(--taille_police) *  15px);
+	color: #646464;
+}
+
+
+.css_actualisation_rapport_en_cours > img{
+
+	width: 65px;
+
+}
+
+.css_montant {
+	
+	text-align: right;
+	font-size: calc(var(--taille_police) *  16px);
+	/*font-family: 'Kameron', serif;*/
+	font-family: 'Lato', sans-serif;
+}
+
+.css_case_grisee {
+	
+	background: #f6f6f6;
+}
+
+.css_tableau_sous_titre {
+	
+	background: #f2f2f2;
+	padding-left: 5px;
+	color: #585858;
+}
+
+.css_tableau_titre {
+	
+	background: #eee;
+	font-weight: calc(var(--poids_police) + 700);
+	padding-left: 5px;
+}
+
+.css_bouton {
+	
+	padding: 5px;
+	border: 1px solid #d4d4d4;
+	margin: 5px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.css_bouton.active {
+	
+	/* background: #eee; */
+	/* color: white; */
+	border: 2px solid #cb1a1a;
+}
+
+.css_bouton:hover {
+	
+	background: #eee;
+}
+
+hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-top: 1px solid #dedede; 
+}
+
+.css_checkbox_eden {
+
+	cursor: pointer;
+}
+
+.css_checkbox_eden:hover {
+
+	background: #e6e6e6;
+}
+
+.css_checkbox_eden.active {
+
+	font-weight: calc(var(--poids_police) + 700);
+}
+
+.css_checkbox_on, .css_checkbox_off {
+	
+	display: inline-block;
+	width: 21px;
+	height: 17px;
+	position: relative;
+	top: 5px;
+	
+}
+
+.css_checkbox_on {
+	
+	background: url('../images/checkbox_on.png') no-repeat;
+	background-size: 16px;
+}
+
+.css_checkbox_off {
+	
+	background: url('../images/checkbox_off.png') no-repeat;
+	background-size: 16px;
+}
+
+.css_activite_statut_enregistree {
+	
+	background: #ffffff;
+}
+.css_activite_statut_en_cours {
+	
+	background: #f2f2f2;
+}
+.css_activite_statut_terminee {
+	
+	background: #b0d3ec;
+}
+.css_activite_statut_verifiee {
+	
+	background: #cbe894;
+}
+
+.css_bloc_aide, .css_bloc_erreur, .css_bloc_stop {
+	
+	padding: 10px;
+	border: 1px solid #d5d5d5;
+	line-height: 17px;
+}
+
+.css_bloc_aide img, .css_bloc_erreur img, .css_bloc_stop img {
+	
+	width: 35px;
+	float: left;
+	margin-right: 10px;
+}
+
+.css_fiche_bloc_filtres {
+	
+	background: #f8f8f8;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+.champ_obligatoire {
+	display: inline-block;
+	width: 14px;
+	height: 15px;
+	color: white;
+	position: absolute;
+	background: #d12222;
+	line-height: 23px;
+	font-size: calc(var(--taille_police) *  19px);
+	left: -15px;
+	padding-left: 3px;
+}
+
+.css_conteneur_progression_ticket {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	transition: all 200ms ease;
+	background: #fff;
+	height: 130px;
+	flex-grow: 1;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.14);
+	margin-bottom: 10px;
+}
+
+.css_conteneur_progression_ticket .steps-container{
+	padding: 40px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.css_conteneur_progression_ticket .steps-container .step.completed {
+	width: 18px;
+	height: 18px;
+	background: #5c6174;
+	border: 4px solid transparent;
+}
+
+.css_conteneur_progression_ticket .steps-container .step {
+	z-index: 1;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 200ms ease;
+	flex-grow: 0;
+	height: 15px;
+	width: 15px;
+	border: 4px solid #d2d3d8;
+	border-radius: 50%;
+}
+.css_conteneur_progression_ticket .steps-container .step.completed svg {
+	transition: all 200ms ease;
+	display: block;
+	height: 10px;
+	width: 10px;
+	fill: #fff;
+}
+
+.css_conteneur_progression_ticket .steps-container .step .label.completed {
+	color: #5c6174;
+}
+.css_conteneur_progression_ticket .steps-container .step .label {
+	position: absolute;
+	top: 30px;
+	filter: none;
+	z-index: 2000;
+	color: #d2d3d8;
+	transition: all 200ms ease;
+	width: 130px;
+	text-align: center;
+	font-weight: calc(var(--poids_police) + 700);
+}
+.css_conteneur_progression_ticket .steps-container .step .icon {
+	font-size: calc(var(--taille_police) *  40px);
+	position: absolute;
+	top: -60px;
+	color: #d2d3d8;
+	transition: color 200ms ease;
+}
+.css_conteneur_progression_ticket .steps-container .step .icon.completed {
+	color: #5c6174;
+}
+.css_conteneur_progression_ticket .steps-container .line {
+	transition: all 200ms ease;
+	height: 2px;
+	flex-grow: 1;
+	max-width: 120px;
+	background: #d2d3d8;
+}
+.css_conteneur_progression_ticket .steps-container .line.completed {
+	background: #5c6174;
+}
+.css_conteneur_progression_ticket .steps-container .step.completed {
+	width: 18px;
+	height: 18px;
+	background: #5c6174;
+	border: 4px solid transparent;
+}
+.css_conteneur_progression_ticket .steps-container .step {
+	z-index: 1;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 200ms ease;
+	flex-grow: 0;
+	height: 15px;
+	width: 15px;
+	border: 4px solid #d2d3d8;
+	border-radius: 50%;
+}
+.css_conteneur_progression_ticket .steps-container .line.next-step-in-progress {
+	background: linear-gradient(to right, #5c6174, #28a745);
+}
+.css_conteneur_progression_ticket .steps-container .line {
+	transition: all 200ms ease;
+	height: 2px;
+	flex-grow: 1;
+	max-width: 120px;
+	background: #d2d3d8;
+}
+.css_conteneur_progression_ticket .steps-container .step.in-progress {
+	width: 18px;
+	height: 18px;
+	background: #28a745;
+	border: 4px solid transparent;
+}
+.css_conteneur_progression_ticket .steps-container .line.prev-step-in-progress {
+	background: linear-gradient(to right, #28a745, #d2d3d8);
+}
+
+.css_conteneur_progression_ticket .steps-container .step.in-progress {
+	width: 18px;
+	height: 18px;
+	background: #28a745;
+	border: 4px solid transparent;
+}
+.css_conteneur_progression_ticket .steps-container .step.in-progress .preloader {
+	display: block;
+	height: 10px;
+	width: 10px;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	border-left-color: transparent;
+	animation-name: spin;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+.css_conteneur_progression_ticket .steps-container .step .label.loading {
+	color: #28a745;
+}
+.css_conteneur_progression_ticket .steps-container .step .icon.in-progress {
+	color: #28a745;
+}
+.css_conteneur_progression_ticket .steps-container .step .icon {
+	font-size: calc(var(--taille_police) *  32px);
+	position: absolute;
+	top: -50px;
+	color: #d2d3d8;
+	transition: color 200ms ease;
+}
+.css_conteneur_progression_ticket .steps-container .step.completed:last-child {
+	background: #28a745;
+}
+.css_conteneur_progression_ticket .steps-container .step:last-child .icon.completed {
+	color: #28a745;
+}
+.css_conteneur_progression_ticket .steps-container .step:last-child .label.completed {
+	color: #28a745;
+}
+
+@keyframes spin {
+	from {
+		transform:rotate(0deg);
+	}
+	to {
+		transform:rotate(360deg);
+	}
+}
+
+.css_deplier_contenu_sous_element .css_deplier_contenu_sous_element_a_deplier {
+	
+	display: none;
+}
+
+/* composant recherche element */
+.modal-mask {
+	position: fixed;
+	z-index: 1058;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	transition: opacity 0.3s ease;
+}
+.modal-enter {
+	opacity: 0;
+}
+
+.modal-leave-active {
+	opacity: 0;
+}
+
+.modal-enter .modal-container,.modal-leave-active .modal-container {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+.modal-body{
+
+	max-height: 530px;
+	min-height: 250px;
+	overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#menus{
+
+	width: 225px;
+	margin-top: 3.45rem!important;
+
+}
+
+.navbar-nav.sidenav-toggler{
+
+	width: 225px!important;
+
+}
+
+
+#menus > li, .navbar-nav.sidenav-toggler > li{
+
+	width: 100%!important;
+	font-size: calc(var(--taille_police) *  12px)!important;
+	font-weight: calc(var(--poids_police) + 400);
+
+}
+
+.navbar{
+
+	padding: 0.3rem 1rem !important;
+
+}
+
+.content-wrapper{
+
+	padding-top: 0.75rem!important;
+
+}

@@ -1,0 +1,1 @@
+<indicateur-stock-actuel></indicateur-stock-actuel>

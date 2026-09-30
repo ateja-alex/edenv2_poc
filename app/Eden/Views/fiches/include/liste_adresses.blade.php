@@ -1,0 +1,1 @@
+<liste-adresses :afficher_par_defaut="{{ $afficher_par_defaut }}" :element_standard="{{ $element_standard }}"></liste-adresses>

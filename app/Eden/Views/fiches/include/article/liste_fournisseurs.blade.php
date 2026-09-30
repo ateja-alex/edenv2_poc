@@ -1,0 +1,1 @@
+<fiche-article-liste-fournisseurs :article_id="article.id"></fiche-article-liste-fournisseurs>

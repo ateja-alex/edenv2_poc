@@ -1,0 +1,1 @@
+<recherche-par-siret ref="recherche_par_siret" :element="fournisseur" type_element="fournisseur"></recherche-par-siret>

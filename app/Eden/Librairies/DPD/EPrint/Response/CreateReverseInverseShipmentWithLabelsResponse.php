@@ -1,0 +1,31 @@
+<?php
+declare (strict_types=1);
+
+namespace App\Eden\Librairies\Ekyna\Component\Dpd\EPrint\Response;
+
+use App\Eden\Librairies\Ekyna\Component\Dpd\OutputInterface;
+use App\Eden\Librairies\Ekyna\Component\Dpd\ResponseInterface;
+
+/**
+ * Class CreateReverseInverseShipmentWithLabelsResponse
+ * @package Ekyna\Component\Dpd\Response
+ * @author  Etienne Dauvergne <contact@ekyna.com>
+ */
+class CreateReverseInverseShipmentWithLabelsResponse implements ResponseInterface, OutputInterface
+{
+    /**
+     * @var \Ekyna\Component\Dpd\EPrint\Model\ShipmentWithLabels
+     */
+    public $CreateReverseInverseShipmentWithLabelsResult;
+
+
+    /**
+     * @inheritdoc
+     */
+    public function initialize(): void
+    {
+        if ($this->CreateReverseInverseShipmentWithLabelsResult) {
+            $this->CreateReverseInverseShipmentWithLabelsResult->initialize();
+        }
+    }
+}

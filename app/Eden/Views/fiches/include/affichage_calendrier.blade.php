@@ -1,0 +1,1 @@
+<affichage-calendrier :filtres_pour_fiche="{ {{$management_element->_type_element}} : {{$management_element->modele->id}} }" ></affichage-calendrier>

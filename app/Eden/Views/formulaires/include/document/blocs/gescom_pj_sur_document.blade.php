@@ -1,0 +1,1 @@
+@include('eden::fiches.include.gestion_pieces_jointes', ['pieces_jointes' => $management->pieces_jointes(), 'dossiers' => $management->dossiers(), 'type_element' => $management->_type_element, 'id_element' => $management->modele->id] )

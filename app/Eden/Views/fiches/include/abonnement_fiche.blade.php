@@ -1,0 +1,1 @@
+<abonnement-fiche :type_element="{{ $type_element }}" :element_id="{{ $id_element }}">

@@ -1,0 +1,1 @@
+@include('eden::formulaires.include.document.blocs.recap',['pied_de_page'=> true])

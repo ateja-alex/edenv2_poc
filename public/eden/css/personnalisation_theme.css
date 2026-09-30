@@ -1,0 +1,299 @@
+.btn-xs {
+	cursor:pointer
+}
+
+.css_form_zone_couleur_1 {
+
+	background: #f9f9f9;
+    border-left: 4px solid #669e24;
+}
+
+.css_indicateur.css_indicateur_success {
+	
+	background: #669e24;
+    color: #ffffff;
+}
+
+.css_gescom_saisie_document_choix_ht_ttc, .css_gescom_saisie_document_suppression_ligne {
+	
+	border: 1px solid #d4d4d4;
+    border-left-width: 0px;
+    height: 30px;
+    width: 84px;
+    text-align: center;
+    background: #eeeeee;
+}
+
+.css_gescom_saisie_document_suppression_ligne {
+	
+	border-left-width: 1px;
+    border-right-width: 0px;
+}
+
+.css_form .input-group input.css_gescom_saisie_document_code_article {
+	
+	width: 100%;
+}
+
+.css_background_couleur_primaire {
+	
+	background: #669e24; 
+	color: white;
+}
+
+.css_color_couleur_primaire {
+	
+	color: #669e24; 
+}
+
+.page-item.active .page-link {
+	
+	background: #038D8D; 
+	color: white;
+	border-color: #aaa;
+}
+
+.pagination > li.active > a, .pagination > li.active > span, .pagination > li.active > a:hover, .pagination > li.active > a:focus, .pagination > li.active > a:active, .pagination > li.active > span:hover, .pagination > li.active > span:focus, .pagination > li.active > span:active {
+	
+	background: #669e24; 
+	color: white;
+}
+
+.pagination > li > a, .pagination > li > span {
+	
+	color: #038D8D; 
+}
+
+.btn.btn-primary, .wizard > .actions .disabled a, .wizard > .actions .disabled a:hover, .wizard > .actions .disabled a:active, .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active, .dt-buttons .dt-button, .tablesaw-sortable th.tablesaw-sortable-head button.btn-primary, .tablesaw-sortable th.tablesaw-sortable-head .dt-buttons button.dt-button, .dt-buttons .tablesaw-sortable th.tablesaw-sortable-head button.dt-button, .sweet-alert button.btn-primary, .owl-theme .owl-nav .btn-primary[class*="owl-"], .owl-theme .owl-nav .wizard > .actions a[class*="owl-"], .wizard > .actions .owl-theme .owl-nav a[class*="owl-"], .owl-theme .owl-nav .dt-buttons [class*="owl-"].dt-button, .dt-buttons .owl-theme .owl-nav [class*="owl-"].dt-button, button.btn-primary.fc-agendaDay-button.fc-state-default.fc-corner-right, .dt-buttons button.fc-agendaDay-button.fc-state-default.fc-corner-right.dt-button, button.btn-primary.fc-month-button.fc-state-default.fc-corner-left, .dt-buttons button.fc-month-button.fc-state-default.fc-corner-left.dt-button, button.btn-primary.fc-agendaWeek-button, .btn-primary.fc-prev-button, .btn-primary.fc-next-button, .btn-primary.fc-today-button {
+	
+	background: #02506b;
+    border: solid 1px #003142;
+}
+
+.btn-primary:not([disabled]):not(.disabled).active, .btn-primary:not([disabled]):not(.disabled):active, .show>.btn-primary.dropdown-toggle,
+.btn.btn-primary:hover, .wizard > .actions a:hover, .dt-buttons .dt-button:hover, .tablesaw-sortable th.tablesaw-sortable-head button.btn-primary:hover, .sweet-alert button.btn-primary:hover, .owl-theme .owl-nav .btn-primary[class*="owl-"]:hover, button.btn-primary.fc-agendaDay-button.fc-state-default.fc-corner-right:hover, .dt-buttons button.fc-agendaDay-button.fc-state-default.fc-corner-right.dt-button:hover, button.btn-primary.fc-month-button.fc-state-default.fc-corner-left:hover, .dt-buttons button.fc-month-button.fc-state-default.fc-corner-left.dt-button:hover, button.btn-primary.fc-agendaWeek-button:hover, .btn-primary.fc-prev-button:hover, .btn-primary.fc-next-button:hover, .btn-primary.fc-today-button:hover, .btn.btn-primary:active, .wizard > .actions a:active, .dt-buttons .dt-button:active, .tablesaw-sortable th.tablesaw-sortable-head button.btn-primary:active, .sweet-alert button.btn-primary:active, .owl-theme .owl-nav .btn-primary[class*="owl-"]:active, button.btn-primary.fc-agendaDay-button.fc-state-default.fc-corner-right:active, .dt-buttons button.fc-agendaDay-button.fc-state-default.fc-corner-right.dt-button:active, button.btn-primary.fc-month-button.fc-state-default.fc-corner-left:active, .dt-buttons button.fc-month-button.fc-state-default.fc-corner-left.dt-button:active, button.btn-primary.fc-agendaWeek-button:active, .btn-primary.fc-prev-button:active, .btn-primary.fc-next-button:active, .btn-primary.fc-today-button:active, .btn.btn-primary:focus, .wizard > .actions a:focus, .dt-buttons .dt-button:focus, .tablesaw-sortable th.tablesaw-sortable-head button.btn-primary:focus, .sweet-alert button.btn-primary:focus, .owl-theme .owl-nav .btn-primary[class*="owl-"]:focus, button.btn-primary.fc-agendaDay-button.fc-state-default.fc-corner-right:focus, .dt-buttons button.fc-agendaDay-button.fc-state-default.fc-corner-right.dt-button:focus, button.btn-primary.fc-month-button.fc-state-default.fc-corner-left:focus, .dt-buttons button.fc-month-button.fc-state-default.fc-corner-left.dt-button:focus, button.btn-primary.fc-agendaWeek-button:focus, .btn-primary.fc-prev-button:focus, .btn-primary.fc-next-button:focus, .btn-primary.fc-today-button:focus {
+	
+	background: #03759c;
+    border: solid 1px #003142;
+}
+
+.btn.btn-danger, .wizard > .actions a.btn-danger, .dt-buttons .btn-danger.dt-button, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger, .sweet-alert button.btn-danger, .owl-theme .owl-nav .btn-danger[class*="owl-"], button.btn-danger.fc-agendaDay-button.fc-state-default.fc-corner-right, button.btn-danger.fc-month-button.fc-state-default.fc-corner-left, button.btn-danger.fc-agendaWeek-button, .btn-danger.fc-prev-button, .btn-danger.fc-next-button, .btn-danger.fc-today-button {
+	
+	background: #ee7767;
+    border: solid 1px #bf5a4c;
+}
+
+.btn-danger:not([disabled]):not(.disabled).active, .btn-danger:not([disabled]):not(.disabled):active, .show>.btn-danger.dropdown-toggle,
+.btn.btn-danger:hover, .wizard > .actions a.btn-danger:hover, .dt-buttons .btn-danger.dt-button:hover, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger:hover, .sweet-alert button.btn-danger:hover, .owl-theme .owl-nav .btn-danger[class*="owl-"]:hover, button.btn-danger.fc-agendaDay-button.fc-state-default.fc-corner-right:hover, button.btn-danger.fc-month-button.fc-state-default.fc-corner-left:hover, button.btn-danger.fc-agendaWeek-button:hover, .btn-danger.fc-prev-button:hover, .btn-danger.fc-next-button:hover, .btn-danger.fc-today-button:hover, .btn.btn-danger:active, .wizard > .actions a.btn-danger:active, .dt-buttons .btn-danger.dt-button:active, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger:active, .sweet-alert button.btn-danger:active, .owl-theme .owl-nav .btn-danger[class*="owl-"]:active, button.btn-danger.fc-agendaDay-button.fc-state-default.fc-corner-right:active, button.btn-danger.fc-month-button.fc-state-default.fc-corner-left:active, button.btn-danger.fc-agendaWeek-button:active, .btn-danger.fc-prev-button:active, .btn-danger.fc-next-button:active, .btn-danger.fc-today-button:active, .btn.btn-danger:focus, .wizard > .actions a.btn-danger:focus, .dt-buttons .btn-danger.dt-button:focus, .tablesaw-sortable th.tablesaw-sortable-head button.btn-danger:focus, .sweet-alert button.btn-danger:focus, .owl-theme .owl-nav .btn-danger[class*="owl-"]:focus, button.btn-danger.fc-agendaDay-button.fc-state-default.fc-corner-right:focus, button.btn-danger.fc-month-button.fc-state-default.fc-corner-left:focus, button.btn-danger.fc-agendaWeek-button:focus, .btn-danger.fc-prev-button:focus, .btn-danger.fc-next-button:focus, .btn-danger.fc-today-button:focus {
+	
+	background: #f7897a;
+    border: solid 1px #bf5a4c;
+}
+
+.alert.alert-danger {
+    background: #ee7767;
+}
+
+.css__lien, a, .css_indicateur, .badge, .css__commentaire, select, textarea  {
+	
+	font-family: "Poppins", sans-serif;
+}
+
+.css__lien, a {
+	
+	/*color: #ee7767;*/
+	color: var(--background_menus);
+}
+
+.card-header .badge {
+	
+	font-size: calc(var(--taille_police) *  14px);
+}
+
+.badge-group .badge {
+	
+	border-radius: 0px;
+	margin-left: -5px;
+    margin-right: -7px;
+	border-right: 1px solid #aaa;
+}
+
+.badge-group .badge:first-child {
+	
+	border-top-left-radius: .25rem;
+	border-bottom-left-radius: .25rem;
+}
+
+.badge-group .badge:last-child {
+	
+	border-top-right-radius: .25rem;
+	border-bottom-right-radius: .25rem;
+	border-right: 0px solid #aaa;
+}
+
+.checkbox-primary input[type="checkbox"]:checked + label::before, .checkbox-primary input[type="radio"]:checked + label::before {
+	
+	background-color: #669e24;
+    border-color: #518e09;
+}
+
+.checkbox-primary input[type="checkbox"] + label::before, .checkbox-primary input[type="radio"] + label::before {
+	
+	background-color: #fff;
+    border-color: #518e09;
+}
+
+.card-header h4 {
+	
+	/* font-family: 'Indie Flower', cursive; */
+	font-size: calc(var(--taille_police) *  30px);
+}
+
+/* les toggles */
+.toggle-handle.btn.btn-default {
+	
+	background: white !important;
+    width: 11px !important;
+    padding: 0px !important;
+}
+
+.toggle-on.btn-xs {
+	
+	padding-right: 24px !important;
+}
+
+.toggle-off.btn-xs {
+    padding-left: 24px !important;
+}
+
+.btn.toggle-on, .btn.toggle-off {
+	
+	border: 0px solid white !important;
+	font-size: 12px !important;
+	line-height: 12px !important;	
+}
+
+.toggle.btn.btn-xs {
+	
+	height: 15px !important;
+}
+.css_conteneur_recherche_element .col-sm-12 {
+	padding-left: 15px !important;
+	justify-content: center;
+}
+.css_conteneur_recherche_element .tt-input, .css_conteneur_recherche_element .tt-hint{	
+	display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: calc(var(--taille_police) *  1rem);
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.css_conteneur_recherche_element .tt-hint {	
+	    top: 5px !important;
+	    width: 100%;
+}
+.css_conteneur_recherche_element .tt-input {
+	height: 38px !important;
+	border-radius: 0;
+}
+.css_conteneur_recherche_element .css_input_ajout_selection_element {	
+	    height: 38px !important;
+	    width: 38px;
+	    justify-content: center;
+	    display: flex;
+	    align-items: center;
+}
+.css_conteneur_recherche_element .css_enfant_cacher_texte {	
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+}
+[v-cloak] {
+	display: none;
+}
+.control {
+    font-family: arial;
+    display: block;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 5px;
+    padding-top: 3px;
+    cursor: pointer;
+    font-size: calc(var(--taille_police) *  16px);
+}
+.control input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.control_indicator {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background: #e6e6e6;
+    border: 0px solid #000000;
+}
+.control-radio .control_indicator {
+    border-radius: undefined%;
+}
+
+.control:hover input ~ .control_indicator,
+.control input:focus ~ .control_indicator {
+    background: #cccccc;
+}
+
+.control input:checked ~ .control_indicator {
+    background: #53801e;
+}
+.control:hover input:not([disabled]):checked ~ .control_indicator,
+.control input:checked:focus ~ .control_indicator {
+    background: #0e6647d;
+}
+.control input:disabled ~ .control_indicator {
+    background: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none;
+}
+.control_indicator:after {
+    box-sizing: unset;
+    content: '';
+    position: absolute;
+    display: none;
+}
+.control input:checked ~ .control_indicator:after {
+    display: block;
+}
+.control-checkbox .control_indicator:after {
+    left: 8px;
+    top: 4px;
+    width: 3px;
+    height: 8px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.control-checkbox input:disabled ~ .control_indicator:after {
+    border-color: #7b7b7b;
+}
+#filtres .badge {
+  font-size: calc(var(--taille_police) *  10px);
+}
+
+.modal-dialog {
+	
+	max-width: 90% !important;
+}
+
+.modal-backdrop {
+	
+	background-color: var(--background_menus);
+}

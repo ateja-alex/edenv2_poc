@@ -1,0 +1,1 @@
+@extends('eden::listes.liste_stocks_par_conditionnement')

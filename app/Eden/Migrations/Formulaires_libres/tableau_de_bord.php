@@ -1,0 +1,76 @@
+<?php return [
+
+		        'vue_js' => [
+		            'vuejs_data' => "",
+		            'vuejs_methods' => "",
+		            'surcharger_la_vue' => "",
+                ],
+                'champs_libres' => [
+					[
+						'nom_formulaire' => 'tableau_de_bord',
+						'type_element' => 'tableau_de_bord',
+						'nom_sql' => 'nom',
+						'taille_avant' => '0',
+						'taille_libelle' => '2',
+						'taille_champ' => '4',
+						'taille_apres' => '0',
+						'ordre' => '0',
+						'condition_affichage_v_if' => "!(tableau_de_bord.id > 0)",
+					],
+					[
+						'nom_formulaire' => 'tableau_de_bord',
+						'type_element' => 'tableau_de_bord',
+						'nom_sql' => 'type',
+						'taille_avant' => '0',
+						'taille_libelle' => '2',
+						'taille_champ' => '4',
+						'taille_apres' => '0',
+						'ordre' => '1',
+					],
+				[
+					'nom_formulaire' => "tableau_de_bord",
+					'type_element' => "tableau_de_bord",
+					'nom_sql' => "",
+					'ordre' => 2,
+					'taille_avant' => 0,
+					'taille_libelle' => 0,
+					'taille_champ' => 12,
+					'taille_apres' => 0,
+					'type_champ' => 2,
+					'nom_vue' => "filtres",
+				],
+				[
+					'nom_formulaire' => 'tableau_de_bord',
+					'type_element' => 'tableau_de_bord',
+					'nom_sql' => 'ordre',
+					'taille_avant' => '0',
+					'taille_libelle' => '2',
+					'taille_champ' => '4',
+					'taille_apres' => '0',
+					'ordre' => '3',
+					
+				],
+				[
+					'nom_formulaire' => 'tableau_de_bord',
+					'type_element' => 'tableau_de_bord',
+					'nom_sql' => 'disponible_extranet',
+					'taille_avant' => '0',
+					'taille_libelle' => '2',
+					'taille_champ' => '4',
+					'taille_apres' => '0',
+					'ordre' => '4',
+					
+				],
+				[
+					'nom_formulaire' => 'tableau_de_bord',
+					'type_element' => 'tableau_de_bord',
+					'nom_sql' => 'description',
+					'taille_avant' => '0',
+					'taille_libelle' => '2',
+					'taille_champ' => '12',
+					'taille_apres' => '0',
+					'ordre' => '5',
+					
+				],
+			],
+	    ];

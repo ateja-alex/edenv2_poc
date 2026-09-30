@@ -1,0 +1,1 @@
+@include('eden::fiches.include.formulaire_edition_element')

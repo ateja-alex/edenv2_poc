@@ -1,0 +1,19 @@
+<h3>Tarifs par client</h3>
+<table class="css_tableau_donnees_fiche_pdf">
+	<tbody>
+		<tr>
+			<td><b>Article</b></td>
+			<td><b>Tarif</b></td>
+			<td><b>Référence</b></td>
+		</tr>
+		<tr>
+			<td>Article Test</td>
+			<td>85,99 {!! maquette('devise_application_symbole') !!}</td>
+			<td>Réf : 077105498</td>
+		</tr>
+	</tbody>
+</table>
+
+@foreach($donnees as $donnee)
+<p>{{ $donnee->nom }}</p>
+@endforeach

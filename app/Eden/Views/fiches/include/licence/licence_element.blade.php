@@ -1,0 +1,1 @@
+<licence-element licence_id="{{$management_element->modele->id}}"></licence-element>

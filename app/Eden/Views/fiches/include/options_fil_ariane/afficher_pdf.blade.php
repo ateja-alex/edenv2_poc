@@ -1,0 +1,1 @@
+<a class="css_action_icon primaire fa fa-fw fa-file-pdf" title="{{ traduction('module_sur_fiche.fiche.element.afficher_pdf') }}" target="_blank" href="{{ route('base_eden.element.afficher_pdf', [$type_element, $id_element]) . '?' . time() }}&regenerer=1" data-placement="left" data-toggle="tooltip"></a>

@@ -1,0 +1,1 @@
+<a href="{{URL::to('/eden/document/vente/facture/creer_avancement_depuis_projet/'.$management_element->modele->id)}}"><i class="css_action_icon primaire fas fa-file-alt" title="{{traduction('module_sur_fiche.fiche.projet.generer_facture_avancement')}}" data-toggle="tooltip"></i></a>

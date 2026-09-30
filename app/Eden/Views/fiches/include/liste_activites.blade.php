@@ -1,0 +1,1 @@
+<section-activites :type_element="'{{$management_element->_type_element}}'" :element_id="{{$management_element->modele->id}}"></section-activites>

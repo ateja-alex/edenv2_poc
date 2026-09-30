@@ -1,0 +1,1 @@
+<declinaisons :article="article" :article_id="article.id"></declinaisons>

@@ -1,0 +1,2 @@
+<div class="col-sm-{{ $taille_libelle }}">{!! management($type_element)->champ($nom_champ)->modele->nom !!}</div>
+<div class="col-sm-{{ $taille_champ }}">{!! management($type_element)->champ($nom_champ)->cree() !!}</div>

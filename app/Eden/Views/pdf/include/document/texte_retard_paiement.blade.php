@@ -1,0 +1,1 @@
+{!! traduction('document.pdf.texte_retard_paiement') !!} {!! maquette('devise_application_nom') !!}.

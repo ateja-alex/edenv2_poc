@@ -1,0 +1,1 @@
+{!! str_replace(',', '<br>', $adresse_de_livraison->affiche()) !!}

@@ -1,0 +1,72 @@
+<?php
+
+return [
+    'table_libre' => [
+        'nom_table' => "Catégorie comptable par article",
+        'nom_table_sql' => "categorie_comptable_article",
+        'description' => "",
+        'feminin' => "",
+        'element' => "catégorie comptable par article",
+        'type_element' => "categorie_comptable_article",
+        'element_pluriel' => "Catégories comptables par article",
+        'fiche' => "0",
+        'gestion_droits' => "0",
+        'disponible_recherche_rapide' => "0",
+        'creation_rapide' => "0",
+        'vue_sql' => "1",
+        'affichage_dans_liste' => "#categorie_comptable_id#",
+    ],
+    'champs_libres' => [
+        'categorie_comptable_id' => [
+            'nom' => "Catégorie comptable",
+            'type' => "42",
+            'type_element_ajax' => "categorie_comptable",
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "categorie_comptable_id",
+        ],
+        'article_id' => [
+            'nom' => "Article",
+            'type' => "42",
+            'type_element_ajax' => "famille",
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "article_id",
+        ],
+        'famille_id' => [
+            'nom' => "Famille",
+            'type' => "42",
+            'type_element_ajax' => "famille",
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "famille_id",
+        ],
+        'code_tva_id' => [
+            'nom' => "Code de TVA ventes",
+            'type' => 20,
+            'liste_choix' => 115,
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "code_tva_id",
+        ],
+        'code_tva_achat_id' => [
+            'nom' => "Code de TVA achats",
+            'type' => 20,
+            'liste_choix' => 115,
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "code_tva_achat_id",
+        ],
+        'compte_produit' => [
+            'nom' => "Compte produit",
+            'type' => 42,
+            'type_element_ajax' => "compte_comptable",
+            'format_champ' => "select",
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "compte_produit",
+        ],
+        'compte_charge' => [
+            'nom' => "Compte charge",
+            'type' => 42,
+            'type_element_ajax' => "compte_comptable",
+            'format_champ' => "select",
+            'type_element_origine' => "article_categorie_comptable",
+            'nom_sql_origine' => "compte_charge",
+        ],
+    ],
+];

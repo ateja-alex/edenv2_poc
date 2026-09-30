@@ -1,0 +1,1 @@
+<article-tarifs-par-entite :article_id="article.id"></article-tarifs-par-entite>

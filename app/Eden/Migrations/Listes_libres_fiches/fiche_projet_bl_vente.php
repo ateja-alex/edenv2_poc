@@ -1,0 +1,22 @@
+<?php
+
+return [
+		
+	'type_element' => 'bl_vente',
+    'fiche' => 'projet',
+    'cle_etrangere' => 'projet_id',
+	
+	'colonnes' => [
+		
+		array('nom' => 'Référence', 'valeur' => 'reference_document', 'ordre' => 0, 'lien_vers_element' => 1),
+		array('nom' => 'Date', 'valeur' => 'date', 'ordre' => 1),
+		array('nom' => 'Tags', 'valeur' => '', 'methode' => 'tags_pour_liste', 'ordre' => 6),
+	],
+	
+	'calculs' => [],
+	
+	'filtres' => [
+		
+		array('nom_sql' => 'date'),
+	],
+];

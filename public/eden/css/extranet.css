@@ -1,0 +1,226 @@
+body {
+    font-family: Raleway, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    background-attachment: fixed;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.alert{
+
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success{
+
+    background: #6d9c3a;
+    color: white;
+}
+
+.alert-danger{
+
+    background: #ee7767;
+    color: white;
+}
+
+/************************************************Common Auth Template*/
+
+#auth {
+    display: flex;
+    align-items: center;
+}
+
+#auth h3 {
+    font-family: "Dosis", Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
+    color: #444444;
+}
+
+#auth .auth-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#auth .auth-logo-img {
+    max-width: 300px;
+    max-height: 200px;
+}
+
+#auth .auth-panel {
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 40vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#auth .auth-panel > div {
+    width: 25vw;
+}
+
+#auth .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#auth .form-field label {
+    display: flex;
+    color: #444444;
+    font-family: "Dosis", Arial, Helvetica, sans-serif;
+}
+
+#auth .form-field input {
+    border-radius: 5px;
+    border: 1px solid #DDDDDD;
+    text-decoration: none;
+    outline: none;
+    height: 20px;
+    padding: 5px;
+    width: 220px;
+}
+
+#auth .button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#auth .button-submit, .bouton_acces_restreint {
+    height: 40px;
+    border: 1px solid;
+    border-radius: 5px;
+    margin-top: 25px;
+    color: white;
+    font-size: 1.1em;
+    text-wrap: nowrap;
+    background-color: var(--couleur_liens);
+    border-color: var(--couleur_liens);
+}
+
+#auth .form-field {
+    display: flex;
+    margin: 10px 5px 5px 5px;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+/************************************************Page Login*/
+
+#login .button-reset {
+    color: #ee7767;
+    display: flex;
+    justify-content: end;
+    font-size: 0.9em;
+    width: 25vw;
+    text-decoration: none;
+    font-family: "Dosis", Arial, Helvetica, sans-serif;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/*************************************************** Responsive*/
+
+@media screen and (max-width: 1023px) {
+    #auth .auth-panel {
+        width: 100vw;
+    }
+
+    #auth .auth-panel > div {
+        width: 90vw;
+    }
+
+    #auth .form-field {
+        display: block;
+    }
+    
+    #auth .form-field input {
+        width: calc(100% - 10px);
+    }
+
+    #login .button-reset {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    #login .button-submit {
+        width: 50vw;
+    }
+}
+
+.authentification_choix_langue {
+	
+	position: absolute;
+	top: 10px;
+	right: 25px;
+	border: 1px solid lightgrey;
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: lightgrey 1px 1px;
+}
+
+.authentification_langue {
+
+	display:flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.authentification_drapeau {
+
+	width: 24px;
+	height: 18px
+}
+
+.authentification_conteneur_langues {
+	
+    position: absolute;
+    border: 1px solid lightgrey;
+    box-shadow: lightgrey 1px 1px;
+    top: 33px;
+    background-color: white;
+    left: 0;
+	transform-origin: top;
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.authentification_conteneur_langues.authentification_conteneur_langues_ouvert{
+	transform: scaleY(1);
+    opacity: 1;
+}
+
+.authentification_conteneur_langues .authentification_langue {
+
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.authentification_conteneur_langues .authentification_langue:hover {
+
+	background-color: lightgrey;
+}

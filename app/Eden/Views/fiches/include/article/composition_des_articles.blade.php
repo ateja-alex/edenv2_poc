@@ -1,0 +1,1 @@
+<composition-des-articles :article_id="article.id"></composition-des-articles>

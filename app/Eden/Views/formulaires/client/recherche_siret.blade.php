@@ -1,0 +1,1 @@
+<recherche-par-siret ref="recherche_par_siret" :element="client" type_element="client"></recherche-par-siret>

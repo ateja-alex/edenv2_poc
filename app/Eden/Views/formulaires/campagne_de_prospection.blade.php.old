@@ -1,0 +1,20 @@
+<div class="row">
+	<div class="col-sm-12 css_form_ligne_titre">Informations générales</div>
+</div>
+<div class="row">
+	@champ('campagne_de_prospection', 'nom', 2,10)
+</div>
+<div class="row">
+	@champ('campagne_de_prospection', 'entite_id', 2,10)
+</div>
+<div class="row">
+	<div class="col-sm-12 css_form_ligne_titre">Utilisateurs affectés</div>
+</div>
+<div class="row">
+	@champ('campagne_de_prospection', 'utilisateurs', 2,10)
+</div>
+
+
+
+
+

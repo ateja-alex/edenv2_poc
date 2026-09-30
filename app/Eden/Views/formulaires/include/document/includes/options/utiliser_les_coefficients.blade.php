@@ -1,0 +1,1 @@
+<span class="mb-1 fas fa-euro-sign css_btn_action_article_document" @click="ajouter_coefficient_article(article_sur_document)"  :title="traduction('interface.document.tableau_des_articles.ajouter_coefficient')"></span>

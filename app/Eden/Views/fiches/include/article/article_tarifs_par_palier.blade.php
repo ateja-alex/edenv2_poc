@@ -1,0 +1,1 @@
+<article-tarifs-par-palier :article_id="article.id"></article-tarifs-par-palier>

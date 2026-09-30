@@ -1,0 +1,466 @@
+
+{{--	<div class="card-header">--}}
+{{--		<h4>--}}
+{{--			<span class="fa fa-tasks"></span>--}}
+{{--			Taches--}}
+{{--			<span class="css__lien" @click="tache_creer"><i class="fa fa-fw fa-plus-square"></i> Nouvelle tache</span>--}}
+
+{{--		</h4>--}}
+{{--	</div>--}}
+
+{{--	<div class="css_fiche_bloc_filtres">--}}
+
+{{--		<span class="badge" :class="{'badge-success': aujourdhui_seulement === true, 'badge-default': aujourdhui_seulement === false}" @click="aujourdhui_seulement = !aujourdhui_seulement;en_retard_seulement = false;seulement_7j = false;">Aujourd'hui</span>--}}
+
+{{--		<span class="badge" :class="{'badge-success': en_retard_seulement === true, 'badge-default': en_retard_seulement === false}" @click="en_retard_seulement = !en_retard_seulement;aujourdhui_seulement = false;seulement_7j = false;">En retard</span>--}}
+
+{{--		<span class="badge" :class="{'badge-success': seulement_7j === true, 'badge-default': seulement_7j === false}" @click="seulement_7j = !seulement_7j;en_retard_seulement = false;aujourdhui_seulement = false;">7 prochains jours</span>--}}
+
+{{--		<span class="badge" :class="{'badge-success': taches_en_cours_seulement === true, 'badge-default': taches_en_cours_seulement === false}" @click="taches_en_cours_seulement = !taches_en_cours_seulement">En cours seulement</span>--}}
+{{--	</div>--}}
+{{--	<br/>--}}
+
+{{--	<div class="row">--}}
+{{--		<div class="col-sm-12" v-show="taches.length == 0">Aucune tache ! Cliquez sur &laquo; <span class="css__lien" @click="tache_creer">nouvelle tache</span> &raquo; ci dessus pour en ajouter une nouvelle</div>--}}
+{{--	</div>--}}
+
+{{--	<div v-for="tache in tri_par_date_de_fin(taches)"--}}
+
+{{--		v-show="--}}
+{{--			(--}}
+{{--				mes_taches_seulement === false--}}
+{{--				||--}}
+{{--				tache.affectation == {{id_utilisateur}}--}}
+{{--			)--}}
+{{--				&&--}}
+{{--				(--}}
+{{--					tache.terminee != 1--}}
+{{--					||--}}
+{{--					taches_en_cours_seulement === false--}}
+{{--					||--}}
+{{--					tache.justeterminee == 1--}}
+{{--				)--}}
+{{--				&&--}}
+{{--		(--}}
+{{--			( en_retard_seulement === true && tache.retard < 0 )--}}
+{{--			||--}}
+{{--			( seulement_7j === true && tache.sept_jours < 0 && tache.retard >= 0 )--}}
+{{--			||--}}
+{{--			( aujourdhui_seulement === true && tache.retard == 0  )--}}
+{{--			||--}}
+{{--			( aujourdhui_seulement === false && en_retard_seulement === false && seulement_7j === false  )--}}
+{{--		)"--}}
+
+{{--		:id="'tache' + tache.id">--}}
+{{--		<hr class="light-grey-hr">--}}
+
+{{--		<div style="display: flex;justify-content: space-between;padding:10px;">--}}
+{{--			<div>--}}
+{{--				<span @click="terminer_tache(tache)">--}}
+{{--					<i class="fa fa-check-square" style="font-size:20px;color:#2ecd99;cursor:pointer;" v-show="tache.terminee == 1"></i>--}}
+{{--					<i class="fa fa-minus-square" style="font-size:20px;color:#ed6f56;cursor:pointer;" v-show="tache.terminee != 1"></i>--}}
+{{--				</span>--}}
+{{--				<span @click="ouvrir_tache(tache)" style="cursor: pointer;" :class="{'estTermine' : tache.terminee}">--}}
+{{--					@{{ tache.titre }}--}}
+{{--					<span v-show="tache.chaine_affichage_client !== null">--}}
+{{--						(@{{ tache.chaine_affichage_client }})--}}
+{{--					</span>--}}
+{{--				</span>--}}
+
+{{--			</div>--}}
+{{--			<div>--}}
+{{--				<span> @{{ affichage_date(tache.date_de_debut, tache.date_de_fin) }} </span>--}}
+{{--			</div>--}}
+{{--		</div>--}}
+{{--	</div>--}}
+
+{{--	<!-- Modal ajout tache -->--}}
+{{--	<div class="modal fade" id="modal_ajout_tache" tabindex="-1" role="dialog" aria-hidden="true">--}}
+{{--		<div class="modal-dialog modal-lg" role="document">--}}
+{{--			<div class="modal-content">--}}
+{{--				<div class="modal-header">--}}
+{{--					<h5 class="modal-title">Gestion des taches</h5>--}}
+{{--					<button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--						<span aria-hidden="true">&times;</span>--}}
+{{--					</button>--}}
+{{--				</div>--}}
+{{--				<input type="hidden" name="id" v-model="tache.id" />--}}
+
+{{--				<div class="modal-body">--}}
+{{--					<form action="#" id="formulaire_ajout_tache" method="post" class="css_form">--}}
+
+{{--						<input type="hidden" value="{{ id_utilisateur }}" name="affectation"/>--}}
+
+{{--						<div class="row">--}}
+{{--							<div class="col-sm-12 css_form_ligne_titre">Informations taches </div>--}}
+{{--						</div>--}}
+
+{{--						<div class="row">--}}
+{{--							<div class="col-sm-2">Titre</div>--}}
+{{--							<div class="col-sm-4">{!! management('tache')->champ('titre')->cree() !!}</div>--}}
+{{--							<div class="col-sm-2">Client</div>--}}
+{{--							<div class="col-sm-4">{!! management('tache')->champ('client_id')->cree() !!}</div>--}}
+{{--						</div>--}}
+{{--						<div class="row">--}}
+{{--							<div class="col-sm-2">Début</div>--}}
+{{--							<div class="col-sm-4">{!! management('tache')->champ('date_de_debut')->cree() !!}</div>--}}
+{{--							<div class="col-sm-2">Fin</div>--}}
+{{--							<div class="col-sm-4">{!! management('tache')->champ('date_de_fin')->cree() !!}</div>--}}
+{{--						</div>--}}
+{{--						<div class="row">--}}
+{{--							<div class="col-sm-2">Commentaire</div>--}}
+{{--							<div class="col-sm-4">{!! management('tache')->champ('commentaire')->cree() !!}</div>--}}
+{{--						</div>--}}
+
+{{--						<div class="row">--}}
+{{--							<div class="col-sm-2">Notifications</div>--}}
+{{--							<div class="col-sm-2">--}}
+{{--								<input type="hidden" name="notification_email_active" v-model="tache.notification_email_active">--}}
+{{--								<div 	class="badge badge-success"--}}
+{{--										v-if="tache.notification_email_active == 1"--}}
+{{--										@click="taches_modifie_alertes('notification_email_active', 0);">Email</div>--}}
+{{--								<div 	class="badge"--}}
+{{--										v-else--}}
+{{--										@click="taches_modifie_alertes('notification_email_active', 1);">Email</div>--}}
+{{--							</div>--}}
+{{--							<div class="col-sm-8">--}}
+{{--								<div class="row" v-if="tache.notification_email_active == 1">--}}
+{{--									<div class="col-sm-3">--}}
+{{--										{!! management('tache')->champ('notification_email_combien')->attr('v-model', 'tache.notification_email_combien')->cree() !!}--}}
+{{--									</div>--}}
+{{--									<div class="col-sm-4">--}}
+{{--										<select name="notification_email_unite" v-model="tache.notification_email_unite">--}}
+{{--											<option value="M" v-if="tache.notification_email_combien>1">Minutes</option>--}}
+{{--											<option value="M" v-else>Minute</option>--}}
+{{--											<option value="H" v-if="tache.notification_email_combien>1">Heures</option>--}}
+{{--											<option value="H" v-else>Heure</option>--}}
+{{--											<option value="J" v-if="tache.notification_email_combien>1">Jours</option>--}}
+{{--											<option value="J" v-else>Jour</option>--}}
+{{--										</select>--}}
+{{--									</div>--}}
+{{--									<div class="col-sm-5">--}}
+{{--										avant--}}
+{{--									</div>--}}
+{{--								</div>--}}
+{{--							</div>--}}
+{{--							<div class="col-sm-2"></div>--}}
+{{--							<div class="col-sm-2">--}}
+{{--								<input type="hidden" name="notification_visuelle_active" v-model="tache.notification_visuelle_active">--}}
+{{--								<div 	class="badge badge-success"--}}
+{{--										v-if="tache.notification_visuelle_active == 1"--}}
+{{--										@click="taches_modifie_alertes('notification_visuelle_active', 0);">Visuelle</div>--}}
+{{--								<div 	class="badge"--}}
+{{--										v-else--}}
+{{--										@click="taches_modifie_alertes('notification_visuelle_active', 1);">Visuelle</div>--}}
+{{--							</div>--}}
+{{--							<div class="col-sm-8">--}}
+{{--								<div class="row" v-if="tache.notification_visuelle_active == 1">--}}
+{{--									<div class="col-sm-3">--}}
+{{--										{!! management('tache')->champ('notification_visuelle_combien')->attr('v-model', 'tache.notification_visuelle_combien')->cree() !!}--}}
+{{--									</div>--}}
+{{--									<div class="col-sm-4">--}}
+{{--										<select name="notification_visuelle_unite" v-model="tache.notification_visuelle_unite">--}}
+{{--											<option value="M" v-if="tache.notification_visuelle_combien>1">Minutes</option>--}}
+{{--											<option value="M" v-else>Minute</option>--}}
+{{--											<option value="H" v-if="tache.notification_visuelle_combien>1">Heures</option>--}}
+{{--											<option value="H" v-else>Heure</option>--}}
+{{--											<option value="J" v-if="tache.notification_visuelle_combien>1">Jours</option>--}}
+{{--											<option value="J" v-else>Jour</option>--}}
+{{--										</select>--}}
+{{--									</div>--}}
+{{--									<div class="col-sm-5">--}}
+{{--										avant--}}
+{{--									</div>--}}
+{{--								</div>--}}
+{{--							</div>--}}
+{{--						</div>--}}
+
+{{--					</form>--}}
+{{--				</div>--}}
+{{--				<div class="modal-footer">--}}
+{{--					<button type="button" class="btn btn-success" @click="tache_terminee(1, tache.id)"  v-show="tache.id != '' && tache.terminee == 0">Terminée</button>--}}
+{{--					<button type="button" class="btn btn-warning" @click="tache_terminee(0, tache.id)"  v-show="tache.id != '' && tache.terminee == 1">Annuler terminée</button>--}}
+{{--					<button type="button" class="btn btn-danger" @click="tache_supprimer" v-show="tache.id != ''">Supprimer</button>--}}
+{{--					<button type="button" class="btn btn-primary" @click="tache_enregistrer_module_accueil();">Enregistrer</button>--}}
+{{--				</div>--}}
+{{--			</div>--}}
+{{--		</div>--}}
+{{--	</div>--}}
+
+@include('eden::listes.includes.liste', $liste_taches)
+
+
+@push('donnees_pour_vuejs_data')
+	taches: {!! modele('tache')
+						->where('affectation', id_utilisateur)
+						->leftJoin('client', 'client_id', 'client.id')
+						->selectRaw(
+							'tache.*,
+							CONCAT(client.nom, \' \', client.prenom) as client,
+							client.chaine_affichage as chaine_affichage_client,
+							DATEDIFF(tache.date_de_fin, NOW()) as retard,
+							DATEDIFF(tache.date_de_debut, NOW() + INTERVAL 7 DAY ) as sept_jours')
+						->get() !!},
+	tache: {
+
+		id: '',
+		utilisateur_id: {{id_utilisateur}},
+		date_de_debut: '{{date('Y-m-d H:00:00')}}',
+		date_de_fin: '{{date('Y-m-d H:00:00', strtotime("now +1 hour "))}}',
+	},
+	nouvelle_tache: {
+
+		id: '',
+		utilisateur_id: {{id_utilisateur}},
+		date_de_debut: '{{date('Y-m-d H:00:00')}}',
+		date_de_fin: '{{date('Y-m-d H:00:00', strtotime("now +1 hour "))}}',
+	},
+	taches_en_cours_seulement: true,
+	mes_taches_seulement: true,
+	aujourdhui_seulement: true,
+	en_retard_seulement: false,
+	seulement_7j: false,
+@endpush
+
+{{-- <script> --}}
+@push('donnees_pour_vuejs_methods')
+
+	taches_modifie_alertes: function(champ, valeur) {
+
+		this.tache[champ] = valeur;
+
+		this.$forceUpdate();
+	},
+
+	tri_par_date_de_fin(arrays) {
+
+		var date_du_jour = new Date();
+		var taches_a_afficher = [];
+
+		//on tries les taches par date
+	  	var taches = arrays.slice().sort(function(a, b){
+	    	return (a.date_de_fin > b.date_de_fin) ? 1 : -1;
+		});
+
+		taches.forEach(function(tache){
+
+			var date_de_fin = new Date(tache.date_de_fin);
+			//on récupère la différence de jour grace au time
+			var difference_en_time = date_du_jour.getTime() - date_de_fin.getTime();
+			var difference_en_jours = Math.round(difference_en_time / (1000 * 3600 * 24));
+			console.log(difference_en_jours);
+
+			if(tache.terminee){
+
+				if(difference_en_jours < 30) {
+
+					taches_a_afficher.push(tache);
+				}
+			}
+			else {
+
+				taches_a_afficher.push(tache);
+			}
+		})
+
+	  	return taches_a_afficher
+	},
+
+
+	affichage_date: function(date_de_debut, date_de_fin) {
+
+		if(date_de_debut == null || date_de_fin == null)
+			return '';
+
+		moment.locale('fr');
+
+		if ( date_de_debut.substr(0,10) == date_de_fin.substr(0,10) ) {
+
+			return moment(date_de_debut, 'YYYY-MM-DD HH:mm:ss').format('dddd Do MMMM YYYY [de] HH:mm') + ' à ' + moment(date_de_fin, 'YYYY-MM-DD HH:mm:ss').format('HH:mm');
+		}
+
+		return 'Du ' + moment(date_de_debut, 'YYYY-MM-DD HH:mm:ss').format('dddd Do MMMM YYYY HH:mm') + ' jusqu\'au ' + moment(date_de_fin, 'YYYY-MM-DD HH:mm:ss').format('dddd Do MMMM YYYY [à] HH:mm');
+	},
+
+	terminer_tache: function(tache) {
+
+
+		if(tache.terminee == 1) {
+
+			tache.terminee = 0;
+		}
+		else {
+
+			tache.terminee = 1;
+			tache.justeterminee = 1;
+		}
+
+		var url = "eden/element/tache/"+tache.id+"/enregistrer";
+
+		var nouveau_statut = tache.terminee;
+
+		// on enregistre la modification
+		$.post({
+
+			url: url,
+			dataType: "json",
+			method: 'POST',
+			data: {
+
+				terminee: nouveau_statut
+			}
+		});
+
+	},
+
+	tache_creer: function() {
+
+		$('#modal_ajout_tache').modal('show');
+
+		// on réinitialise le contact
+		this.tache = this.nouvelle_tache;
+	},
+
+	ouvrir_tache: function(tache) {
+
+		$('#modal_ajout_tache').modal('show');
+
+		this.tache = tache
+	},
+
+	tache_modifier: function(id) {
+
+		$.each(vue_instance.taches, function(osef, tache) {
+
+			if(tache.id == id) {
+
+				vue_instance.tache = tache;
+			}
+		});
+
+		$('#modal_ajout_tache').modal('show');
+	},
+
+	tache_terminee: function(statut_terminee, tache_id) {
+		loading(true);
+
+		var url = "eden/element/tache/"+$('#modal_ajout_tache input[name=id]').val()+"/enregistrer";
+
+		// on enregistre la modification
+		$.post({
+
+			url: url,
+			dataType: "json",
+			method: 'POST',
+			data: {
+
+				terminee: statut_terminee
+			}
+		}).done(function(donnees) {
+
+			// On retire le loader
+			loading(false);
+
+			$('#modal_ajout_tache').modal('hide');
+
+			alert();
+
+			if ( statut_terminee == 1 ) $('#tache' + tache_id).css('text-decoration', 'line-through')
+		});
+
+	},
+
+
+	tache_enregistrer_module_accueil: function() {
+
+		// on fait un appel ajax
+
+		if($('#modal_ajout_tache input[name=id]').val() != '' && $('#modal_ajout_tache input[name=id]').val() != '0')
+			var url = "eden/element/tache/"+$('#modal_ajout_tache input[name=id]').val()+"/enregistrer";
+		else
+			var url = "eden/element/tache/creer";
+
+		// On affiche le loader
+		loading();
+
+		// on enregistre les infos du champ libre
+		$.post({
+
+			url: url,
+			dataType: "json",
+			method: 'POST',
+			data: $('#formulaire_ajout_tache').serialize()
+		}).done(async function(donnees) {
+
+			// On retire le loader
+			loading(false);
+
+			if(donnees.retour !== true) {
+
+				await erreur(donnees.retour);
+				return;
+			}
+
+			$('#modal_ajout_tache').modal('hide');
+
+			// on réinitialise la tache
+			vue_instance.tache = {};
+
+
+			// on actualise la liste
+			vue_instance.tache_actualiser();
+
+
+		});
+
+	},
+
+	tache_supprimer: function() {
+
+		if(!confirm("Etes vous certain ?"))
+			return false;
+
+		loading(true);
+
+
+		// on fait un appel ajax pour supprimer
+		$.get({
+
+			url: "eden/element/tache/"+vue_instance.$data.tache.id+"/supprimer",
+			dataType: "json",
+			method: 'GET'
+		}).done(async function(donnees) {
+
+			if(donnees.retour !== true) {
+
+				loading(false);
+
+				await erreur(donnees.retour);
+				return;
+			}
+
+			$('#modal_ajout_tache').modal('hide');
+
+			// on actualise la liste
+			vue_instance.tache_actualiser();
+		});
+	},
+
+	tache_actualiser: function() {
+
+		loading(true);
+
+		$.get({
+
+			url: 'eden/accueil/commercial/taches_actualiser',
+			dataType: "json"
+		}).done(function(taches) {
+
+			// On retire le loader
+			loading(false);
+
+			vue_instance.taches = taches;
+		});
+	},
+
+@endpush

@@ -1,0 +1,122 @@
+<?php
+return [
+	'vue_js' => [
+		'vuejs_data' => "",
+		'vuejs_methods' => "",
+	],
+	'champs_libres' => [
+        [
+                'nom_formulaire' => "trigger_eden",
+                'type_element' => "trigger_eden",
+                'nom_sql' => "nom",
+                'taille_avant' => "0",
+                'taille_libelle' => "2",
+                'taille_champ' => "4",
+                'taille_apres' => "0",
+                'ordre' => "1",
+
+        ],
+        [
+                'nom_formulaire' => "trigger_eden",
+                'type_element' => "trigger_eden",
+                'nom_sql' => "ordre",
+                'taille_avant' => "0",
+                'taille_libelle' => "2",
+                'taille_champ' => "4",
+                'taille_apres' => "0",
+                'ordre' => "2",
+        ],
+		[
+                'nom_formulaire' => "trigger_eden",
+                'type_element' => "trigger_eden",
+                'nom_sql' => "type_requete",
+                'taille_avant' => "0",
+                'taille_libelle' => "2",
+                'taille_champ' => "4",
+                'taille_apres' => "6",
+                'ordre' => "3",
+
+        ],
+		[
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "type_element_id",
+				'taille_avant' => "0",
+				'taille_libelle' => "2",
+				'taille_champ' => "4",
+				'taille_apres' => "0",
+				'ordre' => "4",
+
+		],
+		[
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "requete",
+				'taille_avant' => "0",
+				'taille_libelle' => "12",
+				'taille_champ' => "12",
+				'taille_apres' => "0",
+				'ordre' => "5",
+
+		],
+        [
+                'nom_formulaire' => "trigger_eden",
+                'type_element' => "trigger_eden",
+                'nom_sql' => "type_element_concerne_id",
+                'taille_avant' => "0",
+                'taille_libelle' => "2",
+                'taille_champ' => "4",
+                'taille_apres' => "6",
+                'ordre' => "6",
+        ],
+		[
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "requete_elements_concernes",
+				'taille_avant' => "0",
+				'taille_libelle' => "12",
+				'taille_champ' => "12",
+				'taille_apres' => "0",
+				'ordre' => "7",
+				'condition_affichage_v_if' => 'trigger_eden.type_requete != 1',
+				'condition_obligatoire' => 'trigger_eden.type_requete != 1',
+
+		],
+        [
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "enregistrement_log",
+				'taille_avant' => "0",
+				'taille_libelle' => "2",
+				'taille_champ' => "4",
+				'taille_apres' => "6",
+				'ordre' => "9",
+
+		],
+        [
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "",
+				'taille_avant' => "0",
+				'taille_libelle' => "0",
+				'taille_champ' => "12",
+				'taille_apres' => "0",
+				'ordre' => "10",
+                'type_champ' => 2,
+                'nom_vue' => "log_champs",
+                'type_vue' => "standard",
+
+		],
+        [
+				'nom_formulaire' => "trigger_eden",
+				'type_element' => "trigger_eden",
+				'nom_sql' => "duree_derniere_execution",
+				'taille_avant' => "0",
+				'taille_libelle' => "2",
+				'taille_champ' => "4",
+				'taille_apres' => "0",
+				'ordre' => "11",
+				'condition_lecture_seule' => '1'
+		],
+	],
+];

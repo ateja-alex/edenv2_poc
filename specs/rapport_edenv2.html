@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartographie Eden</title>
+<meta name="description" content="Rapport de référencement fonctionnel et technique de l'ERP std-eden / framework Eden, en vue d'une refonte.">
+<style>
+:root{
+  --bg:#f7f7f5; --surface:#ffffff; --surface-2:#f0efec; --border:#dedbd4;
+  --text:#1c1b19; --muted:#6b6862; --accent:#8a4b2a; --accent-soft:#f3e6de;
+  --ok:#2f6f4f; --ok-soft:#e2efe8; --warn:#8a6d1f; --warn-soft:#f6eed6;
+  --risk:#9b3232; --risk-soft:#f7e3e0; --info:#2f5d8a; --info-soft:#e2ebf4;
+  --code-bg:#f0efec; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#16151a; --surface:#1e1d23; --surface-2:#26252c; --border:#33323a;
+    --text:#e8e6e1; --muted:#9a968e; --accent:#d99565; --accent-soft:#3a2a20;
+    --ok:#7fc4a0; --ok-soft:#1f3229; --warn:#d8b95e; --warn-soft:#332c18;
+    --risk:#e08a80; --risk-soft:#38221f; --info:#8ab4dd; --info-soft:#1d2a38;
+    --code-bg:#26252c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16151a; --surface:#1e1d23; --surface-2:#26252c; --border:#33323a;
+  --text:#e8e6e1; --muted:#9a968e; --accent:#d99565; --accent-soft:#3a2a20;
+  --ok:#7fc4a0; --ok-soft:#1f3229; --warn:#d8b95e; --warn-soft:#332c18;
+  --risk:#e08a80; --risk-soft:#38221f; --info:#8ab4dd; --info-soft:#1d2a38;
+  --code-bg:#26252c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);
+     font-size:15.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;
+      max-width:1500px;margin:0 auto;padding:0 32px}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
+        padding:32px 0;font-size:13.5px}
+nav.toc .brand{font-weight:700;font-size:15px;letter-spacing:-.01em;margin-bottom:4px}
+nav.toc .sub{color:var(--muted);font-size:12px;margin-bottom:20px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{margin:0 0 1px}
+nav.toc a{display:block;padding:5px 10px;border-radius:6px;color:var(--muted);
+          text-decoration:none;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--text);background:var(--surface-2)}
+nav.toc a.lvl2{padding-left:22px;font-size:12.5px}
+nav.toc a.lvl3{padding-left:34px;font-size:12px;opacity:.82}
+main{padding:32px 0 96px;min-width:0}
+header.hd{border-bottom:1px solid var(--border);padding-bottom:24px;margin-bottom:36px}
+header.hd .kicker{color:var(--accent);font-weight:600;font-size:12.5px;
+  letter-spacing:.09em;text-transform:uppercase}
+h1{font-size:2.15rem;line-height:1.15;letter-spacing:-.025em;margin:.35em 0 .3em;font-weight:700}
+h2{font-size:1.5rem;letter-spacing:-.02em;margin:3rem 0 .9rem;padding-top:.6rem;
+   border-top:1px solid var(--border);font-weight:680}
+h2:first-of-type{margin-top:1rem}
+h3{font-size:1.09rem;margin:2rem 0 .6rem;font-weight:660;letter-spacing:-.01em}
+h4{font-size:.94rem;margin:1.4rem 0 .4rem;font-weight:650;color:var(--muted);
+   text-transform:uppercase;letter-spacing:.05em}
+p{margin:.7em 0}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.855em;background:var(--code-bg);
+     padding:.1em .34em;border-radius:4px;word-break:break-word}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;
+    padding:14px 16px;overflow-x:auto;font-size:12.6px;line-height:1.55;margin:1em 0}
+pre code{background:none;padding:0;font-size:inherit}
+ul,ol{padding-left:1.35em;margin:.6em 0}
+li{margin:.24em 0}
+table{border-collapse:collapse;width:100%;margin:1.1em 0;font-size:13.6px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--surface-2);font-weight:640;white-space:nowrap;position:sticky;top:0}
+tbody tr:hover{background:var(--surface-2)}
+td code{white-space:nowrap}
+.lead{font-size:1.05rem;color:var(--muted);max-width:74ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12.6px;color:var(--muted);margin-top:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+      padding:18px 20px;margin:1.1em 0}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:1.2em 0}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat .n{font-size:1.65rem;font-weight:700;letter-spacing:-.03em;line-height:1.1;
+  font-variant-numeric:tabular-nums}
+.stat .l{font-size:12.2px;color:var(--muted);margin-top:3px}
+.tag{display:inline-block;font-size:11.4px;font-weight:620;padding:1.5px 8px;border-radius:20px;
+     border:1px solid transparent;white-space:nowrap;line-height:1.55}
+.t-ok{background:var(--ok-soft);color:var(--ok)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.t-risk{background:var(--risk-soft);color:var(--risk)}
+.t-info{background:var(--info-soft);color:var(--info)}
+.t-neutral{background:var(--surface-2);color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);
+  border-radius:0 8px 8px 0;padding:12px 18px;margin:1.2em 0;font-size:14.2px}
+.callout.risk{border-color:var(--risk);background:var(--risk-soft)}
+.callout.info{border-color:var(--info);background:var(--info-soft)}
+.callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+.path{font-family:var(--mono);font-size:12.3px;color:var(--muted)}
+.two{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+figure{margin:1.4em 0}
+figcaption{font-size:12.4px;color:var(--muted);margin-top:8px}
+svg{max-width:100%;height:auto;display:block}
+hr{border:0;border-top:1px solid var(--border);margin:2.4em 0}
+.small{font-size:12.8px;color:var(--muted)}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--border);
+  font-size:12.6px;color:var(--muted)}
+details{border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:.8em 0;
+  background:var(--surface)}
+summary{cursor:pointer;font-weight:620;font-size:14px}
+details[open] summary{margin-bottom:.6em}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:0;padding:0 16px}
+  nav.toc{position:static;max-height:none;padding:24px 0 8px;
+    border-bottom:1px solid var(--border);margin-bottom:8px}
+  nav.toc ol{columns:2;column-gap:16px}
+  nav.toc a.lvl2,nav.toc a.lvl3{display:none}
+  h1{font-size:1.75rem}
+}
+@media print{
+  nav.toc{display:none} .wrap{grid-template-columns:1fr;max-width:none}
+  body{font-size:10.5pt} h2{page-break-after:avoid} table{font-size:9pt}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+  <div class="brand">Cartographie Eden</div>
+  <div class="sub">std-eden — référencement pour refonte</div>
+  <ol>
+    <li><a href="#synthese">Synthèse</a></li>
+    <li><a href="#s1">1. Fonctionnalités paramétrables</a></li>
+    <li><a href="#s1-meca" class="lvl2">Mécanique</a></li>
+    <li><a href="#s1-inv" class="lvl2">Inventaire</a></li>
+    <li><a href="#s1-valid" class="lvl2">Validation</a></li>
+    <li><a href="#s2">2. Fonctionnel hors paramétrage</a></li>
+    <li><a href="#s2-menus" class="lvl2">Menus</a></li>
+    <li><a href="#s2-domaines" class="lvl2">Domaines métier</a></li>
+    <li><a href="#s2-elements" class="lvl2">Éléments métier</a></li>
+    <li><a href="#s2-transverse" class="lvl2"><strong>Capacités transverses</strong></a></li>
+    <li><a href="#s2-t1" class="lvl3">Modèle de données</a></li>
+    <li><a href="#s2-t2" class="lvl3">Champs dynamiques</a></li>
+    <li><a href="#s2-t3" class="lvl3">Formulaires &amp; fiches</a></li>
+    <li><a href="#s2-t4" class="lvl3">Recherche</a></li>
+    <li><a href="#s2-t5" class="lvl3">Recherche avancée</a></li>
+    <li><a href="#s2-t6" class="lvl3">Listes &amp; calculs</a></li>
+    <li><a href="#s2-t7" class="lvl3">Restitution</a></li>
+    <li><a href="#s2-t8" class="lvl3">Exports</a></li>
+    <li><a href="#s2-t9" class="lvl3">Droits</a></li>
+    <li><a href="#s2-t10" class="lvl3">Automatisation</a></li>
+    <li><a href="#s2-t11" class="lvl3">Documents</a></li>
+    <li><a href="#s2-t12" class="lvl3">Emails</a></li>
+    <li><a href="#s2-t13" class="lvl3">Import &amp; API</a></li>
+    <li><a href="#s2-t14" class="lvl3">Interface &amp; i18n</a></li>
+    <li><a href="#s2-modes" class="lvl2">Modes de gestion métier</a></li>
+    <li><a href="#s2-integrations" class="lvl2">Intégrations</a></li>
+    <li><a href="#s3">3. Architecture technique</a></li>
+    <li><a href="#s3-couches" class="lvl2">Couches runtime</a></li>
+    <li><a href="#s3-modules" class="lvl2">Modules techniques</a></li>
+    <li><a href="#s3-stack" class="lvl2">Stack &amp; dépendances</a></li>
+    <li><a href="#s3-donnees" class="lvl2">Modèle de données</a></li>
+    <li><a href="#s4">4. Carte macro du code</a></li>
+    <li><a href="#s5">5. Blocs non standard</a></li>
+    <li><a href="#s6">6. Dette &amp; points d'attention</a></li>
+    <li><a href="#annexes">Annexes</a></li>
+  </ol>
+</nav>
+<main>
+<header class="hd">
+  <div class="kicker">Rapport d'analyse fonctionnelle et technique</div>
+  <h1>Eden / std-eden — cartographie en vue d'une refonte</h1>
+  <p class="lead">Référencement du périmètre fonctionnel et technique de l'ERP :
+  ce qu'il y a dedans, comment c'est construit, et ce qui s'écarte des standards.
+  Ce document est un inventaire, pas une spécification de rétro-ingénierie.</p>
+  <div class="meta">
+    <span><strong>Dépôt</strong> std-eden (branche <code>feat/docker_alex</code>)</span>
+    <span><strong>Framework</strong> Eden — submodules <code>app/Eden</code> + <code>public/eden</code></span>
+    <span><strong>Version Eden</strong> tag <code>Version_2026080120</code></span>
+    <span><strong>Date</strong> 17/09/2026</span>
+    <span><strong>Méthode</strong> lecture statique du code, aucun run, aucune modification</span>
+  </div>
+</header>
+<h2 id="synthese">Synthèse</h2>
+
+<p><strong>std-eden est une coquille Laravel de 793 lignes qui héberge un framework applicatif
+maison de 387 000 lignes.</strong> Eden n'est pas une bibliothèque au-dessus de Laravel : il en
+remplace le routage, le modèle de données, la couche d'écrans, l'authentification et les
+migrations. Laravel fournit le conteneur, Blade, Eloquent et quelques façades ; tout le reste est
+propriétaire.</p>
+
+<div class="two">
+<div class="card">
+<h4>Ce que couvre le produit</h4>
+<p>Un ERP complet : gestion commerciale achat et vente, articles et stock multi-entrepôts, CRM,
+projets et tâches, saisie des temps, RH, comptabilité et trésorerie, recouvrement, règlements,
+facturation électronique, e-commerce, blog, extranet, planning, tickets, GED, messagerie,
+reporting, import/export — <strong>23 domaines fonctionnels</strong>,
+<strong>182 objets métier</strong>, <strong>772 routes</strong>,
+<strong>15 intégrations tierces</strong>.</p>
+</div>
+<div class="card">
+<h4>Ce qui le rend paramétrable</h4>
+<p>Deux leviers superposés : <strong>400 fonctionnalités</strong> activables par fichier de
+configuration (dont 353 exposées dans une IHM d'administration), et un moteur <strong>no-code</strong>
+— tables, champs, listes, formulaires, rapports et vues SQL « libres ». Un champ porte
+<strong>63 propriétés</strong> paramétrables, dont l'affichage, l'obligation et la lecture seule
+<em>conditionnels</em>, et le calcul par requête. C'est ce socle, détaillé en §2.4, qui représente
+le périmètre le plus coûteux à reproduire.</p>
+</div>
+</div>
+
+<h3>Les cinq constats qui structurent une refonte</h3>
+
+<ol>
+<li><strong>La configuration est du code.</strong> Le paramétrage écrit des fichiers PHP dans
+<code>storage/app/</code> qui sont ensuite <code>include</code>és : fonctionnalités, mise en page
+des fiches, formulaires libres, menus, filtres JS. Il n'existe pas de frontière nette entre
+« réglage client » et « code source », ni de schéma qui décrive ce qui est réglable.</li>
+
+<li><strong>Le système de fonctionnalités marche, mais il a dérivé.</strong> 87 % des clés sont
+réellement branchées (823 appels dans le code). Restent 51 clés mortes issues d'un regroupement
+jamais nettoyé, 37 réglages affichés sans effet détecté, 49 réglages invisibles dans l'IHM, et
+2 fautes de frappe dont une casse silencieusement l'intégration SharePoint.</li>
+
+<li><strong>Quatre mécanismes ne se portent pas tels quels.</strong> Les migrations maison
+(1 219 fichiers sans rollback ni historique), l'évaluation de conditions et de modèles de documents
+par <code>eval()</code> / Blade dynamique, le DDL construit par concaténation, et une
+authentification qui n'utilise pas du tout Laravel (<strong>zéro occurrence de <code>Auth::</code></strong>).</li>
+
+<li><strong>La logique est concentrée dans très peu de fichiers.</strong> Dix fichiers PHP
+dépassent 60 Ko ; <code>Document_management.php</code> (347 Ko) et
+<code>Element_management.php</code> (180 Ko) portent à eux seuls l'essentiel du métier documentaire.
+Les vues et les managements représentent 63 % du code.</li>
+
+<li><strong>Il n'y a ni filet ni documentation.</strong> Aucun test automatisé exploitable
+(<code>phpunit.xml</code> au format PHPUnit ≤ 9 avec PHPUnit 11 déclaré), aucune CI, et le dossier
+<code class="path">docs/tech/</code> référencé par le <code>CLAUDE.md</code> du projet n'existe pas
+sur cette branche. Le front repose sur Vue 2.7, en fin de vie depuis fin 2023.</li>
+</ol>
+
+<div class="callout">
+<p><strong>Lecture d'ensemble.</strong> Eden est un produit mûr et large, façonné par
+13 344 commits et une cadence de version mensuelle. Ses choix non standard ne sont pas des
+accidents : ils servent un objectif assumé — personnaliser chaque instance client sans redéployer
+de code. Le coût s'est reporté sur la traçabilité, la sécurité et la testabilité. Une refonte a
+donc deux questions distinctes à trancher : <em>quel périmètre fonctionnel reprendre</em>
+(sections 1 et 2) et <em>quel modèle de personnalisation adopter à la place</em> (sections 3 et 5).</p>
+</div>
+<h2 id="s1">1. La liste des fonctionnalités paramétrables</h2>
+
+<p>Eden expose un écran d'administration où un intégrateur active, désactive ou règle des
+comportements de l'ERP sans toucher au code. C'est le mécanisme de personnalisation par client le
+plus visible du produit. Cette section valide son implémentation, son inventaire et sa cohérence.</p>
+
+<div class="grid">
+  <div class="stat"><div class="n">400</div><div class="l">clés de premier niveau déclarées</div></div>
+  <div class="stat"><div class="n">+125</div><div class="l">sous-clés « par type de document »</div></div>
+  <div class="stat"><div class="n">353</div><div class="l">clés exposées dans l'IHM</div></div>
+  <div class="stat"><div class="n">823</div><div class="l">appels à <code>fonctionnalite()</code></div></div>
+</div>
+
+<h3 id="s1-meca">1.1 Mécanique — validée</h3>
+
+<p>Le mécanisme fonctionne, il est cohérent de bout en bout, et il est <strong>entièrement basé
+sur des fichiers PHP</strong> — aucune table de configuration en base.</p>
+
+<pre><code>① DÉFAUTS         app/Eden/Config/fonctionnalites.php          400 clés, valeurs standard
+                                    ▲
+② SURCHARGE       storage/app/eden_fonctionnalites.php        25 Ko, propre à l'instance
+   CLIENT         + storage/app/eden_fonctionnalites_specifiques.php   (clés sur mesure)
+                  + storage/app/eden_fonctionnalites_pdf_par_defaut.php
+                                    │
+③ FUSION          fonctionnalites.php fusionne $standard ← $specifique
+                  · array_merge sur un seul niveau pour les valeurs tableau
+                  · régénère les clés plates historiques depuis gescom_document
+                  · base64_decode des clés de type « password »
+                                    │
+④ EXPOSITION      config('fonctionnalites')
+   LARAVEL        mergeConfigFrom(Config/*.php) dans EdenServiceProvider::register()
+                                    │
+⑤ LECTURE         fonctionnalite('ma_cle')          Helpers/fonctionnalite.php
+                  └ si moi()->profil_id et fonctionnalites_par_profil[cle][profil]
+                      → valeur spécifique au profil
+                  └ sinon valeur globale, sinon null
+                  ⚠ une partie du code lit directement config('fonctionnalites.xxx')
+                                    │
+⑥ ÉCRITURE        POST parametrage/fonctionnalites/enregistrer
+                  Parametrage_controller::fonctionnalites_enregistrer()
+                  · sauvegarde horodatée dans storage/app/sauvegardes_fonctionnalites/
+                  · var_export() du POST complet → réécriture du fichier PHP
+                  · opcache_invalidate()</code></pre>
+
+<h4>Points validés</h4>
+<ul>
+<li><strong>Surcharge par profil utilisateur</strong> : la clé réservée
+<code>fonctionnalites_par_profil[clé][profil_id]</code> permet un réglage différencié par
+profil. Implémenté et lu par le helper.</li>
+<li><strong>Versionnement des sauvegardes</strong> : chaque enregistrement archive l'état
+précédent (2 sauvegardes présentes dans cet environnement).</li>
+<li><strong>Invalidation OPcache</strong> explicite après écriture — nécessaire puisque la
+configuration est du PHP exécutable.</li>
+<li><strong>Auto-diagnostic</strong> : <code>Fonctionnalite_management::recuperer_difference_vue_config()</code>
+compare déjà les clés de l'IHM à celles de la config et affiche les manquantes. Le framework
+connaît son propre problème de dérive.</li>
+<li><strong>Extensibilité de l'IHM</strong> : <code>Fonctionnalite_management::enfants()</code>
+scanne le dossier <code class="path">Managements/Fonctionnalites/</code> par réflexion — ajouter
+une classe crée un onglet de paramétrage.</li>
+</ul>
+
+<div class="callout risk">
+<p><strong>Trois fragilités confirmées dans la mécanique.</strong></p>
+<ol style="margin-bottom:0">
+<li><strong>La configuration est du code PHP généré puis exécuté.</strong> Deux des trois
+écritures (<code>fonctionnalites_specifiques_enregistrer()</code>,
+<code>enregistre_pdf_par_defaut()</code>, <code class="path">Parametrage_controller.php</code>
+l. 220-243 et 286-305) construisent le fichier par concaténation de chaînes sans échappement,
+là où l'écriture principale utilise correctement <code>var_export()</code>. Une valeur
+contenant un guillemet suffit à casser — ou à détourner — le fichier de configuration.</li>
+<li><strong>Les secrets d'intégration sont encodés, pas chiffrés.</strong> Les clés de type
+<code>password</code> (identifiants de connexion aux services tiers) sont stockées en
+<code>base64</code> dans un fichier PHP du dépôt de travail et redécodées à chaque chargement
+de configuration. L'encodage base64 est réversible : ce n'est pas une protection.</li>
+<li><strong>Deux voies de lecture coexistent.</strong> Le helper <code>fonctionnalite()</code>
+applique la surcharge par profil ; les appels directs à <code>config('fonctionnalites.xxx')</code>
+ne l'appliquent pas. Le comportement diffère donc selon le point d'appel.</li>
+</ol>
+</div>
+
+<h3 id="s1-inv">1.2 Inventaire par domaine</h3>
+
+<table>
+<thead><tr><th>Domaine</th><th>Clés IHM</th><th>Classe de paramétrage</th><th>Exemples</th></tr></thead>
+<tbody>
+<tr><td>Gestion commerciale</td><td><strong>159</strong></td><td><code class="path">Gestion_commerciale_v2_management.php</code> <span class="small">(65 Ko)</span></td><td><code>gescom_document</code> (tableau par type), <code>gescom_autoriser_document_negatif</code>, <code>nombre_chiffres_numerotation</code>, <code>type_calcul_du_pourcentage_marge</code></td></tr>
+<tr><td>Intégrations</td><td><strong>61</strong></td><td><code class="path">Integrations_v2_management.php</code></td><td><code>microsoft_app_id</code>, <code>sharepoint_utiliser_synchronisation</code>, <code>stripe_activation</code>, <code>docusign_activation</code>, <code>budget_insight_utiliser</code></td></tr>
+<tr><td>Général / transverse</td><td><strong>42</strong></td><td><code class="path">Fonctionnalites_generales_v2_management.php</code></td><td><code>recherche_par_defaut</code>, <code>gestion_pieces_jointes</code>, <code>nombre_de_lignes_dans_listes</code>, <code>mode_multi_adresses</code></td></tr>
+<tr><td>Tâches &amp; planning</td><td><strong>20</strong></td><td><code class="path">Tache_management.php</code></td><td><code>duree_des_taches</code>, <code>planning_nombre_jours</code>, <code>choix_couleur_tache</code></td></tr>
+<tr><td>Comptabilité</td><td><strong>17</strong></td><td><code class="path">Compta_v2_management.php</code></td><td><code>compta_journal_vente</code>, <code>compta_compte_general_clients</code>, <code>comptabiliser_automatiquement</code></td></tr>
+<tr><td>Emails</td><td><strong>13</strong></td><td><code class="path">Emails_v2_management.php</code></td><td><code>adresse_mail_fonctionnement_application</code>, <code>releve_mail_jour_delai</code></td></tr>
+<tr><td>CRM</td><td><strong>12</strong></td><td><code class="path">Crm_management.php</code></td><td><code>alimentation_timeline_document_vente</code>, <code>utiliser_campagne_prospection</code></td></tr>
+<tr><td>Tickets client</td><td><strong>11</strong></td><td><code class="path">Ticket_client_management.php</code></td><td><code>releve_mail_ticket_client_microsoft</code>, <code>…_extension_piece_jointe_bloque</code></td></tr>
+<tr><td>Projets</td><td><strong>10</strong></td><td><code class="path">Projets_v2_management.php</code></td><td><code>gestion_de_projet</code>, <code>projet_participants</code></td></tr>
+<tr><td>Extranet</td><td><strong>8</strong></td><td><code class="path">Extranet_management.php</code></td><td><code>utiliser_extranet</code>, <code>url_extranet</code>, <code>page_accueil_extranet</code></td></tr>
+<tr><td>Spécifiques client</td><td><strong>1</strong> <span class="tag t-neutral">factice</span></td><td><code class="path">Fonctionnalites_specifiques_management.php</code></td><td>Corps de méthode entièrement commenté ; module alimenté uniquement par le fichier storage du client</td></tr>
+<tr><td>Modèles PDF par défaut</td><td><strong>15</strong></td><td>Config séparée <span class="small">(hors helper <code>fonctionnalite()</code>)</span></td><td>Une clé par type de document, valeur = identifiant du modèle</td></tr>
+</tbody>
+</table>
+
+<p><strong>Types de contrôles</strong> proposés par l'IHM : <code>toggle</code>,
+<code>select</code>, <code>input</code>, <code>textarea</code>, <code>badge_multiselection</code>,
+<code>connexion</code>, <code>publipostage_texte</code>, <code>password</code>. Un descripteur peut
+déclarer une <code>fonctionnalite_mere</code>, ce qui conditionne son affichage à l'activation
+d'une autre clé.</p>
+
+<p><strong>Structures récurrentes</strong> : 15 clés de premier niveau sont des tableaux indexés
+par type de document (<code>gescom_document</code>, <code>modification_document_valide</code>,
+<code>documents_colonnes_a_afficher_vente</code> / <code>_achat</code>,
+<code>alimentation_timeline_document_vente</code> / <code>_achat</code>,
+<code>bloquer_validation_document_si_client_retard_paiement</code>…), soit 125 sous-réglages.
+Ces tableaux sont en partie construits par boucle sur <code>Variables::$documents_gescom</code>
+en tête de fichier.</p>
+
+<h3 id="s1-valid">1.3 Validation de l'implémentation</h3>
+
+<p>Méthode : recherche de chaque clé dans <code>app/</code>, <code>routes/</code> et
+<code>resources/</code>, en excluant les fichiers de déclaration eux-mêmes, pour ne compter que la
+consommation réelle par le métier.</p>
+
+<div class="grid">
+  <div class="stat"><div class="n" style="color:var(--ok)">349</div><div class="l">clés réellement consommées <span class="small">(87 %)</span></div></div>
+  <div class="stat"><div class="n" style="color:var(--warn)">51</div><div class="l">déclarées mais jamais lues <span class="small">(13 %)</span></div></div>
+  <div class="stat"><div class="n" style="color:var(--risk)">37</div><div class="l">affichées en IHM sans effet détecté</div></div>
+  <div class="stat"><div class="n" style="color:var(--risk)">2</div><div class="l">clés fantômes</div></div>
+  <div class="stat"><div class="n" style="color:var(--warn)">49</div><div class="l">réglages non exposés en IHM</div></div>
+</div>
+
+<h4>(a) Implémentées et consommées — 349 clés</h4>
+<p>Le noyau du système est sain. Échantillon vérifié, avec les consommateurs réels :</p>
+<table>
+<thead><tr><th>Clé</th><th>Consommée par</th></tr></thead>
+<tbody>
+<tr><td><code>recouvrement</code></td><td>28 fichiers — <code class="path">Recouvrement_controller</code>, <code class="path">Rapport_recouvrement_management</code>, <code class="path">Variables.php</code></td></tr>
+<tr><td><code>ecart_gestion_ttc</code></td><td>26 fichiers — <code class="path">Document_controller</code>, <code class="path">Calcul_total_sur_document_service</code>, 19 migrations</td></tr>
+<tr><td><code>utiliser_extranet</code>, <code>url_extranet</code></td><td><code class="path">Middlewares/Eden_utilisateur_connecte</code>, <code class="path">Eden_extranet</code>, <code class="path">Authentification_controller</code></td></tr>
+<tr><td><code>gescom_document</code></td><td><code class="path">Fiche_client_management</code>, <code class="path">Listes_formatees_service</code>, vues gescom</td></tr>
+<tr><td><code>compta_compte_general_clients</code></td><td><code class="path">Facture_vente_management</code>, <code class="path">Avoir_vente_management</code>, <code class="path">Paiement_management</code></td></tr>
+<tr><td><code>microsoft_utiliser_connexion</code></td><td><code class="path">Utilisateurs_controller</code>, <code class="path">Microsoft_calendrier_service</code>, <code class="path">Tache_management</code></td></tr>
+<tr><td><code>duree_max_creation_recurrence</code></td><td><code class="path">Recurrence_service</code>, <code class="path">Google_calendrier_service</code>, <code class="path">Microsoft_calendrier_service</code></td></tr>
+<tr><td><code>type_document_generer_pdf</code></td><td><code class="path">Document_management</code>, vues <code class="path">actions/imprimer</code> et <code class="path">actions/valider</code></td></tr>
+</tbody>
+</table>
+
+<h4>(b) Déclarées mais jamais lues — 51 clés</h4>
+<p>Presque toutes s'expliquent par une <strong>opération de regroupement historique</strong> :
+des scripts de migration ont fusionné des dizaines de clés plates en tableaux uniques, sans jamais
+nettoyer les clés d'origine dans la configuration standard.</p>
+<table>
+<thead><tr><th>Famille</th><th>Volume</th><th>Remplacée par</th><th>Script</th></tr></thead>
+<tbody>
+<tr><td><code>gescom_devis_vente</code>, <code>gescom_facture_achat</code>, …</td><td>15</td><td><code>gescom_document</code></td><td><code class="path">S20220708_regroupement_multiples_fonctionnalite.php</code></td></tr>
+<tr><td><code>bloquer_validation_&lt;doc&gt;_si_client_retard_paiement</code></td><td>8</td><td><code>bloquer_validation_document_si_client_retard_paiement</code></td><td>idem</td></tr>
+<tr><td><code>alimentation_timeline_creation_&lt;doc&gt;</code></td><td>9</td><td><code>alimentation_timeline_document_vente</code> / <code>_achat</code></td><td>idem</td></tr>
+<tr><td><code>valider_&lt;doc&gt;_enregistrement</code></td><td>5</td><td><code>valider_document_enregistrement</code></td><td>idem</td></tr>
+<tr><td>Colonnes de documents</td><td>—</td><td><code>documents_colonnes_a_afficher_vente</code> / <code>_achat</code></td><td><code class="path">S20250827_…</code>, <code class="path">S20260520_…</code></td></tr>
+<tr><td>Modification si document validé</td><td>—</td><td><code>modification_document_valide</code></td><td><code class="path">S20220506_…</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<p><strong>Effet de bord mesurable.</strong> À <em>chaque</em> chargement de configuration,
+<code class="path">fonctionnalites.php</code> régénère les 15 clés plates
+<code>gescom_&lt;type&gt;</code> à partir de <code>gescom_document</code>… alors qu'aucun code
+vivant ne les relit. Travail inutile à chaque requête, et surface de confusion pour un
+développeur qui les découvre.</p>
+</div>
+
+<h4>(c) Clés fantômes — 2 cas, dont un bug fonctionnel</h4>
+<table>
+<thead><tr><th>Clé attendue</th><th>Clé réellement déclarée</th><th>Conséquence</th></tr></thead>
+<tbody>
+<tr><td><code>site_racine_eden_sharepoint</code><br><span class="small">lue par <code class="path">Integrations_v2_management</code> <strong>et</strong> <code class="path">Microsoft_sharepoint_service</code></span></td><td><code>dossier_racine_eden_sharepoint</code></td><td><span class="tag t-risk">bug</span> Le champ affiché en paramétrage n'est relié à rien, et le service SharePoint lit une clé inexistante → <code>null</code></td></tr>
+<tr><td><code>extranet_modele_email_inscription</code><br><span class="small">lue par <code class="path">Extranet_management</code> et <code class="path">Utilisateur_extranet_management</code></span></td><td>seul <code>extranet_modele_email_mdp_oublie</code> existe</td><td><span class="tag t-warn">mort</span> Modèle d'email d'inscription jamais paramétrable</td></tr>
+</tbody>
+</table>
+
+<h4>(d) 37 clés visibles en IHM sans effet détecté</h4>
+<p>Le cas le plus problématique pour l'exploitation : l'administrateur croit régler quelque chose
+qui n'a aucune incidence. On y trouve notamment <code>stripe_activation</code>,
+<code>payline_activation</code>, <code>payzen_activation</code>, <code>docusign_activation</code>,
+<code>mode_de_vente</code>, <code>duree_des_taches</code>, <code>fiche_client_taches</code>,
+<code>fiche_client_prospection</code>, <code>gescom_document_avec_nomenclature</code>,
+<code>gescom_gerer_avancement_via_devis</code>, les trois clés <code>transformer_*</code>,
+<code>compte_comptable_remise_achat</code> / <code>_vente</code>.</p>
+<p class="small">Réserve méthodologique : la détection repose sur une recherche textuelle. Une clé
+composée dynamiquement par concaténation échapperait à l'analyse. Ces 37 clés sont des candidats
+forts à vérification, pas une certitude formelle.</p>
+
+<h4>(e) 49 réglages absents de l'IHM</h4>
+<p>Modifiables uniquement en éditant à la main <code class="path">storage/app/eden_fonctionnalites.php</code>.
+Majoritairement les familles regroupées ci-dessus, plus des isolées :
+<code>achats_sur_les_documents</code>, <code>afficher_code_article_recherche</code>,
+<code>afficher_entrepot_sur_document_achat</code>,
+<code>gescom_calcul_date_de_reglement_automatique</code>,
+<code>onglet_par_defaut_fiche_client</code>, <code>page_accueil_extranet</code>,
+<code>blocage_enregistrement_si_article_supprime</code>,
+<code>actualisation_automatique_sur_filtres_colonne_gauche</code>.</p>
+
+<h3>1.4 Legacy et doublons</h3>
+<ul>
+<li><strong><code class="path">Config/fonctionnalites_integrations.php</code> est un doublon
+mort</strong> : son contenu entier est <code>return include(…/fonctionnalites.php)</code>, avec un
+commentaire daté de 2022 demandant de ne plus l'utiliser. Le
+<code>array_merge(config('fonctionnalites'), config('fonctionnalites_integrations'))</code> du
+helper fusionne donc un tableau avec lui-même — sans effet, mais exécuté à chaque requête.</li>
+<li><strong>Migration « v2 » inachevée</strong> : 5 modules portent le suffixe
+<code>_v2_management</code>, 4 ne l'ont pas. La vue
+<code class="path">parametrage_fonctionnalites_affichage_liste_fonctionnalites.blade.php</code>
+et sa variante <code>_v2</code> cohabitent dans le même dossier.</li>
+<li><strong>Sauvegarde asymétrique</strong> : le module principal archive l'état précédent avant
+écrasement ; les modules « spécifiques » et « PDF par défaut » n'archivent rien.</li>
+<li><strong>Enregistrement par instantané complet</strong> : chaque sauvegarde réécrit l'intégralité
+de l'état posté depuis le composant Vue, pas un delta. Une clé ajoutée en code mais non reprise
+côté front peut être effacée au prochain enregistrement.</li>
+</ul>
+
+<div class="callout info">
+<p><strong>Verdict.</strong> Le système de fonctionnalités paramétrables est <strong>réel,
+opérationnel et massivement utilisé</strong> — 823 appels dans le code, 87 % des clés effectivement
+branchées. Sa dérive est celle d'un mécanisme vivant depuis longtemps : ~13 % de clés
+mortes, 37 réglages sans effet, 49 non exposés, 2 fautes de frappe dont une casse une intégration.
+Pour une refonte, le modèle est à conserver ; son support (fichiers PHP générés, secrets en
+base64, absence de schéma et de validation) est à remplacer.</p>
+</div>
+<h2 id="s2">2. Le fonctionnel <em>hors</em> liste paramétrable</h2>
+
+<p>Tout ce qui suit existe dans l'application <strong>indépendamment</strong> du fichier de
+fonctionnalités : ce sont des écrans, des objets métier et des mécanismes livrés en dur par le
+framework. Un flag peut les <em>masquer</em> ou en modifier le comportement, mais leur existence
+ne dépend pas du paramétrage.</p>
+
+<h3 id="s2-menus">2.1 Arborescence des menus livrée en standard</h3>
+
+<p class="small">Source : <code class="path">app/Eden/Config/eden_menus.php</code> (15,5 Ko, en-tête
+<code>/* Généré le 03/08/2022 */</code> — fichier lui-même généré), 46 entrées.</p>
+
+<div class="card">
+<ul style="columns:2;column-gap:32px;margin:0">
+<li><strong>Clients</strong></li>
+<li><strong>Commerce</strong> — Coupons réduction, Crédits, Catégories d'articles, Articles</li>
+<li><strong>Ventes</strong> — Devis, Commandes, BL, Acomptes, Factures, Avoirs, Bons de retour, Bons de préparation</li>
+<li><strong>Achats</strong> — Fournisseurs, Devis, Commandes, BR, Acomptes, Factures, Avoirs, Bons de retour</li>
+<li><strong>Projets</strong> — Saisie des temps, Projets</li>
+<li><strong>Stocks</strong> — Transformation, Inventaire tournant, Réception commande, Mvt stocks, Production, État des stocks</li>
+<li><strong>Tréso</strong> — Suivi tréso, Rapprochement bancaire</li>
+<li><strong>Bibliothèque</strong> (GED)</li>
+<li><strong>Blog</strong> — Catégories, Articles</li>
+<li><strong>Configuration</strong> — Champs libres, Utilisateurs, Profils, Autres paramètres</li>
+</ul>
+</div>
+
+<p>Trois autres arbres de navigation coexistent :
+<code class="path">eden_menus_extranet.php</code> (portail client : tickets),
+<code class="path">eden_intranet.php</code> (page d'accueil en tuiles : annuaire, mon compte),
+<code class="path">indicateurs.php</code> (KPI fiche client : CA, CA 12 mois glissants, encours,
+délai de réponse, date de dernière facture, temps de transformation du 1<sup>er</sup> devis).</p>
+
+<div class="callout info">
+<p><strong>Le menu n'est pas la carte du fonctionnel.</strong> 46 entrées de menu pour
+<strong>772 routes</strong> et <strong>182 types d'éléments métier</strong> : l'essentiel de la
+surface applicative est atteint par les fiches, les listes paramétrables, les rapports et les
+écrans de paramétrage, pas par la navigation principale. Les menus sont eux-mêmes éditables en base
+(<code>Menus_categories</code>, <code>Menus_liens</code>).</p>
+</div>
+
+<h3 id="s2-domaines">2.2 Domaines fonctionnels</h3>
+
+<table>
+<thead><tr><th>Domaine</th><th>Périmètre</th><th>Principaux points d'entrée</th></tr></thead>
+<tbody>
+<tr><td><strong>Gestion commerciale — vente</strong></td>
+<td>Cycle complet devis → commande → BL / bon de préparation → facture → avoir / bon de retour, acomptes, échéanciers.</td>
+<td><code class="path">Managements/Elements/Document_management.php</code> (347 Ko), <code class="path">Controllers/Document_controller.php</code></td></tr>
+
+<tr><td><strong>Gestion commerciale — achat</strong></td>
+<td>Même cycle côté fournisseur + réception de commande, lignes fournisseur, tarifs d'achat.</td>
+<td><code class="path">Elements/Commande_achat*_management.php</code>, <code class="path">Controllers/Commande_achat_ligne_fournisseur_controller.php</code></td></tr>
+
+<tr><td><strong>Articles &amp; stock</strong></td>
+<td>Fiche article, familles, nomenclatures / production, conditionnements, multi-entrepôts, mouvements, transferts, inventaire tournant, numéros de série et lots.</td>
+<td><code class="path">Elements/Article_management.php</code> (48 Ko), <code class="path">Controllers/Gestion_des_stocks_controller.php</code>, <code class="path">Services/Stocks_service.php</code></td></tr>
+
+<tr><td><strong>CRM / prospection</strong></td>
+<td>Leads, campagnes de prospection, centres d'intérêt, apporteurs d'affaires, échanges.</td>
+<td><code class="path">Controllers/Campagne_de_prospection_controller.php</code>, <code class="path">Controllers/Lead_controller.php</code></td></tr>
+
+<tr><td><strong>Projets &amp; tâches</strong></td>
+<td>Projets, tâches (récurrentes, modèles), workflows, approbations, participants, kanban.</td>
+<td><code class="path">Elements/Tache_management.php</code> (81 Ko), <code class="path">Elements/Approbation_management.php</code></td></tr>
+
+<tr><td><strong>Saisie des temps</strong></td>
+<td>Feuilles de temps, régie vs interne, périodes validées/terminées, transformation temps → document.</td>
+<td><code class="path">Controllers/Saisie_des_temps{,_interne,_regie}_controller.php</code>, <code class="path">Services/Saisie_des_temps_service.php</code> (36 Ko)</td></tr>
+
+<tr><td><strong>RH</strong></td>
+<td>Demandes de congés, notes de frais, suivi des jours travaillés, indisponibilités.</td>
+<td><code class="path">Controllers/Note_de_frais_controller.php</code>, <code class="path">Employe_demande_conge_controller.php</code>, <code class="path">Suivi_jours_travailles_controller.php</code></td></tr>
+
+<tr><td><strong>Comptabilité &amp; trésorerie</strong></td>
+<td>Écritures, modèles d'export comptable, codes TVA, suivi de trésorerie (charges/revenus récurrents, créances), rapprochement bancaire.</td>
+<td><code class="path">Controllers/Compta_controller.php</code>, <code class="path">Treso_controller.php</code> (22 Ko), <code class="path">Budget_Insight_controller.php</code> (27 Ko)</td></tr>
+
+<tr><td><strong>Recouvrement</strong></td>
+<td>Relances clients typées, groupes de recouvrement, tableau de suivi.</td>
+<td><code class="path">Controllers/Recouvrement_controller.php</code>, <code class="path">Managements/Recouvrement_management.php</code></td></tr>
+
+<tr><td><strong>Règlements &amp; encaissements</strong></td>
+<td>Paiements, transactions, échéances, encaissement CB, prélèvement manuel, mise à jour de mandat/carte.</td>
+<td><code class="path">Controllers/Paiement_controller.php</code> (34 Ko), <code class="path">Encaissement_cb_controller.php</code>, <code class="path">Reglements_controller.php</code></td></tr>
+
+<tr><td><strong>Facturation électronique</strong></td>
+<td>Factures d'achat électroniques, cycle de vie, mappage de modèles de document. Dépendance <code>atgp/factur-x</code> déclarée côté Eden.</td>
+<td>42 fichiers concernés, dont <code class="path">Elements/Facturation_electronique_{achat,cycle_de_vie}_management.php</code></td></tr>
+
+<tr><td><strong>E-commerce</strong></td>
+<td>Boutique complète : catalogue, recherche, panier (dont paniers enregistrés), compte client, commande, paiement, coupons.</td>
+<td><code class="path">app/Eden/routes/ecommerce.php</code> (86 routes), <code class="path">Controllers/Ecommerce/</code> (12 contrôleurs)</td></tr>
+
+<tr><td><strong>Blog / CMS</strong></td>
+<td>Articles et catégories de blog, contenus de site, sliders, meta-tags.</td>
+<td><code class="path">Controllers/Blog/</code>, <code class="path">Elements/Contenu_site_management.php</code></td></tr>
+
+<tr><td><strong>Extranet client / fournisseur</strong></td>
+<td>Portail séparé : authentification propre, tickets, documents, interface fournisseur, interface lead.</td>
+<td><code class="path">app/Eden/routes/extranet.php</code>, <code class="path">Controllers/Extranet/</code> (5), <code class="path">Middlewares/Eden_extranet.php</code></td></tr>
+
+<tr><td><strong>Planning &amp; calendrier</strong></td>
+<td>Planning interne, planning locatif, calendrier d'événements, récurrences, jours d'indisponibilité, synchronisation bidirectionnelle Google / Microsoft.</td>
+<td><code class="path">Services/Calendrier_service.php</code> (60 Ko), <code class="path">Planning_service.php</code> (36 Ko), <code class="path">Recurrence_service.php</code> (60 Ko)</td></tr>
+
+<tr><td><strong>Tickets / SAV</strong></td>
+<td>Tickets client, échanges, messages, exposition côté extranet.</td>
+<td><code class="path">Managements/Fonctionnalites/Ticket_client_management.php</code>, <code class="path">Services/Ticket_client_service.php</code></td></tr>
+
+<tr><td><strong>Questionnaires &amp; formulaires</strong></td>
+<td>Questionnaires paramétrables (questions, options, répondants, réponses), formulaires web publics.</td>
+<td><code class="path">Controllers/Questionnaire_controller.php</code>, <code class="path">Formulaire_controller.php</code> (14 Ko)</td></tr>
+
+<tr><td><strong>Documents &amp; GED</strong></td>
+<td>Bibliothèque documentaire arborescente, modèles de documents, enrichissement, versionning de documents, publipostage, génération PDF.</td>
+<td><code class="path">Controllers/Bibliotheque_controller.php</code> (41 Ko), <code class="path">Services/Publipostage_service.php</code>, <code class="path">Pdf_service.php</code></td></tr>
+
+<tr><td><strong>Emails &amp; messagerie</strong></td>
+<td>Comptes email, réception IMAP, modèles d'email, destinataires et pièces jointes paramétrés, addon messagerie intégré, emails de factures fournisseur.</td>
+<td><code class="path">Controllers/Addon_messagerie_controller.php</code> (22 Ko), <code class="path">Services/Email_service.php</code> (32 Ko)</td></tr>
+
+<tr><td><strong>Reporting &amp; BI</strong></td>
+<td>Moteur de rapports multi-formes : liste, tableau, courbe, histogramme, camembert, funnel, indicateur, carte, HTML, PDF ; tableaux de bord composables ; recherche avancée.</td>
+<td><code class="path">Managements/Rapports/</code> (17 fichiers), <code class="path">Rapport_courbe_et_histogramme_management.php</code> (30 Ko), <code class="path">Serie_management.php</code> (27 Ko)</td></tr>
+
+<tr><td><strong>Import / export / synchro</strong></td>
+<td>Imports sur mesure, imports en cours, exports Excel asynchrones, synchronisations de services externes (mapping de champs, webhooks).</td>
+<td><code class="path">Controllers/Import_sur_mesure_controller.php</code> (15 Ko), <code class="path">Services/Synchronisation_service_service.php</code>, <code class="path">Queues/</code></td></tr>
+
+<tr><td><strong>Administration &amp; paramétrage</strong></td>
+<td>Champs libres, listes libres, tables libres, formulaires et sous-formulaires libres, rapports libres, vues SQL, menus, profils &amp; droits, utilisateurs, entités, traductions, licence.</td>
+<td><code class="path">app/Eden/routes/parametrage.php</code> (183 routes), <code class="path">Controllers/Parametrage/</code> (6), <code class="path">Managements/Parametrage/</code> (7)</td></tr>
+
+<tr><td><strong>Maintenance &amp; exploitation</strong></td>
+<td>Migrations à chaud, scripts, cache, tests d'URL, suivi de recette, débogage, gestion de version, branches git.</td>
+<td><code class="path">app/Eden/routes/maintenance.php</code> (60 routes), <code class="path">Maintenance_management.php</code> (129 Ko)</td></tr>
+</tbody>
+</table>
+
+<h3 id="s2-elements">2.3 Les 182 éléments métier</h3>
+
+<p>Un « élément » (<code>type_element</code>) est l'unité de base d'Eden : une table, un jeu de
+champs, une fiche, des listes, des droits. Chacun peut être spécialisé par un
+<code>Xxx_management.php</code> ; sinon le framework retombe sur
+<code>Element_management</code> générique.</p>
+
+<details>
+<summary>Liste complète, groupée par domaine</summary>
+<table>
+<thead><tr><th>Domaine</th><th>Éléments</th></tr></thead>
+<tbody>
+<tr><td>Vente</td><td>Devis_vente(_lignes), Commande_vente(_lignes), Bl_vente(_lignes), Facture_vente(_lignes), Avoir_vente(_lignes), Bon_retour_vente(_lignes), Bon_preparation_vente(_lignes), Acompte_vente(_lignes), Achat_sur_document</td></tr>
+<tr><td>Achat</td><td>Devis_achat(_lignes), Commande_achat(_lignes), Commande_achat_ligne_fournisseur, Bl_achat(_lignes), Facture_achat(_lignes), Avoir_achat(_lignes), Bon_retour_achat(_lignes), Acompte_achat(_lignes), Article_fournisseur, Fournisseur</td></tr>
+<tr><td>Générique documents</td><td>Document, Document_lignes, Acompte, Avoir, Bl, Commande, Bordereau</td></tr>
+<tr><td>Articles &amp; stock</td><td>Article, Article_categorie_comptable, Article_evolution_prix, Article_recurrent, Composition_article, Conditionnement, Entrepot, Famille, Mouvement_de_stock, Stocks, Stocks_par_conditionnement, Stocks_tous_les_entrepots(_par_conditionnement), Stock_initial, Transfert_inter_entrepot(_articles), Transformation_stocks, Production_nomenclature, Lot_mouvement</td></tr>
+<tr><td>Tiers &amp; CRM</td><td>Client, Contact, Adresse, Adresse_interne, Lead, Campagne_de_prospection(_client), Centre_d_interet, Apporteur_affaire, Activite, Pays</td></tr>
+<tr><td>Référentiels commerciaux</td><td>Coupon_reduction, Credit, Devise, Condition_commerciale, Code_tva, Modalite_paiement</td></tr>
+<tr><td>Projets &amp; tâches</td><td>Projet, Tache, Tache_recurrence(_modele), Workflow, Approbation, Equipe</td></tr>
+<tr><td>RH</td><td>Employe, Employe_demande_conge, Note_de_frais(_lignes), Feuille_de_temps, Feuille_de_temps_periode_validee/terminee, Jour_travaille, Indisponibilite</td></tr>
+<tr><td>Compta &amp; trésorerie</td><td>Ecriture_comptable, Export_compta_modele, Treso_charge_recurrente, Treso_revenu_recurrent, Treso_creance_client, Treso_mouvement_exceptionnel, Budget_insight, Budget_insight_comptes, Budget_insight_transaction, Compte_bancaire</td></tr>
+<tr><td>Paiement &amp; recouvrement</td><td>Paiement, Transaction_paiement, Echeance, Relance_recouvrement, Type_relance_recouvrement, Groupe_recouvrement, Affacturage</td></tr>
+<tr><td>Facturation électronique</td><td>Facturation_electronique_achat, Facturation_electronique_cycle_de_vie, Facturation_electronique_document_trait</td></tr>
+<tr><td>Signature</td><td>Docusign_document, Docusign_enveloppe</td></tr>
+<tr><td>GED &amp; documents</td><td>Dossier_bibliotheque, Fichier_bibliotheque, Modele_de_document, Modele_enrichissement, Versionning_document, Element_piece_jointe, Eden_sous_formulaire</td></tr>
+<tr><td>Emails</td><td>Compte_email, Configuration_email, Integration_email, Email_recus, Email_facture_fournisseur, Modele_email, Parametrage_destinataire_email, Parametrage_piece_jointe_email, Destinataire</td></tr>
+<tr><td>E-commerce / CMS</td><td>Panier, Panier_enregistre, Blog_article, Blog_categorie, Contenu_site, Meta_tags, Slider</td></tr>
+<tr><td>Tickets &amp; échanges</td><td>Ticket_client, Ticket_client_echange, Ticket_message, Echange</td></tr>
+<tr><td>Questionnaires</td><td>Questionnaire, Questionnaire_question(_option), Questionnaire_reponse, Questionnaire_element_repondant, Formulaire_web_domaine</td></tr>
+<tr><td>Reporting</td><td>Tableau_de_bord, Tableau_de_bord_contenu, Recherche_avancee</td></tr>
+<tr><td>Import / export / synchro</td><td>Import_sur_mesure, Import_en_cours, Export, Synchronisation_service(_champs/_element)</td></tr>
+<tr><td>Paramétrage &amp; admin</td><td>Utilisateur, Utilisateur_extranet, Profil, Profil_droits_divers, Profil_droits_element, Entite, Menus_categories, Menus_liens, Trigger_eden, Vue_sql, Modele_de_calculateur, Parametrage_balise_publipostage, Parametrage_chronometre, Parametrage_lien_champ, Modele_par_defaut</td></tr>
+<tr><td>Exploitation</td><td>Licence, Licence_ensemble, Maintenance, Maintenance_intervention, Cron, Requete_sql_cron, Erreur, Log_page, Log_page_extranet, Log_tentative_connexion, Url_raccourcie, Notification, Notification_manuelle(_element), Suivi_recette_easydev(_echange)</td></tr>
+</tbody>
+</table>
+</details>
+<h3 id="s2-transverse">2.4 Capacités transverses de la plateforme</h3>
+
+<p>Ce sont les fonctions qu'Eden offre <em>sur n'importe quel objet métier</em>, sans code : elles
+constituent le vrai différenciateur du produit et, pour une refonte, le périmètre le plus coûteux
+à reproduire. Chaque capacité est décrite en quelques mots ; le détail vit dans le code cité.</p>
+
+<h4 id="s2-t1">2.4.1 Modèle de données paramétrable</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Table libre</strong></td><td>Créer un objet métier complet sans écrire une ligne de PHP. La table SQL est créée à la volée avec ses colonnes système (<code>id</code>, <code>cree_par/le</code>, <code>modifie_par/le</code>, <code>inactif</code>, <code>chaine_affichage</code>, <code>chaine_tags_recherche</code> + index FULLTEXT), les champs libres système correspondants sont générés, un fichier de migration PHP est écrit pour versionner la structure, et l'objet devient listable, recherchable et éditable. <span class="tag t-warn">Deux étapes restent manuelles</span> : les droits par profil et l'ajout au menu ne sont pas créés automatiquement.</td><td><code class="path">Managements/Parametrage/Table_libre_management.php</code></td></tr>
+<tr><td><strong>Objet adossé à une vue SQL</strong></td><td>Une table libre peut n'être qu'une <em>vue</em> : un objet virtuel qui agrège plusieurs tables (ex. factures + avoirs) et se comporte ensuite comme un objet ordinaire — listable, filtrable, exportable, avec ses propres champs — sans dupliquer la donnée. La vue reconstruit même un index de recherche agrégé pour rester compatible avec la recherche globale.</td><td><code class="path">Services/Vue_sql_service.php</code>, <code class="path">Migrations/Vue_sql/</code></td></tr>
+<tr><td><strong>41 propriétés par objet</strong></td><td>Chaque table libre se règle : libellé au singulier/pluriel, genre, module de rattachement, icône, activation de la fiche, de la recherche rapide, de la création rapide, de la corbeille, du dédoublonnage, du kanban, du planning, du calendrier, de l'accès extranet, du template responsive, d'une vue SQL dédiée…</td><td><code class="path">Migrations/Tables/eden_tableslibres.php</code></td></tr>
+<tr><td><strong>Chaînes d'affichage</strong></td><td>Quatre gabarits par objet définissent comment il s'affiche selon le contexte — en recherche, en tête de fiche, en liste, dans un select — sous forme de patrons <code>#champ# #champ#</code>.</td><td><code>affichage_recherche</code>, <code>affichage_fiche_type</code>, <code>affichage_dans_liste</code>, <code>affichage_pour_select</code></td></tr>
+<tr><td><strong>Champ libre</strong></td><td>Ajouter un champ à n'importe quel objet : la colonne SQL est créée avec le type adéquat, et le champ apparaît dans les formulaires, listes, filtres et exports selon son paramétrage.</td><td><code class="path">Managements/Parametrage/Champ_libre_management.php</code> (35 Ko)</td></tr>
+<tr><td><strong>25 types de champs</strong></td><td>Voir le tableau ci-dessous — y compris des types <em>structurels</em> (onglet, titre, HTML, sous-formulaire) qui font de la liste de champs une véritable mise en page.</td><td><code>Variables::types_champs_libres()</code></td></tr>
+<tr><td><strong>63 propriétés par champ</strong></td><td>Voir §2.4.2. Chaque champ porte son obligation, sa visibilité, son format, sa valeur par défaut, ses conditions, ses règles de calcul.</td><td><code class="path">Migrations/Tables/eden_champslibres.php</code></td></tr>
+<tr><td><strong>Corbeille / inactivation</strong></td><td>Suppression logique généralisée via la colonne <code>inactif</code> présente sur toutes les tables, avec option de corbeille par objet.</td><td><code>corbeille</code> sur <code>eden_tableslibres</code></td></tr>
+<tr><td><strong>Dédoublonnage</strong></td><td>Détection de doublons paramétrable par objet, avec un gabarit d'affichage dédié pour comparer les candidats.</td><td><code>dedoublonnage</code>, <code>affichage_dedoublonnage</code></td></tr>
+</tbody>
+</table>
+
+<h4>Les 25 types de champs</h4>
+<table>
+<thead><tr><th>#</th><th>Type</th><th>Usage</th><th>Colonne SQL générée</th></tr></thead>
+<tbody>
+<tr><td>-5</td><td>Sous-formulaire</td><td>Insère un bloc de saisie répétable (lignes filles) dans le formulaire</td><td>—</td></tr>
+<tr><td>-4 / -3</td><td>Onglet / Fin d'onglet</td><td>Découpe le formulaire en onglets</td><td>—</td></tr>
+<tr><td>-2</td><td>HTML</td><td>Bloc de contenu libre inséré dans le formulaire</td><td><code>VARCHAR(1000)</code></td></tr>
+<tr><td>-1</td><td>Titre</td><td>Séparateur de section</td><td>—</td></tr>
+<tr><td>0</td><td>Texte</td><td>Texte court, avec format vérifiable (email, téléphone, SIRET…)</td><td><code>VARCHAR(300)</code></td></tr>
+<tr><td>1</td><td>Liste libre</td><td>Liste déroulante alimentée par une liste de valeurs paramétrable</td><td><code>INT</code></td></tr>
+<tr><td>2 / 3</td><td>Nombre entier / décimal</td><td>Numérique, avec nombre de décimales et séparateur de milliers</td><td><code>BIGINT</code> / <code>DECIMAL(27,6)</code></td></tr>
+<tr><td>4 / 5</td><td>Date / Date-heure</td><td>Sélecteur de date, comparaisons et filtres relatifs</td><td><code>DATE</code> / <code>DATETIME</code></td></tr>
+<tr><td>6</td><td>Zone de texte</td><td>Texte long, éditeur riche possible</td><td><code>LONGTEXT</code></td></tr>
+<tr><td>7</td><td>Import de fichier</td><td>Pièce jointe unique</td><td><code>VARCHAR(255)</code></td></tr>
+<tr><td>8</td><td>Heure</td><td>Saisie horaire</td><td><code>TIME</code></td></tr>
+<tr><td>9</td><td>Sélection couleur</td><td>Sélecteur de couleur (codes couleur maquette)</td><td><code>VARCHAR(10)</code></td></tr>
+<tr><td>10</td><td>Sélection multiple</td><td>Relation n-n matérialisée par une table pivot</td><td><code>INT UNSIGNED</code> + pivot</td></tr>
+<tr><td>13</td><td>Note</td><td>Notation (étoiles)</td><td><code>INT</code></td></tr>
+<tr><td>14</td><td>Numérotation automatique</td><td>Compteur auto-incrémenté avec masque</td><td><code>VARCHAR(255)</code></td></tr>
+<tr><td>15</td><td>Dropzone</td><td>Dépôt multiple de fichiers par glisser-déposer</td><td><code>LONGTEXT</code></td></tr>
+<tr><td>16</td><td>Tableau</td><td>Grille de saisie libre stockée en JSON</td><td><code>LONGTEXT</code></td></tr>
+<tr><td>17</td><td>Pourcentage</td><td>Valeur en %, précision étendue</td><td><code>DECIMAL(14,8)</code></td></tr>
+<tr><td>18</td><td>Timestamp</td><td>Horodatage technique</td><td><code>TIMESTAMP</code></td></tr>
+<tr><td>20</td><td>Liste formatée</td><td>Liste déroulante sur une des <strong>64 énumérations système</strong> (modes de paiement, jours, entrepôts, statuts…)</td><td><code>INT</code></td></tr>
+<tr><td>21 / 22</td><td>Type / ID d'élément dynamique</td><td>Relation <em>polymorphe</em> : le couple des deux champs pointe vers n'importe quel objet</td><td><code>INT</code></td></tr>
+<tr><td>42</td><td>Sélection d'élément</td><td>Relation vers un autre objet, avec autocomplétion et création à la volée</td><td><code>INT UNSIGNED</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t2">2.4.2 Comportement dynamique des champs</h4>
+
+<p>C'est le cœur du no-code d'Eden : un champ n'est pas une simple colonne, c'est un objet
+comportemental. Les 63 propriétés de <code>eden_champslibres</code> se répartissent ainsi.</p>
+
+<table>
+<thead><tr><th>Famille</th><th>Propriétés</th><th>Ce que ça permet</th></tr></thead>
+<tbody>
+<tr><td><strong>Affichage conditionnel</strong></td>
+<td><code>conditions_v_if_manuelle</code>, <code>conditions_v_show_manuelle</code>, <code>cacher_sans_valeur</code>, <code>visibilite</code></td>
+<td>Afficher ou masquer un champ selon une condition écrite par l'intégrateur, évaluée côté navigateur (Vue <code>v-if</code> / <code>v-show</code>) sur les valeurs de l'élément en cours de saisie et sur l'utilisateur connecté. <code>v-if</code> retire le champ du DOM, <code>v-show</code> le masque seulement. Un champ peut aussi se cacher automatiquement s'il est vide.</td></tr>
+
+<tr><td><strong>Obligation et écriture conditionnelles</strong></td>
+<td><code>obligatoire</code>, <code>lecture_seule</code>, <code>modification_post_validation</code>, <code>modifier_en_masse</code>, + au niveau formulaire <code>condition_obligatoire</code>, <code>condition_lecture_seule</code></td>
+<td>Un champ peut devenir obligatoire ou passer en lecture seule <em>en fonction d'une condition</em>, et non de façon figée. <code>modification_post_validation</code> gère le cas des documents commerciaux verrouillés après validation.</td></tr>
+
+<tr><td><strong>Champs calculés</strong></td>
+<td><code>donnee_calculee_depuis</code>, <code>donnee_calculee_requete</code>, <code>donnee_calculee_champ_maj</code>, <code>recalcul_quotidien</code></td>
+<td>Un champ peut être défini comme calculé par une <strong>requête SQL</strong> paramétrée (avec substitution de l'identifiant cible), déclenchée à chaque création ou modification de l'objet source désigné, pouvant mettre à jour <em>un autre</em> enregistrement (typiquement cumuler des lignes filles sur leur parent), et/ou être rafraîchie chaque nuit. C'est le mécanisme des indicateurs stockés : encours client, CA, date de dernière facture.</td></tr>
+
+<tr><td><strong>Calculateurs et chronomètres</strong></td>
+<td><code class="path">Elements/Modele_de_calculateur_management.php</code>, <code class="path">Parametrage_chronometre_management.php</code></td>
+<td>Un « modèle de calculateur » décrit une formule paramétrable avec variables nommées et pondérations conditionnelles (barèmes, grilles tarifaires). Un « chronomètre » transforme un champ de durée en widget démarrer/arrêter qui enregistre le temps écoulé sur l'élément.</td></tr>
+
+<tr><td><strong>Liens entre champs</strong></td>
+<td><code class="path">Services/Lien_champ_service.php</code>, <code>colonne_source</code>, <code>correspondance_fiche_tiers</code>, <code>filtrage</code></td>
+<td>Un « chemin de champ » traverse plusieurs relations d'un objet à l'autre pour aller chercher une valeur — par exemple « l'adresse email du contact du client de la commande ». Chaque segment du chemin peut être filtré par une recherche avancée. Ce mécanisme alimente les variables des modèles d'email, des notifications et des pièces jointes automatiques, et sert au remplissage automatique de champs à la sélection d'un élément lié.</td></tr>
+
+<tr><td><strong>Listes de valeurs</strong></td>
+<td><code>liste_choix</code>, <code>champ_liste_libre_parent</code>, <code>champ_liste_libre_liaisons</code>, <code>ajout_valeur_volee_inactif</code></td>
+<td>Trois régimes : une liste propre au champ (valeurs saisies par l'intégrateur, chacune avec couleur, couleur de fond, couleur de police, icône, catégorie, ordre et traduction) ; une liste <em>partagée</em> avec un autre champ pour mutualiser un référentiel ; ou l'une des <strong>64 énumérations système</strong>. S'y ajoutent les <strong>listes en cascade</strong> — le choix dans une première liste restreint les valeurs de la seconde — et l'ajout d'une valeur à la volée depuis le formulaire, désactivable champ par champ.</td></tr>
+
+<tr><td><strong>Valeurs par défaut</strong></td>
+<td><code>valeur_defaut</code>, <code>eden_formulaireslibres_valeur_par_defaut</code>, <code class="path">Helpers/modele_par_defaut.php</code></td>
+<td>Valeur statique, ou <strong>expression dynamique</strong> construite depuis l'IHM pour les dates (du type « aujourd'hui + 3 jours », avec deux décalages cumulables), ou valeur différente <em>selon le formulaire</em> dans lequel le champ est utilisé, ou encore modèle d'élément pré-rempli servant de gabarit à la création.</td></tr>
+
+<tr><td><strong>Validation</strong></td>
+<td><code>format_champ</code>, <code>nombre_max_caracteres</code>, <code>unique</code>, <code>unique_entite</code>, <code>doit_etre_plus_petit_que</code>, <code>nombre_decimale</code>, <code>type_fichier</code></td>
+<td>14 formats de texte contrôlés : email, URL, téléphone, code postal, adresse, icône, mot de passe système, et six <strong>validés par une vraie règle métier</strong> — IBAN, BIC, numéro de TVA intracommunautaire, SIREN, SIRET (longueur et clé de contrôle) et numéro de sécurité sociale. S'y ajoutent l'unicité globale ou par entité, la contrainte d'ordre entre deux champs du même objet, la précision décimale et la restriction d'extensions de fichier.</td></tr>
+
+<tr><td><strong>Présence à l'écran</strong></td>
+<td><code>afficher_sur_formulaire</code>, <code>afficher_en_responsive_dans_listes</code>, <code>ordre</code>, <code>taille_libelle</code>, <code>taille_champ</code>, <code>classes_css</code>, <code>classes_js</code></td>
+<td>Position et largeur sur la grille du formulaire (12 colonnes), comportement en affichage mobile, et injection de classes CSS/JS arbitraires pour les cas non prévus.</td></tr>
+
+<tr><td><strong>Recherche et filtrage</strong></td>
+<td><code>recherche</code>, <code>filtrage</code>, <code>index</code>, <code>badge_filtre</code>, <code>badge_cliquable</code></td>
+<td>Rendre le champ interrogeable par la recherche globale, filtrable en liste, indexé en base ; l'afficher comme badge coloré cliquable qui filtre la liste au clic.</td></tr>
+
+<tr><td><strong>Multilingue</strong></td>
+<td><code>index_traduction</code>, <code>multilingue</code>, <span class="small">(legacy : <code>nom_en</code>, <code>nom_es</code>, <code>nom_de</code>)</span></td>
+<td>Deux choses distinctes. Le <em>libellé</em> du champ passe par un index de traduction calculé automatiquement et résolu par le moteur d'i18n général. La propriété <code>multilingue</code> concerne la <em>donnée saisie</em> : la valeur est alors stockée par langue dans une table de traduction dédiée et substituée à la volée (ex. une description produit en plusieurs langues). Les colonnes <code>nom_en/es/de</code> subsistent dans le schéma mais ne sont plus branchées nulle part.</td></tr>
+
+<tr><td><strong>Divers</strong></td>
+<td><code>aide</code>, <code>type_fichier</code>, <code>nom_pj</code>, <code>desactiver_creation_a_la_volee</code>, <code>ajout_valeur_volee_inactif</code>, <code>champ_systeme</code>, <code>ne_pas_loguer</code>, <code>table_pivot</code>, <code>type_element_ajax</code></td>
+<td>Bulle d'aide, restriction d'extensions de fichier, interdiction de créer un élément lié à la volée depuis le champ, exclusion du journal d'historique, protection des champs système.</td></tr>
+</tbody>
+</table>
+
+<h4>Zoom : l'affichage conditionnel</h4>
+
+<p>Eden ne se contente pas de montrer ou cacher un champ. Il sait le rendre
+<em>conditionnellement obligatoire</em>, <em>conditionnellement en lecture seule</em>, et cela à
+deux niveaux distincts :</p>
+<ul>
+<li><strong>Au niveau du champ</strong> — la condition s'applique partout où le champ apparaît,
+dans tous les formulaires.</li>
+<li><strong>Au niveau du placement du champ dans un formulaire donné</strong> — le même champ peut
+donc se comporter différemment selon l'écran.</li>
+</ul>
+
+<p>Les conditions s'écrivent dans une syntaxe proche de JavaScript, mêlant les valeurs de
+l'enregistrement en cours de saisie et des méthodes du composant :</p>
+
+<pre><code>// masquer tant que la case n'est pas cochée
+condition_affichage_v_if  : "document.a_livrer_chez_client"
+
+// rendre obligatoire seulement si aucune adresse n'est renseignée
+condition_obligatoire     : "document.adresse_de_facturation_texte == ''
+                             || document.adresse_de_facturation_id == 0"
+
+// s'appuyer sur une méthode du formulaire
+condition_affichage_v_if  : "$root.utilisation_devise_etrangere()"</code></pre>
+
+<p>Deux variantes sont proposées : <code>v-if</code> retire le champ du document, <code>v-show</code>
+le masque seulement. Les expressions sont évaluées côté navigateur dans le formulaire ; hors
+formulaire — conditions d'envoi d'une pièce jointe d'email, enregistrement conditionnel d'un modèle
+de document — la même syntaxe est réécrite puis exécutée côté serveur par
+<code>eval_condition_js()</code>, ce qui en fait un point de vigilance sécurité (voir §5.3).</p>
+
+<p class="small">Les types de champs structurels (onglet, titre, HTML, sous-formulaire) n'existent
+jamais dans les fichiers de migration livrés : ils ne sont créés que depuis l'IHM de paramétrage.
+C'est un bon indicateur de ce qui relève réellement du no-code.</p>
+<h4 id="s2-t3">2.4.3 Formulaires, fiches et sous-formulaires</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Formulaire générique automatique</strong></td><td>Le niveau zéro du no-code : si aucun formulaire n'est paramétré ni codé, Eden en génère un utilisable à partir de la seule liste des champs de l'objet. Créer un champ libre suffit à le voir apparaître dans un écran fonctionnel. La résolution se fait en cascade : vue codée en dur → formulaire paramétré → formulaire générique.</td><td><code class="path">Helpers/formulaire.php</code></td></tr>
+<tr><td><strong>Formulaire libre</strong></td><td>Composer un écran de saisie : chaque emplacement est soit un champ libre, soit un bloc HTML libre (éditeur WYSIWYG), soit une vue Blade existante, soit un sous-formulaire. Positionnement sur une grille 12 colonnes avec espace avant, largeur du libellé, largeur du champ, espace après, et ordre.</td><td><code class="path">Migrations/Tables/eden_formulaireslibres_champs.php</code>, <code class="path">Controllers/Parametrage/Formulaires_controller.php</code></td></tr>
+<tr><td><strong>Conditions au niveau du formulaire</strong></td><td>Un même champ peut se comporter différemment selon le formulaire où il est posé : <code>condition_affichage_v_if</code>, <code>condition_affichage_en_v_show</code>, <code>condition_obligatoire</code> et <code>condition_lecture_seule</code>.</td><td><code>eden_formulaireslibres_champs</code></td></tr>
+<tr><td><strong>Injection de code dans un formulaire</strong></td><td>Chaque formulaire peut embarquer ses propres <code>vuejs_data</code>, <code>vuejs_methods</code> et <code>css_personnalise</code>, ou basculer vers une vue codée en dur. Très puissant côté intégration — et point d'attention majeur pour une refonte : du JavaScript applicatif vit en base de données.</td><td><code>eden_formulaireslibres</code></td></tr>
+<tr><td><strong>Sous-formulaire</strong></td><td>Bloc répétable pour saisir les lignes filles d'un objet (lignes de note de frais, contacts d'un client, pièces jointes…). Le formulaire de l'objet enfant est réutilisé tel quel, ses champs étant renommés dynamiquement pour être imbriqués. Paramètres : caractère optionnel, ligne unique, nombre maximum de lignes, et possibilité de réutiliser le formulaire d'un autre objet sous un autre nom.</td><td><code class="path">Helpers/sous_formulaire.php</code>, <code class="path">Migrations/Sous_formulaire/</code> (18)</td></tr>
+<tr><td><strong>Fiche composable</strong></td><td>Écran de consultation assemblé en modules positionnés (largeur, ordre, replié ou déplié par défaut, colonne de droite) : formulaire d'édition, formulaire d'affichage, pièces jointes, commentaires, messages, calendrier, abonnement à la fiche, historique/timeline, annuaire de facturation, un formulaire libre nommé, ou une liste/rapport en onglet.</td><td><code class="path">Managements/Fiche_management.php</code> (85 Ko)</td></tr>
+<tr><td><strong>Listes liées automatiques</strong></td><td>Une ligne de configuration (objet parent, objet enfant, clé étrangère, liste à utiliser) suffit pour faire apparaître les enfants en onglet de la fiche du parent — sans code. C'est ce qui produit les onglets « Factures », « Contacts », « Tâches » d'une fiche client.</td><td><code class="path">Migrations/Tables/eden_fiche_liens.php</code></td></tr>
+<tr><td><strong>Fil d'Ariane et licence</strong></td><td>Breadcrumb paramétrable selon les filtres de navigation ; les modules de fiche non couverts par la licence active sont retirés dynamiquement de la structure.</td><td><code class="path">Fiche_management.php</code></td></tr>
+<tr><td><strong>Formulaire web public</strong></td><td>Un formulaire déclaré « web » devient embarquable à l'extérieur de l'ERP, avec rendu HTML allégé, liste de domaines autorisés et champ d'origine — typiquement pour la capture de leads.</td><td><code>type_formulaire</code>, <code class="path">Elements/Formulaire_web_domaine_management.php</code>, <code class="path">Middlewares/Frame.php</code></td></tr>
+<tr><td><strong>Formulaire en modale</strong></td><td>Une liste peut ouvrir la création ou l'édition en fenêtre modale plutôt qu'en page pleine.</td><td><code>formulaire_modale</code> sur <code>eden_listeslibres</code></td></tr>
+<tr><td><strong>Verrouillage d'édition concurrente</strong></td><td><span class="tag t-risk">absent</span> Le helper <code>edition_en_cours()</code> existe mais retourne systématiquement <code>false</code> : deux utilisateurs peuvent éditer le même élément sans avertissement.</td><td><code class="path">Helpers/edition_en_cours.php</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t4">2.4.4 Recherche</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Recherche globale</strong></td><td>Une barre unique dans la navbar interroge, dès 3 caractères, tous les objets marqués « disponible en recherche rapide » (~60 objets). Les résultats sont groupés par type, plafonnés à 50 par type et 100 au total, et affichés via le gabarit <code>affichage_recherche</code> de chaque objet.</td><td><code class="path">Controllers/Recherche_controller.php</code>, <code class="path">Managements/Recherche_management.php</code></td></tr>
+<tr><td><strong>Rendre un objet recherchable</strong></td><td>Trois leviers purement déclaratifs, sans code : activer le drapeau sur l'objet (ce qui crée l'index FULLTEXT), marquer les champs à indexer, définir le gabarit d'affichage. Deux points d'extension optionnels permettent en plus de restreindre les résultats par droits.</td><td><code>disponible_recherche_rapide</code>, propriété <code>recherche</code> du champ</td></tr>
+<tr><td><strong>Index de recherche dénormalisé</strong></td><td>Chaque enregistrement maintient une colonne <code>chaine_tags_recherche</code> reconstruite à chaque sauvegarde : elle concatène les champs indexés, les libellés des valeurs de liste, l'index des objets liés et les relations multiples. Un cron sert de filet, et une reconstruction complète est disponible depuis l'écran de maintenance.</td><td><code class="path">Element_management.php</code> (<code>maj_index_recherche</code>)</td></tr>
+<tr><td><strong>Moteur d'interrogation</strong></td><td><code>MATCH … AGAINST</code> en mode booléen avec troncature par préfixe et expressions exactes entre guillemets, classement par score de pertinence. Repli possible en <code>LIKE</code> objet par objet quand le FULLTEXT ne convient pas.</td><td><code>recherche_globale_like</code></td></tr>
+<tr><td><strong>Détection de doublons</strong></td><td>À la création d'un tiers, le système propose jusqu'à 10 candidats proches en combinant l'index FULLTEXT et une comparaison phonétique <code>SOUNDEX</code> — tolérante aux fautes de frappe.</td><td><code class="path">Recherche_management.php</code></td></tr>
+<tr><td><strong>Création par SIRET</strong></td><td>La saisie d'un SIREN/SIRET interroge un service externe, calcule le numéro de TVA intracommunautaire et pré-remplit la fiche tiers depuis les données officielles.</td><td><code class="path">Controllers/Siret_controller.php</code>, <code class="path">Rules/SirenSiret.php</code></td></tr>
+<tr><td><strong>Autocomplétion</strong></td><td>Les champs de relation interrogent l'objet cible en frappe au kilomètre sur le même index, avec pagination au défilement, tri combinant score et correspondance en début de mot, création à la volée si elle n'est pas désactivée, et modes spéciaux « vide » / « non vide ». Le mécanisme est extensible par convention de nommage pour des recherches composites (ex. une recherche « email » unifiant utilisateurs, contacts et clients).</td><td><code class="path">Controllers/Autocomplete_controller.php</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t5">2.4.5 Recherche avancée — le moteur de filtrage unique</h4>
+
+<div class="callout info">
+<p>La « recherche avancée » n'est pas seulement un écran : c'est <strong>le moteur de filtrage
+générique du framework</strong>. La même structure est réutilisée pour les filtres de liste, les
+couleurs conditionnelles de ligne, la restriction des valeurs sélectionnables d'un champ, les
+filtres des séries de rapport et ceux des tableaux de bord. Toute refonte qui la remplace remplace
+d'un coup tout le filtrage de l'application.</p>
+</div>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th></tr></thead>
+<tbody>
+<tr><td><strong>Structure imbriquée</strong></td><td>Trois tables : la recherche, ses <em>blocs</em> (imbricables sans limite, chacun avec son opérateur et un drapeau d'exclusion) et ses <em>filtres</em>. On construit donc des expressions du type « A ET (B OU C) ET NON (D ET E) ».</td></tr>
+<tr><td><strong>Opérateurs ET / OU / NON</strong></td><td>L'opérateur se pose au niveau du bloc comme du filtre ; l'exclusion d'un bloc entier bascule la condition en négation.</td></tr>
+<tr><td><strong>Opérateurs par type de champ</strong></td><td><em>Texte</em> : vide, non vide, commence par, égal, différent, ne contient pas, contient. <em>Montant et pourcentage</em> : supérieur, supérieur ou égal, inférieur, inférieur ou égal, égal. <em>Liste</em> : appartenance à un ensemble de valeurs. <em>Sélection multiple</em> : sous-requête sur la table pivot. <em>Élément lié</em> : vide, non vide, appartenance à une liste d'identifiants.</td></tr>
+<tr><td><strong>Dates relatives</strong></td><td>Un catalogue de valeurs dynamiques évite de saisir des dates fixes : aujourd'hui, hier, demain, cette année, ce mois-ci, le mois dernier, les 7 ou 30 derniers jours, les 7 ou 30 prochains jours, J+N, renseigné / non renseigné, passé / non passé, ou un intervalle borné.</td></tr>
+<tr><td><strong>Valeurs dynamiques</strong></td><td>Un filtre peut référencer l'utilisateur connecté, ou la valeur d'un autre champ du formulaire courant.</td></tr>
+<tr><td><strong>Filtrage sur champ lié</strong></td><td>Les jointures nécessaires sont construites et aliasées à la volée : on filtre une liste de factures sur un champ du client, ou sur une réponse de questionnaire.</td></tr>
+<tr><td><strong>Partage</strong></td><td>Une recherche enregistrée sans propriétaire devient un modèle partagé à toute l'instance ; avec propriétaire, elle reste personnelle.</td></tr>
+<tr><td><strong>Restriction d'un champ de sélection</strong></td><td>Une recherche avancée peut être attachée à un champ de relation pour restreindre dynamiquement les éléments proposés à la saisie.</td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t6">2.4.6 Listes, colonnes, filtres et calculs</h4>
+
+<p>Le moteur de listes est la pièce la plus travaillée du framework. Une liste est décrite par
+sept tables de métadonnées (liste, colonnes, filtres, calculs, couleurs, vues alternatives,
+paramètres de requête) et chaque sauvegarde de paramétrage <strong>régénère un fichier de
+migration PHP versionné</strong> — 178 fichiers de listes et 138 de listes de fiche en témoignent.</p>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th></tr></thead>
+<tbody>
+<tr><td><strong>Trois sources possibles</strong></td><td>Une liste s'alimente d'une table standard, d'un <strong>SQL libre</strong> avec des emplacements réservés que le moteur remplit (<code>#eden_recherche#</code>, <code>#eden_join#</code>, <code>#eden_filtres#</code>, <code>#eden_order_by#</code>, <code>#eden_profils_et_inactif#</code>), ou d'un kanban.</td></tr>
+<tr><td><strong>Cinq types de colonnes</strong></td><td><em>standard</em> (champ direct), <em>champ</em> (<strong>édition en ligne</strong> : la valeur se modifie dans la liste et part en AJAX sans quitter l'écran), <em>méthode</em> (appel d'une méthode du management avec arguments), <em>calcul</em> (agrégat SQL), <em>concaténation</em> (gabarit <code>#champ1# #champ2#</code>).</td></tr>
+<tr><td><strong>Colonnes calculées et ventilées</strong></td><td>Une colonne peut porter un <code>SUM</code>, <code>AVG</code> ou <code>COUNT</code> sur des lignes liées, avec regroupement et <strong>périodicité</strong> (du quotidien à l'annuel) : le moteur génère alors des sous-colonnes dynamiques avec en-têtes multi-niveaux. La population entrant dans le calcul se restreint par une recherche avancée dédiée.</td></tr>
+<tr><td><strong>Bandeau de calculs</strong></td><td>Totaux et indicateurs au-dessus ou au-dessous de la liste, recalculés avec les filtres courants : <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, moyenne sur comptage, avec unité, icône, condition d'affichage et état déployé par défaut. Chaque calcul peut être <strong>ventilé</strong> par une autre colonne et limité aux N premières valeurs.</td></tr>
+<tr><td><strong>Sous-totaux à la demande</strong></td><td>L'utilisateur choisit jusqu'à <strong>trois niveaux de regroupement</strong> ; les lignes de sous-total sont injectées et le tri est forcé en conséquence.</td></tr>
+<tr><td><strong>Filtres</strong></td><td>Widget déduit automatiquement du type de champ (texte, liste, montant, date, recherche d'élément, utilisateur, famille). Trois emplacements : filtres standards, menu de gauche, filtre de statut. Un filtre peut porter sur un champ lié via une jointure.</td></tr>
+<tr><td><strong>Persistance et filtres nommés</strong></td><td>Page, filtres et tri sont mémorisés par utilisateur et par liste. Un jeu de filtres se sauvegarde sous un nom et se rappelle ensuite.</td></tr>
+<tr><td><strong>Coloration conditionnelle</strong></td><td>Des règles de couleur de ligne s'appuient sur des recherches avancées ; la première règle qui correspond l'emporte. Une couleur de fond fixe peut aussi être posée sur une colonne entière.</td></tr>
+<tr><td><strong>Mise en forme des colonnes</strong></td><td>Alignement, troncature au-delà de N caractères, interdiction du retour à la ligne, comportement responsive, lien cliquable vers l'élément ou vers un autre élément, ouverture du formulaire en modale, affichage d'avatars. <span class="tag t-warn">Pas de largeur de colonne configurable</span> ni de réordonnancement par glisser-déposer côté utilisateur final.</td></tr>
+<tr><td><strong>Droits par colonne, filtre et calcul</strong></td><td>Chacun porte sa propre liste de profils autorisés : deux utilisateurs peuvent voir la même liste avec des colonnes différentes.</td></tr>
+<tr><td><strong>Activation fine</strong></td><td>Par liste, on coupe individuellement : filtres, recherche, recherche avancée, export, création (avec condition), actions groupées, actions individuelles, options, kanban, glisser-déposer, cases à cocher, options mobiles.</td></tr>
+<tr><td><strong>Vues alternatives</strong></td><td>Une même liste peut proposer plusieurs vues commutables — typiquement tableau et kanban — reliées entre elles.</td></tr>
+<tr><td><strong>Pagination</strong></td><td>Nombre de lignes par défaut global, surchargeable par liste et par requête. Cas forcés : 1000 lignes pour une carte, 50 en kanban horizontal, 1000 en kanban vertical.</td></tr>
+<tr><td><strong>Sélection et actions de masse</strong></td><td>Le « tout sélectionner » récupère les identifiants correspondant aux filtres courants sans charger les lignes — conçu pour des dizaines de milliers d'enregistrements — et affiche une synthèse de la sélection. Actions disponibles : modification en masse (avec <em>deltas relatifs</em> sur dates et montants, ajout sans écrasement sur les multi-sélections), suppression en masse, création de tâches en masse, impression groupée de modèles de document (PDF fusionné ou archive), envoi d'email en masse, validation en masse — chacune soumise à un droit dédié.</td></tr>
+<tr><td><strong>Corbeille</strong></td><td>Affichage avec ou sans les éléments inactivés, ou uniquement les inactivés.</td></tr>
+<tr><td><strong>Détail dépliable</strong></td><td>Une ligne peut déplier un bloc de détail sans changer d'écran.</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<p><strong>Limite structurante à connaître.</strong> Il n'existe <strong>aucun filtre
+post-agrégat</strong> (pas de <code>HAVING</code>). On peut restreindre les lignes qui <em>entrent</em>
+dans un calcul, mais pas filtrer les résultats sur la valeur calculée — impossible d'écrire
+« n'afficher que les clients dont le CA dépasse X » directement dans une liste. Les sous-totaux ne
+servent qu'au regroupement, sans seuil applicable.</p>
+</div>
+
+<h4 id="s2-t7">2.4.7 Restitution : rapports, kanban, cartes, tableaux de bord</h4>
+
+<table>
+<thead><tr><th>Forme</th><th>Ce que ça produit</th></tr></thead>
+<tbody>
+<tr><td><strong>Liste / tableau</strong></td><td>Restitution tabulaire paginée et triable (§2.4.6).</td></tr>
+<tr><td><strong>Tableau croisé</strong></td><td>Croisement à une ou deux dimensions (axe X × axe Y).</td></tr>
+<tr><td><strong>Kanban</strong></td><td>Mode d'affichage alternatif d'une liste : cartes réparties en colonnes de statut, glisser-déposer avec ordre persisté, somme par colonne, calcul d'en-tête (somme, champ, nombre, unité), tri multi-critères, deux utilisateurs affichables par carte, colonnes vides masquables, orientation verticale.</td></tr>
+<tr><td><strong>Courbe</strong></td><td>Séries temporelles multi-séries, avec option de cumul et comparaison N−1.</td></tr>
+<tr><td><strong>Histogramme</strong></td><td>Barres groupées ou empilées, avec cumul.</td></tr>
+<tr><td><strong>Camembert</strong></td><td>Répartition en pourcentage sur une dimension.</td></tr>
+<tr><td><strong>Entonnoir</strong></td><td>Conversion par étapes — pipeline commercial.</td></tr>
+<tr><td><strong>Indicateur / KPI</strong></td><td>Chiffre unique avec objectif, sens de réussite (supérieur ou inférieur à la cible), badge de succès, formats montant ou unité, et <strong>forage</strong> vers une liste ou un rapport cible.</td></tr>
+<tr><td><strong>Carte géographique</strong></td><td>Positionnement des éléments par latitude/longitude sur un fond Leaflet, regroupement en clusters activable, couleur de marqueur conditionnelle, infobulle par gabarit.</td></tr>
+<tr><td><strong>Rapport PDF</strong></td><td>Gabarit texte à emplacements <code>#champ#</code> avec blocs conditionnels, téléchargeable et envoyable par email.</td></tr>
+<tr><td><strong>HTML libre</strong></td><td>Classe de base pour les rapports codés, non exposée dans le sélecteur no-code.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Autour des rapports</th><th>Ce que ça permet</th></tr></thead>
+<tbody>
+<tr><td><strong>Tableau de bord composable</strong></td><td>Grille de blocs hétérogènes : un rapport, un conteneur, un composant Vue enfichable (le calendrier), un bloc HTML libre édité en WYSIWYG, ou une <strong>boucle</strong> qui duplique un bloc pour chaque utilisateur d'une liste. Largeur sur 12 colonnes, hauteur en pixels, réordonnancement par glisser-déposer.</td></tr>
+<tr><td><strong>Filtres de tableau de bord</strong></td><td>Filtres globaux définis au niveau du tableau (date, montant, texte, recherche) et mappés champ par champ vers chaque widget. Une option, désactivée par défaut, propage les filtres entre tous les tableaux de bord.</td></tr>
+<tr><td><strong>Portée</strong></td><td>Par profil et par droits, pas par utilisateur individuel ; exposition possible à l'extranet client. L'édition est réservée aux administrateurs — il n'y a pas de rôle « éditeur de tableau de bord » distinct du lecteur.</td></tr>
+<tr><td><strong>Portail de rapports</strong></td><td>Second mode d'affichage : un portail à deux colonnes listant les catégories et les rapports rattachés.</td></tr>
+<tr><td><strong>Favoris et abonnement</strong></td><td>Un utilisateur met un rapport en favori, et peut s'y <strong>abonner</strong> pour recevoir automatiquement le PDF par email selon une fréquence quotidienne, hebdomadaire, mensuelle ou annuelle. C'est la seule planification récurrente de restitution du framework.</td></tr>
+<tr><td><strong>Duplication</strong></td><td>Un rapport se duplique intégralement — colonnes, filtres, séries, couleurs et recherches avancées comprises.</td></tr>
+<tr><td><strong>Indicateurs stockés</strong></td><td>Mécanisme distinct des rapports : des classes d'indicateurs calculent et <em>stockent</em> une valeur agrégée directement en colonne sur l'élément (CA client, encours…), en recalcul unitaire ou en masse. La valeur devient alors utilisable comme une colonne ordinaire, filtrable et triable.</td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t8">2.4.8 Exports</h4>
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th></tr></thead>
+<tbody>
+<tr><td><strong>Formats</strong></td><td>PDF, XLSX et CSV, écrits par lots (1 000 lignes en PDF, 5 000 en tableur). <span class="tag t-neutral">pas d'ODS</span></td></tr>
+<tr><td><strong>Bascule synchrone / différé</strong></td><td>Au-delà d'un seuil paramétrable (50 000 lignes par défaut), l'export part en file d'attente ; l'utilisateur reçoit un email avec le lien de téléchargement et une notification dans l'application. Au-delà de 100 000 lignes (10 000 en PDF), le fichier est fractionné et livré en archive ZIP.</td></tr>
+<tr><td><strong>Modèles d'export comptable</strong></td><td>Modèles persistés avec colonnes ordonnées en gabarit, délimiteur CSV, format de date, ligne d'en-tête optionnelle et <strong>format à longueur fixe</strong> pour les échanges comptables ; un modèle par défaut par objet et par entité, et marquage automatique des écritures exportées.</td></tr>
+<tr><td><strong>Export de questionnaire</strong></td><td>Export dédié des réponses, une colonne par question.</td></tr>
+<tr><td><strong>Limites</strong></td><td><span class="tag t-warn">La mise en forme n'est pas conservée</span> (couleurs perdues, valeurs brutes) et <span class="tag t-warn">aucun export de liste planifié</span> n'existe — seul l'abonnement à un rapport PDF offre une récurrence.</td></tr>
+</tbody>
+</table>
+<h4 id="s2-t9">2.4.9 Droits et sécurité applicative</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Droits par objet et par profil</strong></td><td>Pour chaque couple profil × objet métier × entité, sept droits indépendants : <em>lecture, création, modification, suppression, modification en masse, suppression en masse, comptabilisation</em>.</td><td><code class="path">Migrations/profil_droits_element.php</code></td></tr>
+<tr><td><strong>Droits divers</strong></td><td>Autorisations transverses hors objet métier (accès au paramétrage, aux exports, aux écrans techniques…).</td><td><code class="path">Migrations/profil_droits_divers.php</code></td></tr>
+<tr><td><strong>Rôles techniques</strong></td><td>Trois niveaux hiérarchiques codés en dur par un entier <code>type_utilisateur</code> : utilisateur, éditeur, administrateur/super-admin, testés partout via les helpers <code>editeur()</code>, <code>admin()</code>, <code>super_admin()</code>.</td><td><code class="path">Helpers/super_admin.php</code>, <code class="path">Middlewares/Editeur.php</code></td></tr>
+<tr><td><strong>Cloisonnement par entité</strong></td><td>Les droits se déclinent par entité (société), ce qui permet à un même utilisateur de voir des périmètres différents selon la structure.</td><td><code>entite_id</code> sur les droits ; <code>unique_entite</code> sur les champs</td></tr>
+<tr><td><strong>Fonctionnalités par profil</strong></td><td>N'importe lequel des 400 réglages peut prendre une valeur différente selon le profil de l'utilisateur connecté.</td><td><code>fonctionnalites_par_profil</code>, <code class="path">Helpers/fonctionnalite.php</code></td></tr>
+<tr><td><strong>Politique de mot de passe</strong></td><td>Renouvellement obligatoire et durée de validité paramétrables, séparément pour l'ERP et pour l'extranet (90 jours par défaut).</td><td><code>renouvellement_mot_de_passe_utilisateur[_extranet]</code>, <code>duree_validite_…</code></td></tr>
+<tr><td><strong>Double authentification</strong></td><td>Deux modes au choix par utilisateur, côté ERP comme côté extranet : code à 6 chiffres envoyé par email avec expiration, ou application TOTP type Google Authenticator (appairage par QR code).</td><td><code class="path">Controllers/Authentification_controller.php</code>, <code class="path">Controllers/Extranet/Login_controller.php</code></td></tr>
+<tr><td><strong>Journal des tentatives</strong></td><td>Chaque tentative est tracée (email, IP, URL, navigateur, support, emplacement, succès). Les échecs sont purgés dès qu'une connexion réussit depuis la même IP — démarche RGPD. Au-delà de 25 échecs consécutifs sur une IP, un email d'alerte anti-robot est émis. <span class="tag t-warn">à noter</span> aucun verrouillage automatique de compte n'a été trouvé : seule une alerte est envoyée.</td><td><code class="path">Elements/Log_tentative_connexion_management.php</code>, <code class="path">Queues/Enregistre_log_connexion_queue.php</code></td></tr>
+<tr><td><strong>Restriction par utilisateur ou équipe</strong></td><td>Un droit peut être limité aux seuls éléments où un champ désigne l'utilisateur connecté — soit par un lien simple (champ « sélection d'élément »), soit par appartenance à une sélection multiple (équipe, participants).</td><td><code class="path">Helpers/profil.php</code></td></tr>
+<tr><td><strong>Usurpation de compte</strong></td><td>Un administrateur peut prendre l'identité d'un utilisateur pour reproduire un problème ; l'identité d'origine est conservée en session pour le retour.</td><td>session <code>eden_usurpation_origine</code></td></tr>
+<tr><td><strong>Licence par module</strong></td><td>Des « ensembles » de licence conditionnent l'accès à des modules ; le filtrage est injecté jusque dans le query builder Eloquent maison.</td><td><code class="path">Services/Licence_service.php</code>, <code class="path">Models/Query_builder/Eden_query_builder.php</code></td></tr>
+<tr><td><strong>Extranet cloisonné</strong></td><td>Un objet déclare son exposition extranet, le profil extranet autorisé, le champ portant ce profil et des valeurs forcées à la création côté extranet.</td><td><code>acces_extranet</code>, <code>type_profil_extranet</code>, <code>champ_profil_extranet</code>, <code>valeurs_forcees_creation_extranet</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t10">2.4.10 Automatisation : workflows, triggers, crons, notifications</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Workflow paramétrable</strong></td><td>Se déclenche sur un couple objet + action, avant ou après enregistrement, sous <em>condition avant</em> et <em>condition après</em> exprimées en JSON sur n'importe quel champ. Quatre actions possibles : <strong>envoyer un email</strong>, <strong>modifier l'élément</strong>, <strong>créer un élément lié</strong>, <strong>émettre une notification</strong>. C'est le moteur d'automatisation métier sans code.</td><td><code class="path">Elements/Workflow_management.php</code>, <code class="path">Migrations/workflow.php</code></td></tr>
+<tr><td><strong>Circuit d'approbation</strong></td><td>Pour un couple objet + action, on déclare quels profils doivent approuver avant que l'action ne s'applique, avec une option d'<strong>approbation en cascade</strong> (approuver une action en déclenche d'autres). Chaque demande porte demandeur, destinataire, statut, date et commentaire de refus, et met à jour l'élément d'origine ; un rapport « Mes approbations » les regroupe.</td><td><code class="path">Elements/Approbation_management.php</code>, <code class="path">Migrations/approbation_workflow.php</code></td></tr>
+<tr><td><strong>Trigger applicatif</strong></td><td>Déclencheur paramétré <em>en SQL</em> : une requête de sélection identifie les éléments concernés, une requête de modification applique l'effet, avec substitution de <code>#id_cible#</code>. Il se déclenche après <em>chaque</em> création, modification et suppression, avec protection anti-boucle, invalidation du libellé mis en cache, réindexation de la recherche, journalisation optionnelle des champs modifiés, ordre d'exécution, et propagation en cascade (un trigger peut déclencher les triggers, champs calculés et workflows des éléments qu'il modifie).</td><td><code class="path">Migrations/trigger_eden.php</code>, <code class="path">Element_management.php</code> — <span class="tag t-risk">SQL saisi en paramétrage, voir §5</span></td></tr>
+<tr><td><strong>Crons paramétrables</strong></td><td>Plus de 35 tâches planifiées orchestrées par un contrôleur unique : envoi des emails en attente, notifications, relances, seuils de stock, recalcul des champs calculés, optimisation de tables, génération de PDF, compression d'images, synchronisations calendrier/mail/banque/GED, mise à jour de l'index de recherche, génération des occurrences récurrentes. Chaque cron est un élément en base avec suivi d'exécution (en cours, dernière exécution, délai avant relance).</td><td><code class="path">Migrations/cron.php</code>, <code class="path">routes/cron.php</code>, <code class="path">Controllers/Cron_controller.php</code> (50 Ko)</td></tr>
+<tr><td><strong>Requêtes SQL planifiées</strong></td><td>Un administrateur définit une requête SQL libre exécutée à intervalle paramétrable (valeur + unité), avec suivi de la dernière exécution, de la durée et du dernier envoi du résultat par email. Automatisation sans développement — et surface SQL ouverte.</td><td><code class="path">Elements/Requete_sql_cron_management.php</code></td></tr>
+<tr><td><strong>Notifications manuelles</strong></td><td>Alerte paramétrable déclenchée sur condition SQL, portant titre, type, message HTML, et optionnellement un envoi d'email via modèle, un compte expéditeur, un expéditeur déterminé par un champ de l'élément, plus des sous-formulaires pour ses destinataires et ses pièces jointes.</td><td><code class="path">Migrations/notification_manuelle.php</code></td></tr>
+<tr><td><strong>Notifications par zone</strong></td><td>Chaque notification est rattachée à une zone d'affichage — cloche de la barre supérieure, modale d'ouverture de session — avec icône, contenu HTML, élément lié, entité et marquage « vu ».</td><td><code class="path">Services/Notifications_service.php</code></td></tr>
+<tr><td><strong>Abonnement à un élément</strong></td><td>Un utilisateur peut « suivre » un élément précis pour être notifié de son évolution, indépendamment des règles globales.</td><td><code class="path">Elements/Notification_management.php</code></td></tr>
+<tr><td><strong>Récurrences génériques</strong></td><td>Le moteur n'est pas limité aux tâches : <em>n'importe quel objet</em> peut être déclaré récurrent (quotidien, hebdomadaire, mensuel, fréquences relatives, jours, ordinaux), avec modèle source, date de génération et calcul de la prochaine occurrence. La génération est portée par un cron, avec une limite de création à l'avance. Les récurrences de tâches sont répliquées sur les calendriers Microsoft et Google.</td><td><code class="path">Services/Recurrence_service.php</code> (60 Ko), <code class="path">Migrations/eden_recurrence_elements.php</code></td></tr>
+<tr><td><strong>Jours d'indisponibilité et fériés</strong></td><td>Calendrier d'indisponibilités (congés, fermetures) pris en compte par le planning et les calculs de délai, avec synchronisation automatique des jours fériés depuis une API externe, par pays.</td><td><code class="path">Services/Jour_indisponibilite_service.php</code></td></tr>
+<tr><td><strong>Chronomètres</strong></td><td>Mesure paramétrable du temps écoulé entre deux événements sur un objet (délai de réponse, temps de traitement).</td><td><code class="path">Elements/Parametrage_chronometre_management.php</code></td></tr>
+<tr><td><strong>Files d'attente</strong></td><td>Traitements longs sortis de la requête HTTP : export, email de fin d'export, synchronisation externe, webhook, journal de connexion.</td><td><code class="path">app/Eden/Queues/</code></td></tr>
+<tr><td><strong>Timeline &amp; historique</strong></td><td>Journal d'activité par élément alimenté par plus de 20 types d'événements métier (création, modification, validation, règlement, email, acceptation, facturation, expédition, comptabilisation, annulation par avoir, refus…), avec choix paramétrable de ce qui alimente la timeline par type de document, et exclusion possible champ par champ.</td><td><code>Variables::$types_logs</code>, <code class="path">Services/Alimentation_timeline_service.php</code>, <code>ne_pas_loguer</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t11">2.4.11 Documents, PDF et publipostage</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Modèle de document</strong></td><td>Concevoir un document imprimable sans coder : en-tête, corps, récapitulatif de pied, pied de page, annexes, CSS propre, et positionnement fin de la numérotation de page (coordonnées X/Y, chaînes, tailles). Le contenu est du Blade stocké en base et compilé à la volée.</td><td><code class="path">Migrations/modele_de_document.php</code>, <code class="path">Helpers/blade_compile.php</code></td></tr>
+<tr><td><strong>Modèle par défaut par type de document</strong></td><td>Associer un modèle PDF par défaut à chacun des 15 types de document commerciaux.</td><td><code class="path">Config/fonctionnalites_pdf_par_defaut.php</code></td></tr>
+<tr><td><strong>Balises de publipostage</strong></td><td>Déclarer des balises nommées par objet, remplacées à la génération par la valeur correspondante — utilisables dans les documents et les emails.</td><td><code class="path">Elements/Parametrage_balise_publipostage_management.php</code>, <code class="path">Services/Publipostage_service.php</code></td></tr>
+<tr><td><strong>Enrichissement par IA</strong></td><td>Modèles d'enrichissement paramétrables : on désigne un objet et la liste des champs à compléter, et un appel à OpenAI pré-remplit ou enrichit ces champs depuis l'interface. Conditionné par le réglage <code>open_ai_activation</code>.</td><td><code class="path">Elements/Modele_enrichissement_management.php</code>, <code class="path">Services/Open_ia_service.php</code></td></tr>
+<tr><td><strong>Versionning de document</strong></td><td>Conserver l'historique des versions d'un document généré, activable par type de document.</td><td><code>document_versionning_document</code>, <code class="path">Elements/Versionning_document_management.php</code></td></tr>
+<tr><td><strong>Fusion et assemblage PDF</strong></td><td>Concaténer plusieurs PDF (document + annexes + pièces jointes) en un seul fichier.</td><td><code>grofgraf/laravel-pdf-merger</code>, <code>webklex/laravel-pdfmerger</code></td></tr>
+<tr><td><strong>QR codes et codes-barres</strong></td><td>Deux bibliothèques sont embarquées, mais le seul usage métier retrouvé dans le code est la génération du QR code d'appairage de la double authentification — pas de génération sur les documents commerciaux ou les étiquettes articles.</td><td><code class="path">Librairies/QrCode/</code>, <code class="path">Librairies/CodeBarre/</code></td></tr>
+<tr><td><strong>Bibliothèque documentaire</strong></td><td>GED complète : dossiers hiérarchiques (parent/enfant, chemin), rattachement à un élément métier, marquage confidentiel, droits par entité, exposition extranet, et synchronisation vers SharePoint/OneDrive ou M-Files. Upload, suppression, téléchargement et déplacement de fichiers comme de dossiers.</td><td><code class="path">Controllers/Bibliotheque_controller.php</code> (41 Ko), <code>synchro_bibliotheque</code></td></tr>
+<tr><td><strong>Pièces jointes par élément</strong></td><td>Attacher des fichiers à n'importe quel élément, avec restriction d'extensions, champ dropzone multiple et compression automatique des images.</td><td><code class="path">Elements/Element_piece_jointe_management.php</code>, <code class="path">Services/Image_compresseur_service.php</code></td></tr>
+<tr><td><strong>Signature électronique</strong></td><td>Envoi d'un document en signature, suivi de l'enveloppe et de son cycle de vie.</td><td><code class="path">Services/Docusign_service.php</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t12">2.4.12 Emails et communication</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Modèles d'email</strong></td><td>Modèle nommé par objet, avec sujet, corps, catégorie, langue, entité, condition d'affichage, regroupement multi-destinataires, marquage « par défaut » et enregistrement automatique en échange.</td><td><code class="path">Migrations/modele_email.php</code></td></tr>
+<tr><td><strong>Destinataires paramétrés</strong></td><td>Déterminer automatiquement les destinataires d'un envoi à partir de l'élément (contact du client, commercial, service…).</td><td><code class="path">Elements/Parametrage_destinataire_email_management.php</code></td></tr>
+<tr><td><strong>Pièces jointes paramétrées</strong></td><td>Joindre automatiquement les bons documents selon le type d'envoi, avec sélection possible des PJ d'articles sur les documents commerciaux.</td><td><code class="path">Elements/Parametrage_piece_jointe_email_management.php</code>, <code>selection_pj_article_envoie_mail_documents_gescom</code></td></tr>
+<tr><td><strong>Comptes email et relevé</strong></td><td>Déclarer des boîtes (IMAP ou Microsoft), relever les mails entrants, les rattacher à un élément et alimenter les tickets client ; blocage d'extensions de pièces jointes.</td><td><code class="path">Services/Email_service.php</code> (32 Ko), <code class="path">Controllers/Email_recus_controller.php</code></td></tr>
+<tr><td><strong>Échanges</strong></td><td>Tout email envoyé ou reçu peut être archivé comme « échange » rattaché à l'élément, ce qui alimente la timeline et l'indicateur de dernier contact.</td><td><code class="path">Services/Echange_service.php</code>, <code>enregistrer_systematique_email_en_echange</code></td></tr>
+<tr><td><strong>Addon messagerie</strong></td><td>Interface de messagerie intégrée à l'ERP.</td><td><code class="path">Controllers/Addon_messagerie_controller.php</code> (22 Ko)</td></tr>
+<tr><td><strong>Notifications applicatives</strong></td><td>Notifications in-app, modales d'alerte, et notifications poussées vers Teams.</td><td><code class="path">Services/Notifications_service.php</code>, <code class="path">Services/Microsoft_teams_service.php</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t13">2.4.13 Import, synchronisation et API</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Import sur mesure</strong></td><td>Parcours en plusieurs étapes : dépôt du fichier, mise en correspondance de chaque colonne avec un champ cible, <strong>vérification des valeurs de listes de choix</strong> et des clés d'unicité avant écriture, puis mise en base. L'import est relançable par cron. Le paramétrage porte les tables jointes, les valeurs par défaut, l'ordre de lancement et le mode complet ou incrémental.</td><td><code class="path">Migrations/import_sur_mesure.php</code>, <code class="path">Controllers/Import_sur_mesure_controller.php</code> (15 Ko)</td></tr>
+<tr><td><strong>Suivi des imports</strong></td><td>File des imports en cours avec statut, pour les volumes importants.</td><td><code class="path">Elements/Import_en_cours_management.php</code></td></tr>
+<tr><td><strong>Synchronisation de service</strong></td><td>Connecteur générique : on déclare un service, ses paramètres de connexion (stockés chiffrés), le mapping des tables et champs externes vers les champs Eden, et l'on suit par élément l'historique et les erreurs de synchronisation. Les échanges passent par des jobs et des webhooks sortants. Socle utilisé par Brevo et Esalink.</td><td><code class="path">Services/Synchronisation_service_service.php</code>, <code class="path">Queues/Webhook_synchronisation_externe_queue.php</code></td></tr>
+<tr><td><strong>API REST générique</strong></td><td>Une API expose <em>n'importe quel</em> objet métier : <code>list</code>, <code>get</code>, <code>save</code>, <code>delete</code>, plus des opérations de gestion commerciale — <code>valid</code> (validation d'un document), <code>transform</code> (transformation devis→commande→facture), <code>update_price</code>. S'y ajoutent l'envoi d'email, la lecture de paramètres et la recherche de contacts par téléphone ou email.</td><td><code class="path">app/Eden/routes/api.php</code>, <code class="path">Controllers/Api/Api_controller.php</code></td></tr>
+<tr><td><strong>Authentification de l'API</strong></td><td>Trois modes : en-tête <code>x-client-id</code> portant une clé d'instance, couple identifiant/mot de passe d'instance, ou jeton. <span class="tag t-warn">à noter</span> ce sont des secrets <em>globaux à l'instance</em>, non rattachés à un utilisateur : pas de scope, pas de rotation, pas de traçabilité par appelant.</td><td><code class="path">Middlewares/Api.php</code></td></tr>
+<tr><td><strong>URL raccourcies</strong></td><td>Génération de liens courts, notamment pour les envois externes et l'extranet.</td><td><code class="path">Elements/Url_raccourcie_management.php</code></td></tr>
+</tbody>
+</table>
+
+<h4 id="s2-t14">2.4.14 Interface, internationalisation et exploitation</h4>
+
+<table>
+<thead><tr><th>Capacité</th><th>Ce que ça permet</th><th>Où</th></tr></thead>
+<tbody>
+<tr><td><strong>Menus paramétrables</strong></td><td>Catégories et liens de menu éditables en base, avec icône, ordre, traduction et cible (liste, rapport, écran).</td><td><code class="path">Elements/Menus_categories_management.php</code>, <code>Menus_liens</code></td></tr>
+<tr><td><strong>Page d'accueil « intranet »</strong></td><td>Accueil en tuiles configurables (annuaire, raccourcis, mon compte).</td><td><code class="path">Config/eden_intranet.php</code>, <code class="path">Managements/Intranet_management.php</code></td></tr>
+<tr><td><strong>Maquette et thème</strong></td><td>Jeu de couleurs nommées appliqué à l'interface, plus un CSS spécifique par instance.</td><td><code class="path">Helpers/maquette.php</code>, <code class="path">storage/app/css_specifique_erp.css</code></td></tr>
+<tr><td><strong>Historique de navigation</strong></td><td>Barre d'historique des éléments récemment consultés, activable.</td><td><code>utiliser_historique_navbar</code></td></tr>
+<tr><td><strong>Mode mobile / responsive</strong></td><td>Détection du mobile, colonnes de liste et options d'action spécifiques au mobile, template responsive par objet.</td><td><code class="path">Helpers/est_un_mobile.php</code>, <code>afficher_en_responsive_dans_listes</code>, <code>options_mobile</code>, <code>template_responsive</code></td></tr>
+<tr><td><strong>Intégration en iframe</strong></td><td>Middleware dédié pour l'affichage de l'ERP dans un cadre externe.</td><td><code class="path">Middlewares/Frame.php</code></td></tr>
+<tr><td><strong>Traduction in-app</strong></td><td>Mode traduction activable dans l'interface : l'utilisateur clique un libellé et le traduit directement, via un index de traduction porté par chaque libellé. 4 langues nativement sur les champs.</td><td><code class="path">Services/Traduction_service.php</code> (38 Ko), directive <code>@traduction</code>, <code class="path">public/eden/traductions</code></td></tr>
+<tr><td><strong>Aide contextuelle</strong></td><td>Bulles d'aide par champ, plus une table d'aides utilisateur indexées permettant de marquer une aide comme vue par utilisateur.</td><td>propriété <code>aide</code>, <code class="path">Migrations/aide_utilisateur.php</code></td></tr>
+<tr><td><strong>Éléments liés</strong></td><td>Résolution générique des objets rattachés à un élément, y compris via relation polymorphe ou table pivot — base des onglets de fiche et des blocs « documents liés ».</td><td><code class="path">Helpers/elements_lies.php</code>, <code class="path">Services/Documents_lies_service.php</code></td></tr>
+<tr><td><strong>Journalisation des pages</strong></td><td>Trace des pages consultées, côté ERP et côté extranet.</td><td><code class="path">Elements/Log_page_management.php</code>, <code>Log_page_extranet</code></td></tr>
+<tr><td><strong>Suivi de recette</strong></td><td>Objets dédiés au suivi des tickets de recette entre l'éditeur et le client, synchronisés par API.</td><td><code class="path">Elements/Suivi_recette_easydev_management.php</code>, <code class="path">Controllers/Synchro_suivi_recette_controller.php</code></td></tr>
+<tr><td><strong>Gestion de version</strong></td><td>Changelog produit distribué par clé d'instance, avec rappels de version affichés aux utilisateurs.</td><td><code class="path">Versioning.json</code>, table <code>version_eden</code></td></tr>
+<tr><td><strong>Tests métier intégrés</strong></td><td>16 scénarios de test métier exécutables depuis l'écran de maintenance (documents, stocks, transformation à la ligne…), hors PHPUnit.</td><td><code class="path">Managements/Tests/</code></td></tr>
+</tbody>
+</table>
+<h3 id="s2-modes">2.5 Modes de gestion métier paramétrables</h3>
+
+<p>Au-delà des capacités transverses, l'ERP sait prendre en charge plusieurs <em>variantes de
+fonctionnement</em> du même processus. Ce sont ces modes qui font qu'une instance ressemble peu à
+une autre — et qui doivent être arbitrés un par un dans une refonte. Les groupes ci-dessous
+reprennent le découpage réel de l'écran de paramétrage gestion commerciale
+(17 onglets, 159 réglages).</p>
+
+<h4>2.5.1 Stock</h4>
+<table>
+<thead><tr><th>Sujet</th><th>Ce qui existe</th></tr></thead>
+<tbody>
+<tr><td><strong>Valorisation</strong></td><td>Prix d'achat moyen pondéré recalculé à la volée sur les factures d'achat des 12 derniers mois ; à défaut, dernier prix d'achat mémorisé sur la fiche article. <span class="tag t-warn">Ni FIFO, ni LIFO, ni CUMP perpétuel</span> — pas de valorisation mouvement par mouvement.</td></tr>
+<tr><td><strong>Multi-entrepôts</strong></td><td>Stock par entrepôt, avec vues agrégées « tous entrepôts ». Entrepôt par défaut paramétrable, et option de gestion de l'entrepôt <em>à la ligne</em> du document.</td></tr>
+<tr><td><strong>Transferts inter-entrepôts</strong></td><td>Génèrent une paire de mouvements (sortie / entrée), avec explosion automatique des nomenclatures vers leurs composants.</td></tr>
+<tr><td><strong>Conditionnements</strong></td><td>Unité de vente ≠ unité de stock : chaque conditionnement porte un coefficient de quantité et ses propres tarifs de vente et d'achat. La quantité saisie est convertie en unités de stock. Option d'éclatement automatique des conditionnements sur un BL d'achat.</td></tr>
+<tr><td><strong>Numéros de série</strong></td><td>Champ par ligne de document, activable type de document par type de document. Traçabilité restituée par un rapport, limité aux BL de vente et d'achat.</td></tr>
+<tr><td><strong>Lots et péremption</strong></td><td>Table de lots (numéro + date de péremption) et table de mouvements de lot par ligne de document, activable globalement.</td></tr>
+<tr><td><strong>Types de mouvement</strong></td><td>Quatre natures : mouvement lié à un document commercial, ajustement d'inventaire, transfert inter-entrepôts, production/désassemblage. Un indicateur distingue les mouvements réels des <em>réservations</em>.</td></tr>
+<tr><td><strong>Cinq niveaux de stock</strong></td><td>Stock actuel, stock réservé, stock disponible (actuel − réservé), stock acheté (à recevoir), stock à terme (actuel − réservé + acheté), calculés par article × entrepôt × conditionnement.</td></tr>
+<tr><td><strong>Quand le stock bouge</strong></td><td>Câblage précis par type de document : les <em>commandes</em> ne posent qu'une réservation ; les <em>BL et bons de retour</em> déclenchent le mouvement physique (le BL d'achat solde en plus la réservation de la commande) ; le <em>bon de préparation</em> ne touche pas au stock, il ne recalcule que le reliquat ; les <em>factures</em> ne mouvementent que si la ligne ne provient pas d'un BL — garde-fou contre le double décompte.</td></tr>
+<tr><td><strong>Inventaire tournant</strong></td><td>Comparaison stock théorique / stock réel saisi par famille, avec génération automatique du mouvement d'écart. Deux points d'entrée : le rapport d'inventaire et l'écran de gestion des stocks.</td></tr>
+<tr><td><strong>Nomenclatures et production</strong></td><td>Quatre natures d'article : standard, nomenclature/kit (non stockée, éclatée en composants), frais divers (hors stock), assemblage/produit fini (stocké, prix et poids recalculés depuis la composition). La production sort les composants et rentre le produit fini en une opération, récursivement. Les cycles de composition sont bloqués.</td></tr>
+<tr><td><strong>Transformation de stock</strong></td><td>Un article ou conditionnement source est scindé en plusieurs lignes d'arrivée, avec un mouvement de sortie et des mouvements d'entrée, recalculés si le conditionnement, l'entrepôt ou la date changent.</td></tr>
+<tr><td><strong>Seuils</strong></td><td>Seuil d'alerte et seuil minimum par article et par conditionnement, matérialisés par un badge de couleur comparant stock actuel et stock à terme. <span class="tag t-warn">Pas de réapprovisionnement automatique</span> — l'alerte est visuelle, aucune commande n'est générée.</td></tr>
+</tbody>
+</table>
+
+<h4>2.5.2 Articles et tarification</h4>
+<table>
+<thead><tr><th>Sujet</th><th>Ce qui existe</th></tr></thead>
+<tbody>
+<tr><td><strong>Grilles tarifaires</strong></td><td>Catalogues tarifaires groupés avec dates de validité, et conditions commerciales par client ou par fournisseur, déclinables par famille ou par article, par <strong>palier de quantité</strong> et par conditionnement, avec tarif forcé et remise. Résolution par priorité : client direct, puis catalogue, puis défaut.</td></tr>
+<tr><td><strong>Articles fournisseurs</strong></td><td>Multi-fournisseurs par article avec fournisseur prioritaire qui alimente le prix d'achat, tarifs par conditionnement, blocage des références en double, retrait en cascade du prix d'achat si le fournisseur prioritaire est supprimé.</td></tr>
+<tr><td><strong>Évolution de prix planifiée</strong></td><td>Programmer une hausse ou une baisse à une date future — en euros ou en pourcentage — par article, par fournisseur (tous ses articles), par famille (et ses filles) ou globalement. Un traitement applique l'évolution le jour venu.</td></tr>
+<tr><td><strong>Résolution du prix d'achat</strong></td><td>Cascade à quatre niveaux : prix du conditionnement, puis tarif article-fournisseur pour ce conditionnement, puis tarif article-fournisseur × quantité du conditionnement, puis prix d'achat de l'article.</td></tr>
+<tr><td><strong>Coefficients</strong></td><td>Trois coefficients cumulatifs et multiplicatifs applicables au tarif net en vente : coefficient article, coefficient de regroupement, coefficient devis.</td></tr>
+<tr><td><strong>Éco-contribution</strong></td><td>Montant par catégorie et par tranche de dates, remonté récursivement à travers les nomenclatures, en mode « inclus dans le prix » ou « ajouté au prix », avec un type de document qui fige la valeur.</td></tr>
+<tr><td><strong>Catégories comptables</strong></td><td>Association article/famille → catégorie comptable avec codes TVA vente et achat distincts. Un changement de code TVA corrige rétroactivement les lignes de factures et avoirs non encore comptabilisées.</td></tr>
+<tr><td><strong>Frais de port</strong></td><td>Traités comme un article de nature « frais divers », calculés par grille transporteur croisant zone postale et tranche de poids.</td></tr>
+<tr><td><strong>Déclinaisons</strong></td><td><span class="tag t-warn">réduit à un interrupteur</span> Le réglage <code>fiche_article_declinaisons</code> n'active qu'un onglet ; aucun modèle de variantes n'a été trouvé dans le code.</td></tr>
+</tbody>
+</table>
+
+<h4>2.5.3 Documents commerciaux</h4>
+<table>
+<thead><tr><th>Sujet</th><th>Ce qui existe</th></tr></thead>
+<tbody>
+<tr><td><strong>Numérotation</strong></td><td>Motif paramétrable <strong>par entité</strong> avec jetons <code>{annee-date}</code>, <code>{mois-date}</code>, <code>{annee-date-2}</code>, <code>{numero}</code> et <code>{break}</code> (point de remise à zéro du compteur), nombre de chiffres réglable. La référence n'est figée qu'à la validation — avant, le document est « pro forma ». Factures et acomptes partagent la même séquence pour la continuité légale, et un contrôle d'intégrité chronologique par année est activable.</td></tr>
+<tr><td><strong>Cycle de transformation</strong></td><td>Devis → commande → (bon de préparation → BL → bon de retour) → (acompte → facture) → avoir, symétrique côté achat. Transformation <strong>ligne à ligne</strong> avec suivi du reliquat : transformation partielle autorisée, sur-transformation bloquée.</td></tr>
+<tr><td><strong>Regroupement et facturation groupée</strong></td><td>Fusion de plusieurs documents sources en un seul document cible avec sous-totaux par source ; facturation groupée en masse par tiers, désactivable client par client, avec options pour ignorer les BL ou commandes à zéro.</td></tr>
+<tr><td><strong>Facturation à l'avancement</strong></td><td>Par projet ou par devis, avec titres de séparation et pourcentage d'avancement modifiable ou verrouillé.</td></tr>
+<tr><td><strong>Acomptes</strong></td><td>Trois modes de calcul : en pourcentage, en montant TTC ou en montant HT, appliqués proportionnellement à tous les totaux.</td></tr>
+<tr><td><strong>Validation et verrouillage</strong></td><td>Validation soumise à un circuit d'approbation optionnel. Le verrouillage après validation se règle à deux niveaux : par type de document <em>et</em> champ par champ. Suppression d'une facture validée : trois comportements — générer un avoir, empêcher la suppression, ou supprimer. Clôture comptable mensuelle bloquant la saisie antérieure.</td></tr>
+<tr><td><strong>Montants négatifs</strong></td><td>Trois comportements à l'enregistrement : bloquant, avertissement, ou aucun blocage.</td></tr>
+<tr><td><strong>Marges</strong></td><td>Pourcentage calculé sur le prix de vente <em>ou</em> sur le prix d'achat ; marge brute et marge nette (après remise) en montant et en pourcentage ; seuils minimum et recommandé déclenchant une alerte ; réglage possible des marges par nature d'article.</td></tr>
+<tr><td><strong>Remises</strong></td><td>À la ligne en pourcentage, et en pied de page en cascade — en montant ou en pourcentage, calculées en HT ou en TTC, appliquées à la plage de lignes depuis la remise précédente.</td></tr>
+<tr><td><strong>Arrondis</strong></td><td>Nombre de décimales configurable, arrondi appliqué sur le total ou sur le prix unitaire, et choix entre « arrondir chaque ligne puis sommer » et « sommer puis arrondir ».</td></tr>
+<tr><td><strong>Écart de gestion TTC</strong></td><td>Tolérance d'arrondi au centime activable par type de document, avec compte de produit, compte de charge et seuil maximum.</td></tr>
+<tr><td><strong>Devises</strong></td><td>Conversion activable sur le tarif ou sur le prix d'achat, champ de conversion sélectionnable, prix converti grisable.</td></tr>
+<tr><td><strong>TVA</strong></td><td>Forçage à zéro par client, alerte si taux nul, code TVA porté par la catégorie comptable de l'article avec correction rétroactive.</td></tr>
+<tr><td><strong>Contrôle de prix</strong></td><td>Vérification « prix de vente inférieur au prix d'achat » activable type de document par type de document, avec alerte à l'enregistrement. Prix net modifiable ou non en saisie.</td></tr>
+<tr><td><strong>Mode de vente</strong></td><td>B2C ou B2B — détermine notamment l'affichage par défaut en TTC ou en HT. Multi-entités et multi-adresses activables séparément, avec option de fiche client unique en multi-entités.</td></tr>
+<tr><td><strong>Règlements</strong></td><td>Échéancier multi-échéances, chaque échéance en montant fixe ou en pourcentage du TTC. Modalités de paiement combinant délai en jours, « fin de mois » et jour fixe (ex. 30 jours fin de mois le 10).</td></tr>
+<tr><td><strong>Affacturage</strong></td><td><span class="tag t-warn">flag seulement</span> Active une action de masse sur les factures ; aucune intégration d'affactureur n'a été trouvée.</td></tr>
+<tr><td><strong>Lettrage comptable</strong></td><td><span class="tag t-risk">absent</span> Les colonnes existent dans l'export comptable mais ne sont pas alimentées.</td></tr>
+<tr><td><strong>Expédition</strong></td><td>Bon de préparation (picking) distinct du BL, grille transporteur par zone et par poids, événements d'expédition tracés. <span class="tag t-warn">Pas d'intégration transporteur réelle</span> : ni étiquette, ni suivi de colis — uniquement le calcul tarifaire du port.</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<p><strong>Auto-évaluation laissée dans le code.</strong> Les descripteurs de réglages portent
+parfois un marqueur de qualité : <strong>61</strong> sont annotés <code>'valide' => true</code>,
+<strong>7</strong> explicitement <code>'valide' => false</code> et <strong>3</strong>
+<code>'a_ameliorer' => true</code> — tous dans la gestion commerciale. L'équipe a donc commencé à
+qualifier ses propres paramètres, sans aller au bout.</p>
+</div>
+
+<h3 id="s2-integrations">2.6 Intégrations externes</h3>
+
+<table>
+<thead><tr><th>Service</th><th>Usage</th><th>Implémentation</th></tr></thead>
+<tbody>
+<tr><td>Microsoft 365 / Graph</td><td>Calendrier Outlook, emails, SharePoint, Teams, tâches Planner, OAuth</td><td>7 services, dont <code class="path">Microsoft_calendrier_service.php</code> (60 Ko), <code class="path">Microsoft_sharepoint_service.php</code> (32 Ko) — SDK <code>microsoft/microsoft-graph ^1.29</code></td></tr>
+<tr><td>Google</td><td>OAuth, synchro Google Calendar</td><td><code class="path">Google_calendrier_service.php</code> (52 Ko), <code>google/apiclient</code></td></tr>
+<tr><td>Stripe</td><td>Paiement CB, tokenisation carte, e-commerce</td><td><code class="path">Stripe_management.php</code> + <code class="path">Stripe_oldmanagement.php</code> (doublon non supprimé)</td></tr>
+<tr><td>Payline (Monext)</td><td>Passerelle CB alternative</td><td><code class="path">Managements/Payline_management.php</code></td></tr>
+<tr><td>Payzen (Lyra)</td><td>CB &amp; prélèvement facture</td><td><code class="path">Managements/Payzen_management.php</code></td></tr>
+<tr><td>Budget Insight / Budgea<br><span class="small">devenu <strong>Powens</strong> en 2022</span></td><td>Agrégation bancaire, rapprochement des relevés</td><td>SDK copié à la main : <code class="path">Librairies/Budgea/Client.php</code></td></tr>
+<tr><td>M-Files</td><td>GED externe, synchronisation documentaire</td><td><code class="path">Services/Mfiles_service.php</code> (22 Ko) + tables de mappage</td></tr>
+<tr><td>DocuSign</td><td>Signature électronique (enveloppes, statuts)</td><td><code class="path">Services/Docusign_service.php</code></td></tr>
+<tr><td>Brevo (ex-Sendinblue)</td><td>Emailing, synchro listes/contacts</td><td><code class="path">Services/Brevo_service.php</code> (16 Ko)</td></tr>
+<tr><td>Esalink</td><td>Connecteur de synchronisation externe</td><td><code class="path">Services/Esalink_service.php</code> (36 Ko)</td></tr>
+<tr><td>DPD</td><td>Étiquettes et expéditions transporteur</td><td>SDK copié à la main : <code class="path">Librairies/DPD/</code> (112 fichiers)</td></tr>
+<tr><td>SIRENE / INSEE</td><td>Recherche entreprise, préremplissage tiers, TVA intracom</td><td><code class="path">Siret_api_service.php</code> + <code class="path">Siret_v2_api_service.php</code> (deux générations coexistantes)</td></tr>
+<tr><td>OpenAI</td><td>Assistance rédactionnelle contextualisée</td><td><code class="path">Services/Open_ia_service.php</code>, <code class="path">Controllers/Api/Ai_controller.php</code></td></tr>
+<tr><td>IMAP</td><td>Réception des emails entrants</td><td><code>webklex/laravel-imap</code>, <code class="path">Controllers/Mail_controller.php</code></td></tr>
+<tr><td>AWS S3</td><td>Stockage de fichiers</td><td><code>league/flysystem-aws-s3-v3</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<p><strong>15 intégrations tierces</strong>, dont 3 passerelles de paiement concurrentes
+(Stripe, Payline, Payzen) et 2 générations d'API SIRET maintenues en parallèle. Trois SDK sont
+recopiés dans le dépôt au lieu d'être gérés par Composer (Budgea, DPD, QrCode) — aucun suivi
+de version ni de CVE.</p>
+</div>
+<h2 id="s3">3. Architecture technique</h2>
+
+<p>std-eden est une coquille Laravel quasi vide (<strong>793 lignes</strong> de PHP hors
+<code>app/Eden</code>) qui monte un framework applicatif maison, <strong>Eden</strong>, livré en
+submodule git. Eden n'est pas une bibliothèque : il fournit le routage, le modèle de données,
+le moteur d'écrans, les vues et la quasi-totalité du métier.</p>
+
+<div class="grid">
+  <div class="stat"><div class="n">387 k</div><div class="l">lignes PHP dans <code>app/Eden</code></div></div>
+  <div class="stat"><div class="n">793</div><div class="l">lignes PHP hors Eden</div></div>
+  <div class="stat"><div class="n">3 368</div><div class="l">fichiers PHP</div></div>
+  <div class="stat"><div class="n">772</div><div class="l">routes déclarées</div></div>
+  <div class="stat"><div class="n">182</div><div class="l">éléments métier</div></div>
+  <div class="stat"><div class="n">1 219</div><div class="l">fichiers de « migration » Eden</div></div>
+  <div class="stat"><div class="n">13 344</div><div class="l">commits sur le submodule Eden</div></div>
+  <div class="stat"><div class="n">261 Mo</div><div class="l">assets <code>public/eden</code></div></div>
+</div>
+
+<h3 id="s3-couches">3.1 Chaîne d'exécution</h3>
+
+<pre><code>Navigateur
+  │
+  ▼  Nginx ──► PHP-FPM                       docker-compose/{nginx,php}
+  │
+  ▼  bootstrap/app.php                       style Laravel ≤ 10 (Kernel dédié)
+  │                                          + bascule Handler_7 / Handler_8 selon PHP
+  ▼  app/Http/Kernel.php                     middlewares Laravel standards
+  │
+  ▼  Middlewares Eden (13)                   eden_middleware, eden_utilisateur_connecte (10 Ko),
+  │                                          editeur, acces_parametrage, eden_extranet, api_eden, frame
+  │                                          ── auth = session('utilisateur_eden'), pas de guard Laravel
+  ▼  Routage                                 routes/*.php (Laravel, ~vides)
+  │                                          └► app/Eden/routes/*.php chargés par EdenServiceProvider
+  │                                             web 497 · parametrage 183 · ecommerce 86 · maintenance 60
+  │                                             cron 43 · extranet 28 · api 27
+  ▼  Controllers (132)                       couche fine : parse la requête, appelle un Management
+  │                                          Element_controller = point d'entrée générique multi-éléments
+  ▼  Managements (466)                       COUCHE MÉTIER — cœur du framework
+  │    ├─ Elements/ (182)                    métier par type d'objet ; fallback Element_management (180 Ko)
+  │    ├─ Fiche_management (85 Ko)           construit l'écran « fiche » depuis les métadonnées
+  │    ├─ Listes_management (92 Ko)          construit les listes / datatables paramétrables
+  │    ├─ Rapports/ (17) · Cartes · Indicateurs
+  │    ├─ Services/ (70)                     transverse : calendrier, récurrence, O365, Google, PDF…
+  │    ├─ Fonctionnalites/ (12)              écrans de paramétrage des flags
+  │    └─ Parametrage/ (7)                   édition du méta-modèle (champs/tables/listes libres)
+  ▼  Champs (27)                             Champ.php (95 Ko) + 25 types typés
+  │                                          construit depuis une ligne de eden_champslibres :
+  │                                          sait se valider, se persister et se rendre (HTML + Vue)
+  ▼  Views (1 113 Blade)                     app/Eden/Views, exposées via loadViewsFrom('eden')
+  │                                          directives maison @champ et @traduction
+  ▼  HTML + Vue 2.7.16 / jQuery 3.6 / Bootstrap 4      public/eden (submodule, 261 Mo)</code></pre>
+
+<div class="callout info">
+<p><strong>Ce qui est piloté par les métadonnées</strong> : l'existence d'un objet métier, ses
+champs, leur type, leur obligation, leur position sur la fiche, les colonnes de liste, les filtres,
+les rapports, les menus, les droits. Tout cela vit en base (<code>eden_champslibres</code>,
+tables libres) ou dans des fichiers PHP générés sous <code>storage/app/</code>.</p>
+<p><strong>Ce qui est codé</strong> : le comportement — règles de calcul commercial, workflow des
+documents, transformation devis→commande→facture, mouvements de stock, intégrations. C'est là que
+vivent les <em>god classes</em>.</p>
+</div>
+
+<h3 id="s3-modules">3.2 Modules techniques macro</h3>
+
+<table>
+<thead><tr><th>Module</th><th>Chemin</th><th>Rôle</th><th>Fichiers</th><th>LOC</th><th>Criticité</th></tr></thead>
+<tbody>
+<tr><td>Amorçage</td><td><code class="path">bootstrap/</code>, <code class="path">app/Http/Kernel.php</code></td><td>Démarrage Laravel, providers, middlewares globaux</td><td>~10</td><td>~300</td><td><span class="tag t-warn">haute</span></td></tr>
+<tr><td>Providers Eden</td><td><code class="path">app/Eden/Providers/</code></td><td>Charge config, vues, routes Eden ; définit <code>@champ</code> et <code>@traduction</code> ; charge les 59 helpers</td><td>3</td><td>314</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Middlewares</td><td><code class="path">app/Eden/Middlewares/</code></td><td>Auth session, extranet, e-commerce, droits éditeur, API key, iframe</td><td>13</td><td>812</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Routage</td><td><code class="path">app/Eden/routes/</code></td><td>772 routes réparties en 7 fichiers thématiques</td><td>7</td><td>2 268</td><td><span class="tag t-warn">haute</span></td></tr>
+<tr><td>Controllers</td><td><code class="path">app/Eden/Controllers/</code></td><td>Entrée HTTP ; sous-dossiers Api, Fiches, Rapports, Parametrage, Ecommerce, Extranet, Blog, Integrations</td><td>132</td><td>35 871</td><td><span class="tag t-warn">haute</span></td></tr>
+<tr><td>Managements</td><td><code class="path">app/Eden/Managements/</code></td><td>Cœur métier + moteurs d'écrans + services transverses</td><td>466</td><td>114 146</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Champs</td><td><code class="path">app/Eden/Champs/</code></td><td>Déclaration, validation, persistance et rendu d'un champ dynamique (25 types)</td><td>27</td><td>6 356</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Métadonnées cœur</td><td><code class="path">app/Eden/{Variables,Champs_libres,Listes_libres,Tables_libres,Rapports_libres,Vuejs}.php</code> + <code>Versioning.json</code></td><td>Constantes globales, registres no-code, changelog produit</td><td>7</td><td>—<br><span class="small">~620 Ko</span></td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Migrations Eden</td><td><code class="path">app/Eden/Migrations/</code></td><td>Définitions déclaratives de tables, champs, listes, formulaires, rapports, vues SQL + scripts one-shot</td><td>1 219</td><td>67 948</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Models</td><td><code class="path">app/Eden/Models/</code></td><td>Coquilles Eloquent (28 lignes en moyenne) + <code>Eden_query_builder</code></td><td>103</td><td>2 936</td><td><span class="tag t-info">moyenne</span></td></tr>
+<tr><td>Views</td><td><code class="path">app/Eden/Views/</code></td><td>1 113 templates Blade, organisés par domaine ; JS Vue inline massif</td><td>1 114</td><td>128 476</td><td><span class="tag t-warn">haute</span></td></tr>
+<tr><td>Helpers</td><td><code class="path">app/Eden/Helpers/</code></td><td>59 fichiers de fonctions globales sans namespace</td><td>59</td><td>3 929</td><td><span class="tag t-risk">critique</span></td></tr>
+<tr><td>Librairies vendorisées</td><td><code class="path">app/Eden/Librairies/</code></td><td>SDK tiers copiés : QrCode, DPD, Budgea, CodeBarre, czproject/git</td><td>135 PHP<br><span class="small">552 fichiers</span></td><td>16 253</td><td><span class="tag t-info">moyenne</span></td></tr>
+<tr><td>Queues</td><td><code class="path">app/Eden/Queues/</code></td><td>Export, mail de fin d'export, synchro externe, webhook, log de connexion</td><td>6</td><td>498</td><td><span class="tag t-info">moyenne</span></td></tr>
+<tr><td>Console</td><td><code class="path">app/Eden/Console/Commands/</code></td><td>1 seule commande Artisan (compression d'images)</td><td>1</td><td>105</td><td><span class="tag t-neutral">faible</span></td></tr>
+<tr><td>Front public</td><td><code class="path">public/eden/</code> <span class="small">(submodule)</span></td><td>Assets : <code>vendors/</code> 201 Mo, <code>extranet/</code> 43 Mo, js, css, images, traductions, fonts</td><td>—</td><td>—<br><span class="small">261 Mo</span></td><td><span class="tag t-warn">haute</span></td></tr>
+<tr><td>Build front hôte</td><td><code class="path">webpack.mix.js</code>, <code class="path">resources/</code></td><td>Laravel Mix 4 — ne compile que <code>app.js</code> / <code>app.scss</code>, quasi inutilisé</td><td>~6</td><td>~60</td><td><span class="tag t-neutral">faible</span></td></tr>
+<tr><td>Infrastructure</td><td><code class="path">docker-compose/</code></td><td>nginx + PHP-FPM + MariaDB + phpMyAdmin + supervisor</td><td>13</td><td>—</td><td><span class="tag t-info">moyenne</span></td></tr>
+<tr><td>Tests &amp; CI</td><td><code class="path">tests/</code>, <code class="path">phpunit.xml</code>, <code class="path">.github/</code></td><td>2 tests d'exemple ; <code>.github/</code> ne contient qu'un <code>dockerfile</code>, aucun workflow</td><td>4</td><td>~60</td><td><span class="tag t-risk">dette</span></td></tr>
+</tbody>
+</table>
+
+<h3 id="s3-stack">3.3 Stack &amp; dépendances</h3>
+
+<div class="two">
+<div class="card">
+<h4>Backend</h4>
+<ul>
+<li>PHP <code>^8.2</code> · Laravel <code>^12.0</code></li>
+<li>Amorçage resté en <strong>style Laravel ≤ 10</strong> (<code>app/Http/Kernel.php</code> dédié au lieu du bootstrap fluent de L11/L12)</li>
+<li>Trace de portage historique : <code>bootstrap/app.php</code> choisit <code>Handler_7</code> ou <code>Handler_8</code> selon la version majeure de PHP</li>
+<li>MySQL / MariaDB ; les DDL générés forcent <code>CHARSET=latin1</code></li>
+<li>Cache <code>file</code>, session <code>file</code>, queue <code>sync</code> par défaut</li>
+</ul>
+</div>
+<div class="card">
+<h4>Frontend</h4>
+<ul>
+<li><strong>Vue 2.7.16</strong> — dernière version de Vue 2, <span class="tag t-risk">EOL 31/12/2023</span></li>
+<li>jQuery 3.6 · Bootstrap 4 · Laravel Mix 4 (webpack)</li>
+<li>Libs vendorisées : TinyMCE, Summernote, Select2, DataTables, Highcharts, Chart.js, Leaflet, Vuetify, PrimeVue, FullCalendar…</li>
+<li>Aucun bundler moderne, aucun <code>package.json</code> couvrant <code>public/eden</code> : les assets sont commités binaires</li>
+</ul>
+</div>
+</div>
+
+<h4>Dépendances Composer notables</h4>
+<table>
+<thead><tr><th>Domaine</th><th>Paquets</th></tr></thead>
+<tbody>
+<tr><td>Documents</td><td><code>barryvdh/laravel-dompdf</code>, <code>grofgraf/laravel-pdf-merger</code>, <code>webklex/laravel-pdfmerger</code>, <code>maatwebsite/excel</code>, <code>openspout/openspout</code>, <code>zanysoft/laravel-zip</code></td></tr>
+<tr><td>Intégrations</td><td><code>google/apiclient</code>, <code>microsoft/microsoft-graph ^1.29</code>, <code>webklex/laravel-imap</code>, <code>league/oauth2-client</code>, <code>league/flysystem-aws-s3-v3</code>, <code>docusign/esign-client</code> <span class="small">(Eden uniquement)</span></td></tr>
+<tr><td>Métier</td><td><code>danielebarbaro/laravel-vat-eu-validator</code>, <code>intervention/validation</code>, <code>atgp/factur-x</code> <span class="small">(Eden uniquement — facturation électronique)</span></td></tr>
+<tr><td>Sécurité / divers</td><td><code>pragmarx/google2fa-qrcode</code>, <code>bacon/bacon-qr-code</code>, <code>doctrine/dbal</code>, <code>laravel/legacy-factories</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout risk">
+<p><strong>Deux <code>composer.json</code> divergents.</strong> Celui du dépôt hôte et celui du
+submodule Eden déclarent des contraintes différentes pour les mêmes paquets
+(<code>bacon/bacon-qr-code ^3.0</code> vs <code>^2.0</code>, <code>php ^8.2</code> vs <code>^8</code>),
+et chacun contient des paquets absents de l'autre : <code>atgp/factur-x</code> et
+<code>docusign/esign-client</code> côté Eden ; <code>maatwebsite/excel</code> et
+<code>zanysoft/laravel-zip</code> côté hôte. Le composer.json d'Eden pose de surcroît
+<code>minimum-stability: dev</code>. La résolution effective dépend de quel fichier est utilisé
+à l'installation.</p>
+</div>
+
+<h4>Obsolescence connue des briques</h4>
+<table>
+<thead><tr><th>Brique</th><th>Version ici</th><th>Statut amont</th></tr></thead>
+<tbody>
+<tr><td>Vue.js</td><td>2.7.16</td><td><span class="tag t-risk">Fin de vie 31/12/2023</span> — plus aucun correctif</td></tr>
+<tr><td>Bootstrap</td><td>4</td><td><span class="tag t-warn">Non maintenu</span> (Bootstrap 5 depuis 2021)</td></tr>
+<tr><td>Laravel Mix</td><td>4 (2019)</td><td><span class="tag t-warn">Remplacé par Vite</span> dans Laravel depuis la v9</td></tr>
+<tr><td>Microsoft Graph SDK PHP</td><td>^1.29</td><td><span class="tag t-warn">v2 disponible</span> — rupture d'API complète (<code>createRequest</code> → API fluide)</td></tr>
+<tr><td><code>fzaninotto/faker</code></td><td>^1.4 (dev)</td><td><span class="tag t-risk">Abandonné</span> — remplacé par <code>fakerphp/faker</code></td></tr>
+<tr><td>Budget Insight / Budgea</td><td>SDK copié</td><td><span class="tag t-warn">Renommé Powens</span> (2022), API et marque ont évolué</td></tr>
+<tr><td><code>phpunit.xml</code></td><td>schéma PHPUnit ≤ 9</td><td><span class="tag t-risk">Incompatible</span> avec <code>phpunit ^11</code> déclaré</td></tr>
+</tbody>
+</table>
+
+<h3 id="s3-donnees">3.4 Modèle de données</h3>
+
+<ul>
+<li><strong>~315 tables métier</strong> décrites par les fichiers racine de
+<code class="path">app/Eden/Migrations/</code>, plus 29 tables système sous
+<code class="path">Migrations/Tables/</code> (préfixe <code>eden_</code>).</li>
+<li><strong>Nommage</strong> : français, snake_case, singulier
+(<code>facture_vente</code>, <code>commande_achat_lignes</code>, <code>log_historique</code>).</li>
+<li><strong>Colonnes systématiques</strong> injectées à la création de toute table libre :
+<code>id</code>, <code>cree_par</code>, <code>cree_le</code>, <code>modifie_par</code>,
+<code>modifie_le</code>, <code>inactif</code>, <code>chaine_affichage</code> et
+<code>chaine_tags_recherche</code> (index FULLTEXT pour la recherche globale).</li>
+<li><strong>Le méta-modèle</strong> vit dans les tables <code>eden_champslibres</code>,
+<code>eden_champslibres_listes</code>, <code>eden_formulaireslibres(_champs)</code>,
+<code>eden_listes_libres_*</code>, <code>eden_fiche_liens</code>, <code>eden_sous_formulaire</code> :
+un champ métier y est une <em>ligne</em>, pas une colonne de modèle.</li>
+<li><strong>Relations</strong> : très peu de relations Eloquent déclarées. Les liens passent par
+des champs de type « recherche d'élément » résolus dynamiquement, par des vues SQL générées
+(<code class="path">Migrations/Vue_sql/</code>, <code class="path">Services/Vue_sql_service.php</code>)
+et par du SQL construit à la volée.</li>
+<li><strong>Modèles Eloquent</strong> : 103 fichiers pour 2 936 lignes — soit ~28 lignes par
+modèle. Exemple intégral de <code class="path">Models/Client.php</code> :</li>
+</ul>
+
+<pre><code>class Client extends Model
+{
+    protected $table = "client";
+}</code></pre>
+
+<p>Les modèles ne portent ni <code>$fillable</code>, ni <code>$casts</code>, ni relations :
+ce sont des adaptateurs de table. La connaissance du schéma est ailleurs, dans les métadonnées.</p>
+<h2 id="s4">4. Carte macro des modules et du code</h2>
+
+<figure>
+<svg viewBox="0 0 980 660" role="img" aria-labelledby="carte-t carte-d" font-family="ui-sans-serif,system-ui,sans-serif">
+  <title id="carte-t">Carte macro d'Eden</title>
+  <desc id="carte-d">Trois blocs : la coquille Laravel, le framework Eden avec ses couches
+  routage, contrôleurs, managements, champs et vues, et le socle de métadonnées qui pilote
+  l'ensemble.</desc>
+  <style>
+    .bx{fill:var(--surface);stroke:var(--border);stroke-width:1.2;rx:8}
+    .zone{fill:none;stroke:var(--border);stroke-width:1.2;stroke-dasharray:5 4;rx:12}
+    .lbl{fill:var(--text);font-size:13px;font-weight:620}
+    .sub{fill:var(--muted);font-size:10.5px}
+    .zt{fill:var(--muted);font-size:11px;font-weight:700;letter-spacing:.08em}
+    .n{fill:var(--muted);font-size:10px;font-family:ui-monospace,monospace}
+    .arr{stroke:var(--muted);stroke-width:1.3;fill:none;marker-end:url(#a)}
+    .meta{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2;rx:8}
+    .metat{fill:var(--accent);font-size:13px;font-weight:650}
+    .crit{fill:var(--risk-soft);stroke:var(--risk);stroke-width:1.2;rx:8}
+    .critt{fill:var(--risk);font-size:13px;font-weight:650}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/>
+    </marker>
+  </defs>
+
+  <!-- zone hote -->
+  <rect class="zone" x="14" y="14" width="600" height="78"/>
+  <text class="zt" x="28" y="34">COQUILLE LARAVEL — 793 LIGNES</text>
+  <rect class="bx" x="28" y="44" width="128" height="34"/>
+  <text class="lbl" x="40" y="58">bootstrap/</text><text class="sub" x="40" y="71">style L≤10</text>
+  <rect class="bx" x="168" y="44" width="128" height="34"/>
+  <text class="lbl" x="180" y="58">Http/Kernel</text><text class="sub" x="180" y="71">middlewares</text>
+  <rect class="bx" x="308" y="44" width="128" height="34"/>
+  <text class="lbl" x="320" y="58">routes/*.php</text><text class="sub" x="320" y="71">4 fichiers vides</text>
+  <rect class="bx" x="448" y="44" width="152" height="34"/>
+  <text class="lbl" x="460" y="58">Providers (5)</text><text class="sub" x="460" y="71">dont EdenServiceProvider</text>
+
+  <path class="arr" d="M314 92 L314 112"/>
+
+  <!-- zone eden -->
+  <rect class="zone" x="14" y="118" width="600" height="452"/>
+  <text class="zt" x="28" y="138">FRAMEWORK EDEN — submodule app/Eden — 387 000 LIGNES</text>
+
+  <rect class="bx" x="28" y="150" width="572" height="44"/>
+  <text class="lbl" x="42" y="170">Middlewares (13) + Routage Eden (7 fichiers)</text>
+  <text class="sub" x="42" y="186">auth = session('utilisateur_eden') · 772 routes : web 497 · paramétrage 183 · e-commerce 86 · maintenance 60 · cron 43 · extranet 28 · api 27</text>
+  <text class="n" x="560" y="170">3 080 l.</text>
+
+  <path class="arr" d="M314 194 L314 212"/>
+
+  <rect class="bx" x="28" y="216" width="572" height="44"/>
+  <text class="lbl" x="42" y="236">Controllers (132)</text>
+  <text class="sub" x="42" y="252">couche fine · Element_controller générique · Document_controller 114 Ko · Cron_controller 50 Ko</text>
+  <text class="n" x="547" y="236">35 871 l.</text>
+
+  <path class="arr" d="M314 260 L314 278"/>
+
+  <rect class="crit" x="28" y="282" width="572" height="132"/>
+  <text class="critt" x="42" y="302">Managements (466) — cœur métier</text>
+  <rect class="bx" x="42" y="312" width="166" height="40"/>
+  <text class="lbl" x="52" y="328" font-size="11.5">Elements (182)</text>
+  <text class="sub" x="52" y="343">Document 347 Ko · Element 180 Ko</text>
+  <rect class="bx" x="218" y="312" width="166" height="40"/>
+  <text class="lbl" x="228" y="328" font-size="11.5">Moteurs d'écrans</text>
+  <text class="sub" x="228" y="343">Fiche 85 Ko · Listes 92 Ko</text>
+  <rect class="bx" x="394" y="312" width="192" height="40"/>
+  <text class="lbl" x="404" y="328" font-size="11.5">Services (70)</text>
+  <text class="sub" x="404" y="343">O365, Google, PDF, récurrence…</text>
+  <rect class="bx" x="42" y="360" width="166" height="40"/>
+  <text class="lbl" x="52" y="376" font-size="11.5">Rapports (17) · Cartes</text>
+  <text class="sub" x="52" y="391">10 formes de restitution</text>
+  <rect class="bx" x="218" y="360" width="166" height="40"/>
+  <text class="lbl" x="228" y="376" font-size="11.5">Fonctionnalites (12)</text>
+  <text class="sub" x="228" y="391">écrans des flags</text>
+  <rect class="bx" x="394" y="360" width="192" height="40"/>
+  <text class="lbl" x="404" y="376" font-size="11.5">Parametrage (7) · Maintenance</text>
+  <text class="sub" x="404" y="391">édite le méta-modèle · 129 Ko</text>
+  <text class="n" x="530" y="302">114 146 l.</text>
+
+  <path class="arr" d="M314 414 L314 432"/>
+
+  <rect class="bx" x="28" y="436" width="278" height="44"/>
+  <text class="lbl" x="42" y="456">Champs (27)</text>
+  <text class="sub" x="42" y="472">Champ.php 95 Ko + 25 types typés</text>
+  <text class="n" x="250" y="456">6 356 l.</text>
+
+  <rect class="bx" x="322" y="436" width="278" height="44"/>
+  <text class="lbl" x="336" y="456">Helpers (59)</text>
+  <text class="sub" x="336" y="472">fonctions globales : moi(), management(), modele()…</text>
+  <text class="n" x="544" y="456">3 929 l.</text>
+
+  <path class="arr" d="M314 480 L314 498"/>
+
+  <rect class="bx" x="28" y="502" width="572" height="44"/>
+  <text class="lbl" x="42" y="522">Views (1 113 Blade)</text>
+  <text class="sub" x="42" y="538">directives @champ / @traduction · JS Vue inline · vues jusqu'à 99 Ko</text>
+  <text class="n" x="530" y="522">128 476 l.</text>
+
+  <!-- zone metadonnees -->
+  <rect class="zone" x="634" y="118" width="332" height="452"/>
+  <text class="zt" x="648" y="138">SOCLE DE MÉTADONNÉES</text>
+
+  <rect class="meta" x="648" y="150" width="304" height="62"/>
+  <text class="metat" x="662" y="170">Migrations Eden (1 219)</text>
+  <text class="sub" x="662" y="186">tableaux PHP déclaratifs — pas artisan migrate</text>
+  <text class="sub" x="662" y="200">Tables · Listes · Formulaires · Rapports · Vue_sql · Scripts</text>
+
+  <rect class="meta" x="648" y="222" width="304" height="62"/>
+  <text class="metat" x="662" y="242">Tables eden_* en base</text>
+  <text class="sub" x="662" y="258">eden_champslibres, eden_formulaireslibres,</text>
+  <text class="sub" x="662" y="272">eden_listes_libres_*, eden_sous_formulaire…</text>
+
+  <rect class="meta" x="648" y="294" width="304" height="76"/>
+  <text class="metat" x="662" y="314">Fichiers PHP générés</text>
+  <text class="sub" x="662" y="330">storage/app/eden_fonctionnalites.php (25 Ko)</text>
+  <text class="sub" x="662" y="344">storage/app/eden_fiche_*.php — layouts d'écrans</text>
+  <text class="sub" x="662" y="358">écrits à l'exécution par l'UI de paramétrage</text>
+
+  <rect class="meta" x="648" y="380" width="304" height="62"/>
+  <text class="metat" x="662" y="400">Config/ (67 fichiers)</text>
+  <text class="sub" x="662" y="416">fonctionnalites.php · eden_menus.php</text>
+  <text class="sub" x="662" y="430">Config/fiches/ — 1 fichier par fiche standard</text>
+
+  <rect class="meta" x="648" y="452" width="304" height="62"/>
+  <text class="metat" x="662" y="472">Variables.php · Versioning.json</text>
+  <text class="sub" x="662" y="488">51 tableaux statiques · changelog 543 Ko</text>
+  <text class="sub" x="662" y="502">enums métier codés en dur</text>
+
+  <rect class="bx" x="648" y="524" width="304" height="34"/>
+  <text class="lbl" x="662" y="540">public/eden — 261 Mo</text>
+  <text class="sub" x="800" y="540">Vue 2.7 · jQuery · Bootstrap 4</text>
+
+  <path class="arr" d="M646 348 L604 348" marker-end="url(#a)"/>
+  <path class="arr" d="M646 190 L604 300"/>
+
+  <!-- legende -->
+  <rect class="bx" x="14" y="590" width="240" height="26"/>
+  <text class="sub" x="26" y="607">code exécutable</text>
+  <rect class="crit" x="266" y="590" width="240" height="26"/>
+  <text class="sub" x="278" y="607">concentration critique de logique</text>
+  <rect class="meta" x="518" y="590" width="240" height="26"/>
+  <text class="sub" x="530" y="607">métadonnées / configuration</text>
+</svg>
+<figcaption>Carte macro. Le flux vertical à gauche est la chaîne d'exécution d'une requête ;
+le bloc de droite est le socle de métadonnées qui l'alimente à chaque étage — c'est lui qui
+donne à Eden son caractère « piloté par la configuration », et c'est aussi lui qui rend une
+migration « à l'identique » difficile.</figcaption>
+</figure>
+
+<h3>4.1 Volumétrie du code</h3>
+
+<figure>
+<svg viewBox="0 0 900 340" role="img" aria-labelledby="vol-t" font-family="ui-sans-serif,system-ui,sans-serif">
+  <title id="vol-t">Lignes de code par module Eden</title>
+  <style>
+    .bar{fill:var(--accent)} .bar2{fill:var(--info)} .bar3{fill:var(--muted)}
+    .bl{fill:var(--text);font-size:12px} .bv{fill:var(--muted);font-size:11px;
+      font-family:ui-monospace,monospace}
+  </style>
+  <!-- max 128476 -> 620px -->
+  <g>
+    <text class="bl" x="0" y="24">Views</text>
+    <rect class="bar" x="130" y="12" width="620" height="16" rx="3"/>
+    <text class="bv" x="758" y="24">128 476</text>
+
+    <text class="bl" x="0" y="52">Managements</text>
+    <rect class="bar" x="130" y="40" width="551" height="16" rx="3"/>
+    <text class="bv" x="689" y="52">114 146</text>
+
+    <text class="bl" x="0" y="80">Migrations</text>
+    <rect class="bar2" x="130" y="68" width="328" height="16" rx="3"/>
+    <text class="bv" x="466" y="80">67 948</text>
+
+    <text class="bl" x="0" y="108">Controllers</text>
+    <rect class="bar" x="130" y="96" width="173" height="16" rx="3"/>
+    <text class="bv" x="311" y="108">35 871</text>
+
+    <text class="bl" x="0" y="136">Librairies</text>
+    <rect class="bar3" x="130" y="124" width="78" height="16" rx="3"/>
+    <text class="bv" x="216" y="136">16 253</text>
+
+    <text class="bl" x="0" y="164">Champs</text>
+    <rect class="bar" x="130" y="152" width="31" height="16" rx="3"/>
+    <text class="bv" x="169" y="164">6 356</text>
+
+    <text class="bl" x="0" y="192">Config</text>
+    <rect class="bar2" x="130" y="180" width="21" height="16" rx="3"/>
+    <text class="bv" x="159" y="192">4 386</text>
+
+    <text class="bl" x="0" y="220">Helpers</text>
+    <rect class="bar" x="130" y="208" width="19" height="16" rx="3"/>
+    <text class="bv" x="157" y="220">3 929</text>
+
+    <text class="bl" x="0" y="248">Models</text>
+    <rect class="bar" x="130" y="236" width="14" height="16" rx="3"/>
+    <text class="bv" x="152" y="248">2 936</text>
+
+    <text class="bl" x="0" y="276">routes</text>
+    <rect class="bar" x="130" y="264" width="11" height="16" rx="3"/>
+    <text class="bv" x="149" y="276">2 268</text>
+
+    <text class="bl" x="0" y="304">Middlewares</text>
+    <rect class="bar" x="130" y="292" width="4" height="16" rx="3"/>
+    <text class="bv" x="142" y="304">812</text>
+
+    <text class="bl" x="0" y="332">Autres</text>
+    <rect class="bar3" x="130" y="320" width="5" height="16" rx="3"/>
+    <text class="bv" x="143" y="332">1 187</text>
+  </g>
+</svg>
+<figcaption>Lignes de PHP/Blade par module. Les vues et les managements représentent à eux
+deux <strong>63 %</strong> du code. Les migrations déclaratives, troisième poste, ne contiennent
+pas de logique : ce sont 68 000 lignes de tableaux de configuration.</figcaption>
+</figure>
+
+<h3>4.2 Concentration : les 20 plus gros fichiers</h3>
+
+<table>
+<thead><tr><th>Taille</th><th>Fichier</th><th>Rôle</th></tr></thead>
+<tbody>
+<tr><td>347 Ko</td><td><code class="path">Managements/Elements/Document_management.php</code></td><td>Tout le cycle de vie des documents commerciaux</td></tr>
+<tr><td>180 Ko</td><td><code class="path">Managements/Elements/Element_management.php</code></td><td>Classe mère générique de tout objet métier</td></tr>
+<tr><td>129 Ko</td><td><code class="path">Managements/Maintenance_management.php</code></td><td>Moteur de migrations et d'exploitation</td></tr>
+<tr><td>116 Ko</td><td><code class="path">Librairies/QrCode/phpqrcode.php</code></td><td>Lib tierce vendorisée</td></tr>
+<tr><td>114 Ko</td><td><code class="path">Controllers/Document_controller.php</code></td><td>Contrôleur documents</td></tr>
+<tr><td>99 Ko</td><td><code class="path">Views/parametrage/liste_libre.blade.php</code></td><td>Écran de paramétrage des listes libres</td></tr>
+<tr><td>95 Ko</td><td><code class="path">Champs/Champ.php</code></td><td>Classe de base de tout champ dynamique</td></tr>
+<tr><td>92 Ko</td><td><code class="path">Managements/Listes_management.php</code></td><td>Moteur de listes</td></tr>
+<tr><td>85 Ko</td><td><code class="path">Managements/Fiche_management.php</code></td><td>Moteur de fiches</td></tr>
+<tr><td>81 Ko</td><td><code class="path">Managements/Elements/Tache_management.php</code></td><td>Métier tâches</td></tr>
+<tr><td>81 Ko</td><td><code class="path">Librairies/QrCode/bindings/tcpdf/qrcode.php</code></td><td>Lib tierce vendorisée</td></tr>
+<tr><td>78 Ko</td><td><code class="path">Views/composants_vue/js/affichage_calendrier.blade.php</code></td><td>JS de calendrier inline dans du Blade</td></tr>
+<tr><td>75 Ko</td><td><code class="path">app/Eden/routes/web.php</code></td><td>497 routes dans un fichier</td></tr>
+<tr><td>68 Ko</td><td><code class="path">Views/parametrage/include/modal_ajout_champ_libre.blade.php</code></td><td>Modale d'ajout de champ libre</td></tr>
+<tr><td>66 Ko</td><td><code class="path">Views/formulaires/include/document/includes/tableau_des_articles.blade.php</code></td><td>Grille des lignes de document</td></tr>
+<tr><td>65 Ko</td><td><code class="path">Managements/Fonctionnalites/Gestion_commerciale_v2_management.php</code></td><td>Écran de paramétrage gestion commerciale</td></tr>
+<tr><td>60 Ko</td><td><code class="path">Managements/Services/Calendrier_service.php</code></td><td>Service calendrier</td></tr>
+<tr><td>60 Ko</td><td><code class="path">Views/parametrage/parametrer_rapport.blade.php</code></td><td>Écran de paramétrage des rapports</td></tr>
+<tr><td>60 Ko</td><td><code class="path">Managements/Services/Recurrence_service.php</code></td><td>Moteur de récurrences</td></tr>
+<tr><td>60 Ko</td><td><code class="path">Managements/Services/Microsoft_calendrier_service.php</code></td><td>Synchro calendrier Microsoft 365</td></tr>
+</tbody>
+</table>
+
+<p class="small">Dix fichiers PHP dépassent 60 Ko. Les deux plus gros —
+<code>Document_management</code> et <code>Element_management</code> — totalisent à eux seuls
+527 Ko et concentrent le métier documentaire de l'ERP.</p>
+<h2 id="s5">5. Blocs techniques non standard</h2>
+
+<p>Inventaire de ce qui s'écarte des conventions Laravel et de l'écosystème PHP. Ce sont les
+endroits où l'intuition d'un développeur Laravel est prise en défaut — et les points où une
+refonte ne pourra pas se contenter d'un portage.</p>
+
+<h3>5.1 Migrations Eden — un moteur maison, pas <code>artisan migrate</code></h3>
+<p class="path">app/Eden/Migrations/ (1 219 fichiers) · Managements/Maintenance_management.php (129 Ko) · routes/maintenance.php</p>
+
+<p>Un fichier de migration Eden n'est pas une classe : c'est un <code>return [...]</code> décrivant
+un état cible.</p>
+<pre><code>// app/Eden/Migrations/Tables/eden_champslibres.php
+return [
+    'id_cl'        => ['type' => 'integer', 'cle_primaire' => true],
+    'type_element' => ['type' => 'string'],
+    'nom_sql'      => ['type' => 'string'],
+    …
+];</code></pre>
+<p>Pour les tables métier, le fichier décrit en plus la « table libre » et tous ses champs libres :</p>
+<pre><code>// app/Eden/Migrations/adresse.php
+return [
+  'table_libre' => [
+     'nom_table' => 'Adresses', 'nom_table_sql' => 'adresse', 'type_element' => 'adresse',
+     'affichage_recherche' => '#adresse# #code_postal# #ville# ', … ],
+  'champs_libres' => [ … ],
+];</code></pre>
+
+<table>
+<thead><tr><th>Standard Laravel</th><th>Eden</th></tr></thead>
+<tbody>
+<tr><td>Classes <code>Migration</code> avec <code>up()</code> / <code>down()</code></td><td>Tableaux PHP déclaratifs, rejoués intégralement</td></tr>
+<tr><td>Table <code>migrations</code>, batchs, ordre</td><td>Aucune — idempotence par introspection (<code>Schema::hasTable</code> / <code>hasColumn</code>)</td></tr>
+<tr><td><code>php artisan migrate</code> / <code>migrate:rollback</code></td><td>Routes HTTP : <code>GET eden/maintenance/migrations_installation</code>, <code>POST eden/maintenance/migrations</code></td></tr>
+<tr><td>Pas de rollback possible</td><td>Pas de rollback non plus</td></tr>
+<tr><td>Scripts one-shot : migrations datées</td><td><code class="path">Migrations/Scripts/{Avant,Apres}_migrations/</code>, suivi via la table générique <code>parametre</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout risk">
+<p><strong>Deux points à confirmer côté exploitation.</strong></p>
+<p>① <code>Maintenance_controller::migrations_post()</code> appelle une méthode statique dont le
+nom vient de la requête, sans liste blanche :</p>
+<pre style="margin:.6em 0"><code>$fonction = request()->fonction ?? null;
+Maintenance_management::$fonction();</code></pre>
+<p>La route est protégée par les middlewares <code>eden_middleware</code> + <code>editeur</code>.
+② En revanche, <code>GET eden/maintenance/migrations_installation</code> est déclarée
+<em>en dehors</em> du groupe de middlewares dans
+<code class="path">app/Eden/routes/maintenance.php</code> (l. 5) : elle est donc accessible sans
+authentification et enchaîne <code>mise_a_jour_composer</code>,
+<code>generer_tables_champs_libres</code>, <code>maj_vue_sql</code>,
+<code>maj_formulaires_libres</code>… avec <code>memory_limit = -1</code> et
+<code>set_time_limit(0)</code>. À vérifier en priorité sur les environnements exposés.</p>
+</div>
+
+<h3>5.2 Le no-code qui écrit du PHP à l'exécution</h3>
+<p class="path">Managements/Parametrage/Table_libre_management.php · Maintenance_management::generer_fichier_migration_formulaire() · Controllers/Parametrage_controller.php · Vuejs.php</p>
+
+<p>C'est le bloc le plus structurant — et le plus inhabituel. Le paramétrage ne se contente pas
+d'écrire en base : il <strong>génère des fichiers PHP</strong> qui sont ensuite
+<code>include</code>és comme du code applicatif.</p>
+<ul>
+<li><code class="path">storage/app/eden_fonctionnalites.php</code> — écrit par l'écran de
+paramétrage, inclus par la config Laravel.</li>
+<li><code class="path">storage/app/eden_fiche_*.php</code> — la <em>mise en page des fiches</em>
+(client, article, facture, projet…) matérialisée en fichiers PHP par instance.</li>
+<li><code class="path">Migrations/Formulaires_libres/*.php</code> — générés par concaténation de
+chaînes depuis la base :
+<pre style="margin:.5em 0"><code>$texte = '&lt;?php return [ \'type_element\' => "'.$le_formulaire['type_element'].'", … ];';
+$fichier = fopen($chemin, "x+");
+fputs($fichier, $texte);</code></pre>
+L'échappement se limite à un <code>str_replace("'", "\\'", …)</code> — pas de
+<code>var_export()</code>.</li>
+<li><code class="path">Config/eden_menus.php</code> porte l'en-tête <code>/* Généré le 03/08/2022 */</code>.</li>
+<li><code>Vuejs::genere_filtres_vuejs()</code> écrit un fichier <code>.js</code> dans
+<code>storage/app/public/</code>.</li>
+</ul>
+<p>Conséquence directe : la frontière entre « configuration client » et « code source » n'existe
+pas. Une partie du comportement d'une instance vit dans des fichiers PHP qui ne sont ni versionnés
+avec le code, ni décrits par un schéma.</p>
+
+<h3>5.3 <code>eval()</code> et Blade dynamique sur du contenu configuré</h3>
+<p class="path">Helpers/eval_condition_js.php · Helpers/blade_compile.php · Providers/EdenServiceProvider.php · ~20 vues Blade</p>
+
+<p>Trois évaluateurs distincts exécutent du code construit à partir de données paramétrables.</p>
+<pre><code>// Helpers/eval_condition_js.php — conditions d'affichage paramétrées
+//   réécrit "$root.moi.xxx" → "moi()->xxx", "client.champ" → "$element->champ"
+return eval('return '.$condition.';');
+
+// Helpers/blade_compile.php — modèles de documents éditables en base
+function blade_compile($value, array $args = array()) {
+    return \Blade::render(html_entity_decode($value), $args);
+}</code></pre>
+<ul>
+<li><code>eval_condition_js()</code> évalue en PHP une condition saisie dans l'écran de
+paramétrage.</li>
+<li><code>blade_compile()</code> compile et exécute du Blade — donc du PHP — provenant de champs
+de base de données (modèles de documents, blocs de contenu, publipostage).</li>
+<li>Les directives <code>@champ</code> et <code>@traduction</code> utilisent
+<code>eval()</code> sur leurs arguments au moment de la compilation Blade (arguments écrits par
+les développeurs : risque moindre, pattern non standard tout de même).</li>
+<li>Côté navigateur, une vingtaine de vues appellent <code>eval(condition)</code> /
+<code>window.eval(...)</code> pour les mêmes conditions d'affichage.</li>
+<li>Un second <code>eval()</code> PHP existe dans
+<code class="path">Elements/Parametrage_balise_publipostage_management.php</code>.</li>
+</ul>
+<p>Le périmètre de confiance est donc « tout administrateur fonctionnel capable d'éditer un modèle
+de document ou une condition d'affichage peut exécuter du PHP arbitraire sur le serveur ».</p>
+
+<h3>5.4 SQL brut et DDL concaténé</h3>
+<p><strong>496 appels</strong> à <code>DB::select</code> / <code>statement</code> / <code>raw</code> /
+<code>insert</code> / <code>update</code> / <code>delete</code> dans <code>app/Eden</code>.
+La création de table libre construit son DDL par concaténation :</p>
+<pre><code>// Managements/Parametrage/Table_libre_management.php:121
+DB::select('CREATE TABLE`'.$type_element.'` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `modifie_par` int(11) NOT NULL, … `chaine_tags_recherche` longtext, `chaine_affichage` text,
+  PRIMARY KEY (`id`), FULLTEXT INDEX (`chaine_tags_recherche`))
+  ENGINE=InnoDB DEFAULT CHARSET=latin1');</code></pre>
+<p>Deux observations : <code>$type_element</code> provient d'une saisie de paramétrage et n'est pas
+quoté en identifiant ; et les tables créées à l'exécution le sont en
+<strong><code>latin1</code></strong>, pas en <code>utf8mb4</code>.</p>
+<p>Le même mécanisme génère des <strong>vues SQL</strong> par type d'élément
+(<code class="path">Migrations/Vue_sql/</code>, <code class="path">Services/Vue_sql_service.php</code>,
+21 Ko) — une couche d'abstraction de lecture invisible depuis le code PHP.</p>
+
+<h3>5.5 Authentification et droits entièrement maison</h3>
+<div class="two">
+<div class="card">
+<h4>Mesure</h4>
+<p style="font-size:1.6rem;font-weight:700;margin:.2em 0">0</p>
+<p class="small" style="margin:0">occurrence de la façade <code>Auth::</code> dans les
+387 000 lignes de <code>app/Eden</code>.</p>
+</div>
+<div class="card">
+<h4>Ce qui est utilisé à la place</h4>
+<ul style="margin:.2em 0">
+<li><code>moi()</code> = <code>session()->get('utilisateur_eden')</code></li>
+<li>Rôles par entier <code>type_utilisateur</code> → helpers <code>super_admin()</code>, <code>editeur()</code>, <code>admin()</code></li>
+<li>Droits fins : <code>Profil_droits_element</code>, <code>Profil_droits_divers</code></li>
+<li>Middlewares maison, aucune Policy ni Gate</li>
+</ul>
+</div>
+</div>
+<p><code>config/auth.php</code> déclare bien les guards Laravel standards : ils sont inertes. Un
+mécanisme d'<strong>usurpation de compte</strong> (session <code>eden_usurpation_origine</code>)
+permet au support de prendre l'identité d'un utilisateur.</p>
+<p>Deux alias de middleware déclarés dans <code class="path">app/Http/Kernel.php</code>
+(<code>eden_acces_restreint_extranet</code>, <code>eden_employe_connecte</code>) pointent vers des
+classes <strong>absentes du dépôt</strong> ; ils ne sont référencés par aucune route — alias morts
+qui lèveraient une erreur s'ils étaient utilisés.</p>
+
+<h3>5.6 Helpers globaux chargés par <code>glob()</code></h3>
+<pre><code>// app/Eden/Providers/HelperServiceProvider.php
+foreach (glob(app_path().'/Eden/Helpers/*.php') as $filename) {
+    require_once($filename);
+}</code></pre>
+<p>59 fichiers, ~4 000 lignes de fonctions globales sans namespace, chargées à chaque boot —
+hors de l'autoloader Composer (<code>autoload.files</code> n'est pas utilisé). Tout fichier déposé
+dans le dossier est exécuté. Parmi les fonctions publiées dans l'espace global :
+<code>moi()</code>, <code>management()</code>, <code>modele()</code>, <code>parametre()</code>,
+<code>fonctionnalite()</code>, <code>champ_libre()</code>, <code>traduction()</code>,
+<code>montant()</code>, <code>super_admin()</code>, <code>dd_eden()</code>.</p>
+
+<h3>5.7 Résolution du métier par convention de nom</h3>
+<pre><code>// app/Eden/Helpers/management.php
+$tests = [
+  "\\App\\Managements\\Elements\\".ucfirst($type_element)."_management",        // spécifique client
+  "\\App\\Eden\\Managements\\Elements\\".ucfirst($type_element)."_management",  // standard Eden
+  "\\App\\Eden\\Managements\\Elements\\Element_management",                     // générique
+];
+foreach($tests as $classe) if(class_exists($classe)) { … }</code></pre>
+<p>Il n'y a ni conteneur d'injection, ni interface, ni registre : la classe métier est trouvée par
+<code>class_exists()</code> sur un nom construit, avec mise en cache… <strong>en session</strong>.
+C'est aussi le point d'extension client : un projet spécifique surcharge Eden en déposant une
+classe du même nom sous <code>App\Managements\</code>.</p>
+
+<h3>5.8 Cache applicatif en session</h3>
+<p><code class="path">Managements/Cache_management.php</code> (37 Ko) stocke le cache des
+métadonnées — classes de management résolues, éléments, traductions, droits — dans la
+<strong>session PHP</strong> de l'utilisateur (<code>session()->put('cache.…')</code>,
+<code>session()->forget('cache')</code>), et non dans le cache Laravel. Conséquences : cache non
+partagé entre utilisateurs, rechargé à chaque nouvelle session, taille de session importante,
+et invalidation qui dépend du cycle de vie de la session.</p>
+
+<h3>5.9 Tâches planifiées en routes HTTP</h3>
+<p>43 routes dans <code class="path">app/Eden/routes/cron.php</code> pointant vers un
+<code class="path">Cron_controller.php</code> de 50 Ko, déclenchées par un cron système
+<strong>externe et non versionné dans le dépôt</strong>. Le scheduler Laravel n'est pas utilisé —
+<code class="path">app/Console/Kernel.php</code> ne référence qu'une seule commande
+(compression d'images). S'ajoute un mécanisme de « requêtes SQL cron » paramétrables
+(<code>Requete_sql_cron</code>).</p>
+
+<h3>5.10 Bibliothèques tierces recopiées dans le dépôt</h3>
+<table>
+<thead><tr><th>Lib</th><th>Fichiers</th><th>Remarque</th></tr></thead>
+<tbody>
+<tr><td><code class="path">Librairies/QrCode/</code></td><td>425</td><td><code>phpqrcode.php</code> — projet non maintenu depuis le début des années 2010</td></tr>
+<tr><td><code class="path">Librairies/DPD/</code></td><td>112</td><td>SDK transporteur</td></tr>
+<tr><td><code class="path">Librairies/czproject/git/</code></td><td>13</td><td><strong>Contient son propre <code>composer.json</code></strong> : c'est un paquet Composer copié à la main</td></tr>
+<tr><td><code class="path">Librairies/Budgea/</code></td><td>1</td><td>Client d'agrégation bancaire</td></tr>
+<tr><td><code class="path">Librairies/CodeBarre/</code></td><td>1</td><td>Génération de codes-barres</td></tr>
+</tbody>
+</table>
+<p>Aucune de ces dépendances n'est suivie par Composer : ni version, ni alerte de sécurité,
+ni mise à jour. Idem côté front pour les 201 Mo de <code class="path">public/eden/vendors/</code>.</p>
+
+<h3>5.11 Git exécuté depuis l'application web</h3>
+<p><code class="path">Managements/Git_management.php</code> lance <code>exec('git rev-parse
+--abbrev-ref HEAD')</code> pour afficher la branche courante des trois dépôts (Eden, spécifique,
+public), et utilise la lib <code>czproject/git</code> pour faire des <code>add</code> /
+<code>commit</code> programmatiques. L'application dispose donc d'un accès en écriture à son propre
+code source.</p>
+
+<h3>5.12 Conventions de code</h3>
+<ul>
+<li>Nommage <strong>français</strong> intégral : classes, méthodes, variables, colonnes, routes.</li>
+<li><code>snake_case</code> sur les classes et méthodes — à l'opposé de PSR-1 / PSR-12
+(<code>Fiche_management</code>, <code>recuperer_difference_vue_config()</code>).</li>
+<li>Méthodes statiques omniprésentes, aucune interface, aucune injection de dépendances.</li>
+<li>Gestion d'erreurs maison : <code>Handler_7</code> / <code>Handler_8</code> sélectionnés selon
+la version de PHP, <code>dd_eden()</code>, table <code>erreur</code>.</li>
+<li>Code mort versionné : <code>Stripe_oldmanagement.php</code> à côté de
+<code>Stripe_management.php</code>, 6 fichiers <code>.blade.php.old</code>,
+<code>Siret_api_service</code> + <code>Siret_v2_api_service</code>.</li>
+</ul>
+
+<h3>5.13 Code client dans le socle « standard »</h3>
+<p>Le dépôt Eden est présenté comme le standard, mais il contient du code nommément spécifique à
+des clients : <strong>248 occurrences</strong> du sigle d'un client (<code>amc</code>) dans
+<code>app/Eden</code>, dont des méthodes métier appelées directement depuis les vues e-commerce
+livrées en standard :</p>
+<pre><code>{{ \App\Managements\Ecommerce_management::promo_sur_tablier_amc() }}
+\App\Managements\Ecommerce_management::promo_sur_volet_amc()[$type_de_la_promotion]</code></pre>
+<p>Ces appels visent <code>App\Managements\</code> — le namespace <em>projet spécifique</em>, absent
+de ce dépôt. Les vues standard dépendent donc de classes qui n'existent que chez un client.
+73 fichiers du cœur contiennent par ailleurs le mot <code>specifique</code>.</p>
+<h2 id="s6">6. Points d'attention pour la refonte</h2>
+
+<p>Synthèse ordonnée des constats des sections précédentes. Il ne s'agit pas d'un plan de
+refonte : c'est la liste des sujets qui ne se portent pas « tels quels ».</p>
+
+<table>
+<thead><tr><th>Sujet</th><th>Nature</th><th>Ampleur</th><th>Renvoi</th></tr></thead>
+<tbody>
+<tr><td>Génération de fichiers PHP à l'exécution (fonctionnalités, fiches, formulaires, menus, filtres JS)</td><td><span class="tag t-risk">architecture</span></td><td>Structurant — il n'y a pas de frontière config / code</td><td>§5.2, §1.1</td></tr>
+<tr><td><code>eval()</code> PHP et JS + Blade compilé depuis la base</td><td><span class="tag t-risk">sécurité</span></td><td>3 évaluateurs, ~20 vues concernées</td><td>§5.3</td></tr>
+<tr><td>Route de migration non authentifiée + appel de méthode piloté par la requête</td><td><span class="tag t-risk">sécurité</span></td><td>À vérifier sur les environnements exposés</td><td>§5.1</td></tr>
+<tr><td>DDL concaténé à partir de saisies de paramétrage, tables en <code>latin1</code></td><td><span class="tag t-risk">sécurité / données</span></td><td>496 appels SQL bruts</td><td>§5.4</td></tr>
+<tr><td>Secrets d'intégration en base64 dans un fichier PHP</td><td><span class="tag t-risk">sécurité</span></td><td>Toutes les clés de type <code>password</code></td><td>§1.1</td></tr>
+<tr><td>Aucun usage d'<code>Auth::</code>, droits par entier, pas de Policy</td><td><span class="tag t-warn">architecture</span></td><td>Refonte complète du modèle de droits</td><td>§5.5</td></tr>
+<tr><td>Moteur de migrations maison</td><td><span class="tag t-warn">outillage</span></td><td>1 219 fichiers, sans rollback ni historique</td><td>§5.1</td></tr>
+<tr><td>God classes</td><td><span class="tag t-warn">maintenabilité</span></td><td>10 fichiers &gt; 60 Ko ; 527 Ko pour les 2 plus gros</td><td>§4.2</td></tr>
+<tr><td>Zéro test automatisé exploitable, zéro CI</td><td><span class="tag t-risk">qualité</span></td><td><code>phpunit.xml</code> au schéma ≤ 9 avec PHPUnit 11 déclaré</td><td>§3.2</td></tr>
+<tr><td>Front Vue 2.7 en fin de vie, Bootstrap 4, Laravel Mix 4, 201 Mo de vendors commités</td><td><span class="tag t-warn">obsolescence</span></td><td>Chantier front complet</td><td>§3.3</td></tr>
+<tr><td>Helpers globaux chargés par <code>glob()</code>, résolution par <code>class_exists</code></td><td><span class="tag t-warn">couplage</span></td><td>59 fichiers, appelés partout</td><td>§5.6, §5.7</td></tr>
+<tr><td>Cache métier stocké en session utilisateur</td><td><span class="tag t-warn">performance</span></td><td>37 Ko de logique de cache à repenser</td><td>§5.8</td></tr>
+<tr><td>Cron en routes HTTP, dépendance à une infra externe non versionnée</td><td><span class="tag t-warn">exploitation</span></td><td>43 routes</td><td>§5.9</td></tr>
+<tr><td>Deux <code>composer.json</code> divergents, SDK vendorisés</td><td><span class="tag t-warn">dépendances</span></td><td>5 libs hors Composer, contraintes contradictoires</td><td>§3.3, §5.10</td></tr>
+<tr><td>Code client dans le socle standard</td><td><span class="tag t-warn">modularité</span></td><td>248 occurrences, vues standard dépendant d'un namespace absent</td><td>§5.13</td></tr>
+<tr><td>Dérive du paramétrage : 51 clés mortes, 37 sans effet, 49 non exposées, 2 fantômes</td><td><span class="tag t-info">fonctionnel</span></td><td>Nettoyage à faire avant toute reprise</td><td>§1.3</td></tr>
+<tr><td>Migration « v2 » du paramétrage inachevée, doublons (<code>Stripe_old…</code>, Siret v1/v2, <code>.old</code>)</td><td><span class="tag t-info">nettoyage</span></td><td>Faible effort, forte clarté gagnée</td><td>§1.4, §5.12</td></tr>
+<tr><td>Documentation absente</td><td><span class="tag t-info">connaissance</span></td><td><code>CLAUDE.md</code> renvoie à <code class="path">docs/tech/</code> — le dossier n'existe pas sur cette branche</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h2 id="annexes">Annexes</h2>
+
+<h3>A. Chiffres de référence</h3>
+<table>
+<thead><tr><th>Indicateur</th><th>Valeur</th></tr></thead>
+<tbody>
+<tr><td>Lignes PHP + Blade dans <code>app/Eden</code></td><td>387 473</td></tr>
+<tr><td>Lignes PHP hors <code>app/Eden</code></td><td>793</td></tr>
+<tr><td>Fichiers PHP dans <code>app/Eden</code></td><td>3 368</td></tr>
+<tr><td>Vues Blade</td><td>1 113</td></tr>
+<tr><td>Routes déclarées</td><td>772</td></tr>
+<tr><td>Éléments métier (<code>*_management</code> sous <code>Elements/</code>)</td><td>182</td></tr>
+<tr><td>Services transverses</td><td>70</td></tr>
+<tr><td>Types de champs</td><td>25 + classe de base</td></tr>
+<tr><td>Fichiers de migration Eden</td><td>1 219 <span class="small">(315 tables métier, 29 tables système, 226 scripts, 181 formulaires libres, 178 listes libres, 138 listes de fiches, 109 rapports, 18 sous-formulaires, 15 vues SQL, 9 listes de champs libres)</span></td></tr>
+<tr><td>Fonctionnalités paramétrables</td><td>400 clés + 125 sous-clés + 15 modèles PDF</td></tr>
+<tr><td>Appels à <code>fonctionnalite()</code></td><td>823, pour 309 clés distinctes</td></tr>
+<tr><td>Appels SQL bruts (<code>DB::*</code>)</td><td>496</td></tr>
+<tr><td>Occurrences de <code>Auth::</code></td><td>0</td></tr>
+<tr><td>Poids de <code>public/eden</code></td><td>261 Mo <span class="small">(dont vendors 201 Mo, extranet 43 Mo)</span></td></tr>
+<tr><td>Historique du submodule Eden</td><td>13 344 commits, 614 branches distantes, 25+ contributeurs</td></tr>
+<tr><td>Version Eden analysée</td><td>tag <code>Version_2026080120</code> — cadence de version mensuelle</td></tr>
+</tbody>
+</table>
+
+<h3>B. Où lire quoi</h3>
+<table>
+<thead><tr><th>Pour comprendre…</th><th>Commencer par</th></tr></thead>
+<tbody>
+<tr><td>Le cycle de vie d'une requête</td><td><code class="path">app/Eden/Providers/EdenServiceProvider.php</code></td></tr>
+<tr><td>Le modèle « élément »</td><td><code class="path">app/Eden/Helpers/management.php</code> puis <code class="path">Managements/Elements/Element_management.php</code></td></tr>
+<tr><td>Le rendu d'un champ</td><td><code class="path">app/Eden/Champs/Champ.php</code> + directive <code>@champ</code></td></tr>
+<tr><td>Le méta-modèle</td><td><code class="path">app/Eden/Migrations/Tables/eden_champslibres.php</code> et un fichier racine (ex. <code class="path">Migrations/adresse.php</code>)</td></tr>
+<tr><td>Le paramétrage fonctionnel</td><td><code class="path">Config/fonctionnalites.php</code> + <code class="path">Managements/Fonctionnalites/Fonctionnalite_management.php</code></td></tr>
+<tr><td>Le métier documentaire</td><td><code class="path">Managements/Elements/Document_management.php</code> (347 Ko)</td></tr>
+<tr><td>L'exploitation</td><td><code class="path">Managements/Maintenance_management.php</code> + <code class="path">routes/maintenance.php</code></td></tr>
+</tbody>
+</table>
+
+<h3>C. Méthode et limites</h3>
+<ul>
+<li>Analyse <strong>statique uniquement</strong> : aucun code exécuté, aucune base interrogée,
+aucune modification du dépôt. Les comportements à l'exécution (volumétrie réelle, données d'une
+instance, effets des overrides client) ne sont pas observés.</li>
+<li>Branche analysée : <code>feat/docker_alex</code>, submodule Eden au tag
+<code>Version_2026080120</code>. Le dépôt de projet <em>spécifique</em>
+(namespace <code>App\Managements\</code>) n'est pas présent : tout ce qui en dépend est signalé
+comme tel.</li>
+<li>La détection des clés « mortes » repose sur une recherche textuelle ; une clé composée
+dynamiquement échapperait à l'analyse. Les chiffres de la §1.3 sont des ordres de grandeur
+vérifiés par échantillon, pas une preuve formelle.</li>
+<li>Le dossier <code class="path">docs/tech/</code> référencé par <code>CLAUDE.md</code> n'existe
+pas sur cette branche : aucune documentation interne n'a pu être croisée avec le code.</li>
+</ul>
+
+<h3>D. Sources externes consultées</h3>
+<ul class="small">
+<li>Fin de vie de Vue 2 — <a href="https://v2.vuejs.org/eol/">v2.vuejs.org/eol</a></li>
+<li>Guide de migration du SDK PHP Microsoft Graph v1 → v2 — <a href="https://github.com/microsoftgraph/msgraph-sdk-php/blob/main/UPGRADING.md">github.com/microsoftgraph/msgraph-sdk-php</a></li>
+<li>Budget Insight devient Powens — <a href="https://www.openbankingexpo.com/news/budget-insight-rebrands-to-powens/">openbankingexpo.com</a></li>
+<li>Abandon de <code>fzaninotto/faker</code> — <a href="https://laravel-news.com/changes-coming-to-php-faker">laravel-news.com</a></li>
+<li>Payline (Monext) et Payzen (Lyra) — solutions toujours actives ; aucune fin de vie annoncée —
+<a href="https://www.payzen.eu/">payzen.eu</a>, <a href="https://docs.monext.fr/">docs.monext.fr</a></li>
+</ul>
+
+<footer>
+<p>Rapport généré le 17 septembre 2026 par analyse statique du dépôt std-eden
+(branche <code>feat/docker_alex</code>) et de ses submodules. Aucun fichier du dépôt n'a été
+modifié. Les identifiants, clés d'API et paramètres de connexion rencontrés dans la configuration
+n'ont volontairement pas été reproduits dans ce document.</p>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+<i class="css_action_icon primaire fa fa-fw fa-trash" @click="suppression_fiche('{{$management_element->_type_element}}','{{ $management_element->modele->id }}')" title="{{traduction('module_sur_fiche.fiche.generique.supprimer')}}" data-toggle="tooltip"></i>
