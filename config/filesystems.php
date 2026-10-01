@@ -46,6 +46,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            // Dossiers en 0755 (au lieu de 0700) : nginx, qui sert /storage depuis le
+            // volume partage, ne tourne pas sous le meme utilisateur que PHP
+            'directory_visibility' => 'public',
         ],
 
         'temp' => [

@@ -4,6 +4,10 @@ server {
     root /var/www/public;
     index index.php index.html;
 
+    # Redirections relatives (ex. ajout du / final sur un dossier) : derriere
+    # l'ingress, nginx ne connait ni le schema (https) ni le port publics
+    absolute_redirect off;
+
     client_max_body_size 256M;
     keepalive_timeout 3600s;
     client_header_timeout 3600s;
