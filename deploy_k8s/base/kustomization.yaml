@@ -11,6 +11,7 @@ resources:
   - eden-migrate.job.yaml
   - ingress.yaml
   - ip-autorisees.middleware.yaml
+  - sortie-restreinte.networkpolicy.yaml
 
 labels:
   - pairs:

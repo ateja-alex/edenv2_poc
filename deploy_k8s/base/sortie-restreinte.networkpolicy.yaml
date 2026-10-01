@@ -1,0 +1,41 @@
+# Sorties reseau des pods du client limitees au strict necessaire (DNS, MariaDB, Redis).
+# Avec des donnees de prod, EDEN prend son SMTP (et ses API Google, Microsoft, modele...)
+# dans la base : sans ce filtre, le worker, les crons ou l'interface enverraient de vrais
+# mails aux clients. Le volume NFS n'est pas concerne (monte par le noeud, pas par le pod).
+# A assouplir explicitement le jour ou un client doit sortir (SMTP de test, API modele).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sortie-restreinte
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    # DNS du cluster
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - { protocol: UDP, port: 53 }
+        - { protocol: TCP, port: 53 }
+    # MariaDB commune
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: eden-plateforme
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb
+      ports:
+        - { protocol: TCP, port: 3306 }
+    # Redis du namespace
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+      ports:
+        - { protocol: TCP, port: 6379 }
