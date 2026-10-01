@@ -36,6 +36,7 @@ x-app: &app
   env_file:
     - path: ./.local/${CLIENT:-aucun}/.env
       required: false
+  networks: [interne]
   volumes: &shared
     - storage_app:/var/www/storage/app
     - migrations:/var/www/app/Migrations
@@ -47,6 +48,7 @@ x-app: &app
 x-web: &web
   image: eden-web:dev
   build: { context: ., target: web }
+  networks: [interne]
   volumes:
     # nginx sert /storage (lien public/storage -> storage/app/public)
     - storage_app:/var/www/storage/app:ro
@@ -116,12 +118,14 @@ services:
       - --log.level=INFO
       - --accesslog=true
     ports: ["${WEB_PORT:-8443}:443", "${HTTP_PORT:-8080}:80"]
+    networks: [default, interne]   # seul service avec un pied hors du reseau interne
     volumes:
       - ./docker/compose/traefik.yml:/etc/traefik/dynamic.yml:ro
     depends_on: [web1, web2]
 
   db:
     image: mariadb:10.11   # version de la prod
+    networks: [interne]
     environment:
       MARIADB_DATABASE: eden
       MARIADB_USER: eden
@@ -138,6 +142,13 @@ services:
       start_period: 30m   # import d'un gros dump
   redis:
     image: redis:7-alpine
+    networks: [interne]
+
+# Reseau sans acces a Internet : avec des donnees de prod, EDEN ne doit envoyer
+# aucun mail (le SMTP vient de la base) ni appeler d'API externe (Google, Microsoft...)
+networks:
+  interne:
+    internal: true
 
 volumes:
   storage_app:
