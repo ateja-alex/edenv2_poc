@@ -26,3 +26,4 @@ docker-compose.multipod.yml
 /*.sql
 /*.sql.gz
 /.local
+/deploy_k8s

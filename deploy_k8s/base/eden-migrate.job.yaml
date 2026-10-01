@@ -1,0 +1,44 @@
+# Migrations EDEN, une fois par deploiement (jamais par pod) : php artisan eden:migrate.
+# Un Job est immuable : le supprimer avant de reappliquer (voir README).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: eden-migrate
+  labels:
+    app.kubernetes.io/name: eden-migrate
+spec:
+  backoffLimit: 0                    # pas de relance automatique : on lit l'erreur
+  activeDeadlineSeconds: 43200       # 12 h : certaines reprises de donnees durent des heures
+  ttlSecondsAfterFinished: 604800    # garde le Job (et ses logs) 7 jours
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: eden-migrate
+    spec:
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: ghcr
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+      containers:
+        - name: migrate
+          image: ghcr.io/ateja-alex/edenv2_poc-app
+          command: ["php", "artisan", "eden:migrate"]
+          envFrom:
+            - configMapRef: { name: eden-config }
+            - secretRef: { name: eden-secrets }
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 4Gi }
+          volumeMounts:
+            - name: fichiers
+              subPath: storage_app
+              mountPath: /var/www/storage/app
+            - name: fichiers
+              subPath: migrations
+              mountPath: /var/www/app/Migrations
+      volumes:
+        - name: fichiers
+          persistentVolumeClaim:
+            claimName: eden-fichiers

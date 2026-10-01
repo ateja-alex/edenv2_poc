@@ -1,0 +1,72 @@
+# MariaDB commune a tous les clients du POC (namespace eden-plateforme) :
+# une base et un utilisateur par client (voir README). Regroupement ou non a trancher
+# avec les mesures VictoriaMetrics. Version de la prod.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+spec:
+  serviceName: mariadb
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mariadb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mariadb
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+        - name: mariadb
+          image: mariadb:10.11
+          args:
+            - --innodb-buffer-pool-size=8G
+            - --max-connections=500
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom: { secretKeyRef: { name: mariadb-root, key: MARIADB_ROOT_PASSWORD } }
+          ports:
+            - name: mysql
+              containerPort: 3306
+          readinessProbe:
+            exec:
+              command: ["healthcheck.sh", "--connect", "--innodb_initialized"]
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["healthcheck.sh", "--connect"]
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            requests: { cpu: "2", memory: 10Gi }
+            limits: { memory: 12Gi }
+          volumeMounts:
+            - name: donnees
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: donnees
+      spec:
+        accessModes: [ReadWriteOnce]
+        # Block High Speed Gen2, a verifier : kubectl get storageclass
+        storageClassName: csi-cinder-high-speed-gen2
+        resources:
+          requests:
+            storage: 100Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  labels:
+    app.kubernetes.io/name: mariadb
+spec:
+  selector:
+    app.kubernetes.io/name: mariadb
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql

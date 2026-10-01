@@ -1,0 +1,16 @@
+# Base commune a tous les clients EDEN : ne pas appliquer seule, passer par
+# un overlay deploy_k8s/clients/<client> (namespace, hote, configuration, secrets).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - fichiers.pvc.yaml
+  - redis.yaml
+  - eden-web.yaml
+  - eden-worker.yaml
+  - eden-migrate.job.yaml
+  - ingress.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: eden

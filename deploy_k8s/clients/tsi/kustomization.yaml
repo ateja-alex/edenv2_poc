@@ -1,0 +1,39 @@
+# Client TSI : kubectl apply -k deploy_k8s/clients/tsi
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: eden-tsi
+
+resources:
+  - namespace.yaml
+  - ../../base
+  - cronjobs.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/instance: tsi
+
+# Version deployee : tag sha-xxxxxxx produit par la CI (jamais latest)
+images:
+  - name: ghcr.io/ateja-alex/edenv2_poc-app
+    newTag: sha-XXXXXXX
+  - name: ghcr.io/ateja-alex/edenv2_poc-web
+    newTag: sha-XXXXXXX
+
+configMapGenerator:
+  - name: eden-config
+    envs: [client.env]
+
+# secret.env (ignore par git) : APP_KEY, DB_PASSWORD... (modele : secret.env.example)
+secretGenerator:
+  - name: eden-secrets
+    envs: [secret.env]
+
+patches:
+  - target: { kind: Ingress, name: eden-web }
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: tsi.poc.ateja.corp
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: tsi.poc.ateja.corp

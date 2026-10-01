@@ -1,0 +1,93 @@
+# Taches cron du client (reprises de la crontab de la VM) : php artisan eden:cron <tache>.
+# Un pod par execution ; le verrou de la table cron empeche deux executions simultanees.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-execute-requete-sql
+  labels:
+    app.kubernetes.io/name: eden-cron
+spec:
+  schedule: "* * * * *"
+  timeZone: Europe/Paris
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 50
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 3600
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: eden-cron
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: ghcr
+          securityContext: { runAsUser: 33, runAsGroup: 33 }
+          containers:
+            - name: cron
+              image: ghcr.io/ateja-alex/edenv2_poc-app
+              command: ["php", "artisan", "eden:cron", "execute_requete_sql_cron"]
+              envFrom:
+                - configMapRef: { name: eden-config }
+                - secretRef: { name: eden-secrets }
+              resources:
+                requests: { cpu: 100m, memory: 256Mi }
+                limits: { memory: 1Gi }
+              volumeMounts:
+                - name: fichiers
+                  subPath: storage_app
+                  mountPath: /var/www/storage/app
+          volumes:
+            - name: fichiers
+              persistentVolumeClaim:
+                claimName: eden-fichiers
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-supprimer-export-differe
+  labels:
+    app.kubernetes.io/name: eden-cron
+spec:
+  schedule: "* * * * *"
+  timeZone: Europe/Paris
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 50
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 3600
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: eden-cron
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+            - name: ghcr
+          securityContext: { runAsUser: 33, runAsGroup: 33 }
+          containers:
+            - name: cron
+              image: ghcr.io/ateja-alex/edenv2_poc-app
+              command: ["php", "artisan", "eden:cron", "supprimer_export_differe"]
+              envFrom:
+                - configMapRef: { name: eden-config }
+                - secretRef: { name: eden-secrets }
+              resources:
+                requests: { cpu: 100m, memory: 256Mi }
+                limits: { memory: 1Gi }
+              volumeMounts:
+                - name: fichiers
+                  subPath: storage_app
+                  mountPath: /var/www/storage/app
+          volumes:
+            - name: fichiers
+              persistentVolumeClaim:
+                claimName: eden-fichiers

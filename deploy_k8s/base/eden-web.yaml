@@ -1,0 +1,160 @@
+# Pod EDEN = nginx (image web) + PHP-FPM (image app), qui se parlent en 127.0.0.1:9000.
+# Plusieurs replicas partagent le volume RWX (parametrage genere, PJ) et Redis (sessions).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eden-web
+  labels:
+    app.kubernetes.io/name: eden-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eden-web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxUnavailable: 0, maxSurge: 1 }   # pas de coupure au deploiement
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: eden-web
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      terminationGracePeriodSeconds: 60
+      # Un pod par noeud autant que possible : la perte d'un noeud ne coupe pas le client
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: eden-web
+      initContainers:
+        # Sous-dossiers du volume crees par le kubelet en root : on les rend a www-data
+        # (non recursif : le chmod recursif des fichiers restaures se fait une fois, a la restauration)
+        - name: prepare-volume
+          image: busybox:1.37
+          command:
+            - sh
+            - -c
+            - mkdir -p /v/storage_app/public /v/migrations && chown 33:33 /v/storage_app /v/storage_app/public /v/migrations && chmod 755 /v/storage_app /v/storage_app/public /v/migrations
+          volumeMounts:
+            - name: fichiers
+              mountPath: /v
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { memory: 64Mi }
+      containers:
+        - name: web
+          image: ghcr.io/ateja-alex/edenv2_poc-web
+          env:
+            - name: PHP_FPM_HOST
+              value: "127.0.0.1"
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            # passe par PHP : un pod dont FPM ne repond pas sort du Service
+            httpGet: { path: /, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet: { path: /healthz, port: http }
+            periodSeconds: 20
+          lifecycle:
+            # laisse le temps au Service/ingress de retirer le pod avant l'arret
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 5"]
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 256Mi }
+          volumeMounts:
+            - name: fichiers
+              subPath: storage_app
+              mountPath: /var/www/storage/app
+              readOnly: true
+        - name: app
+          image: ghcr.io/ateja-alex/edenv2_poc-app
+          envFrom:
+            - configMapRef: { name: eden-config }
+            - secretRef: { name: eden-secrets }
+          env:
+            - name: FPM_MAX_CHILDREN
+              value: "8"
+          ports:
+            - name: fpm
+              containerPort: 9000
+          livenessProbe:
+            tcpSocket: { port: fpm }
+            periodSeconds: 20
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 5"]
+          resources:
+            # Le HPA se base sur le CPU demande par ce conteneur
+            requests: { cpu: 500m, memory: 1Gi }
+            limits: { memory: 3Gi }
+          volumeMounts:
+            - name: fichiers
+              subPath: storage_app
+              mountPath: /var/www/storage/app
+            - name: fichiers
+              subPath: migrations
+              mountPath: /var/www/app/Migrations
+      volumes:
+        - name: fichiers
+          persistentVolumeClaim:
+            claimName: eden-fichiers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eden-web
+  labels:
+    app.kubernetes.io/name: eden-web
+spec:
+  selector:
+    app.kubernetes.io/name: eden-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+# Au moins un pod garde pendant un drain de noeud (montee de version MKS, scale down)
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: eden-web
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eden-web
+---
+# Scaling des pods sur le CPU de PHP ; au-dela des noeuds disponibles, les pods en
+# attente declenchent l'autoscaler de noeuds MKS (pool en autoscaling)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: eden-web
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: eden-web
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: ContainerResource
+      containerResource:
+        name: cpu
+        container: app
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300   # evite le yo-yo apres un pic

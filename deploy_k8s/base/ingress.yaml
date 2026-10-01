@@ -1,0 +1,25 @@
+# Entree HTTPS du client via Traefik (redirection HTTP -> HTTPS faite par Traefik,
+# voir plateforme/traefik-values.yaml). Hote remplace dans l'overlay du client.
+# Sans secretName : certificat par defaut de Traefik (auto-signe) pour le POC.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eden-web
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts: [client.exemple.invalid]
+  rules:
+    - host: client.exemple.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: eden-web
+                port:
+                  name: http

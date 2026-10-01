@@ -1,0 +1,32 @@
+# Traefik, ingress du cluster (chart Helm officiel, version a epingler a l'installation) :
+#   helm repo add traefik https://traefik.github.io/charts
+#   helm upgrade --install traefik traefik/traefik -n traefik --create-namespace \
+#     --version <x.y.z> -f deploy_k8s/plateforme/traefik-values.yaml
+deployment:
+  replicas: 2
+
+ports:
+  web:
+    # Toute requete HTTP est redirigee en HTTPS : l'application ne verifie plus le HTTPS
+    redirections:
+      entryPoint:
+        to: websecure
+        scheme: https
+        permanent: true
+  websecure:
+    tls:
+      enabled: true
+
+service:
+  type: LoadBalancer   # LB Octavia OVH, 1 IP publique pour tous les clients
+
+# Garde l'IP du client (X-Forwarded-For) au travers du LB
+# (a verifier avec le LB OVH : proxy protocol ou externalTrafficPolicy Local)
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+resources:
+  requests: { cpu: 100m, memory: 128Mi }
+  limits: { memory: 512Mi }

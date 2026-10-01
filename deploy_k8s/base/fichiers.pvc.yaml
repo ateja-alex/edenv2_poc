@@ -1,0 +1,14 @@
+# Fichiers du client, partages par tous les pods (RWX = OVH File Storage, NFS) :
+#   storage_app/  -> /var/www/storage/app   (parametrage eden_*.php, PJ, exports, composants)
+#   migrations/   -> /var/www/app/Migrations (migrations generees par le parametrage)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: eden-fichiers
+spec:
+  accessModes: [ReadWriteMany]
+  # Classe RWX du cluster, a verifier : kubectl get storageclass
+  storageClassName: csi-manila-nfs
+  resources:
+    requests:
+      storage: 150Gi   # minimum d'un partage OVH File Storage

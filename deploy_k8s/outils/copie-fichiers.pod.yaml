@@ -1,0 +1,26 @@
+# Pod temporaire pour restaurer les fichiers d'un client dans son volume RWX
+# (voir README, "Restaurer un client"). A supprimer apres usage.
+#   kubectl apply -n eden-<client> -f deploy_k8s/outils/copie-fichiers.pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: copie-fichiers
+  labels:
+    app.kubernetes.io/name: copie-fichiers
+    app.kubernetes.io/part-of: eden
+spec:
+  restartPolicy: Never
+  containers:
+    - name: copie
+      image: busybox:1.37
+      command: ["sleep", "86400"]
+      resources:
+        requests: { cpu: 100m, memory: 64Mi }
+        limits: { memory: 512Mi }
+      volumeMounts:
+        - name: fichiers
+          mountPath: /v
+  volumes:
+    - name: fichiers
+      persistentVolumeClaim:
+        claimName: eden-fichiers

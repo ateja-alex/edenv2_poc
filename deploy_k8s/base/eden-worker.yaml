@@ -1,0 +1,45 @@
+# Worker des queues Laravel (exports, traitements differes) : meme image que PHP-FPM
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eden-worker
+  labels:
+    app.kubernetes.io/name: eden-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eden-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: eden-worker
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      # laisse finir le job en cours (queue:work s'arrete proprement sur SIGTERM)
+      terminationGracePeriodSeconds: 300
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+      containers:
+        - name: worker
+          image: ghcr.io/ateja-alex/edenv2_poc-app
+          command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+          envFrom:
+            - configMapRef: { name: eden-config }
+            - secretRef: { name: eden-secrets }
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { memory: 2Gi }
+          volumeMounts:
+            - name: fichiers
+              subPath: storage_app
+              mountPath: /var/www/storage/app
+            - name: fichiers
+              subPath: migrations
+              mountPath: /var/www/app/Migrations
+      volumes:
+        - name: fichiers
+          persistentVolumeClaim:
+            claimName: eden-fichiers
