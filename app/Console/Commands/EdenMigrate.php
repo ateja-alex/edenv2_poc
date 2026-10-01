@@ -31,8 +31,11 @@ class EdenMigrate extends Command
         $debut = microtime(true);
 
         try {
-            Maintenance_management::lancer_migrations(function(string $etape) {
-                $this->info('→ '.$etape);
+            Maintenance_management::lancer_migrations(function(string $etape, bool $ignoree = false) {
+                if($ignoree)
+                    $this->warn('→ '.$etape.' ignorée : EDEN_MODEL_API_URL non configurée');
+                else
+                    $this->info('→ '.$etape);
             });
         }
         catch(\Throwable $erreur) {

@@ -55,7 +55,7 @@ class Maintenance_management {
         'maj_formulaires_libres',
         'maj_sous_formulaires',
         'maj_version_eden',
-        'maj_traductions',
+        // maj_traductions desactivee : synchro depuis l'API modele, non indispensable
         'maj_crons',
         'maj_utilisateurs_easydev',
         'generer_licences',
@@ -63,10 +63,20 @@ class Maintenance_management {
     ];
 
     /**
+     * Étapes qui synchronisent depuis l'API modèle (EDEN_MODEL_API_URL) :
+     * ignorées si elle n'est pas configurée (environnement local, test).
+     */
+    public const ETAPES_API_MODELE = [
+        'maj_utilisateurs_easydev',
+        'generer_licences',
+    ];
+
+    /**
      * Lance toutes les étapes de migration (commande eden:migrate).
      * Le cache est vidé une seule fois, à la fin ; une exception interrompt la suite.
      *
-     * @param callable|null $sur_etape appelée avec le nom de l'étape avant son lancement
+     * @param callable|null $sur_etape appelée avec le nom de l'étape avant son lancement,
+     *                                  et true en second argument si elle est ignorée
      */
     public static function lancer_migrations(?callable $sur_etape = null) {
 
@@ -76,12 +86,17 @@ class Maintenance_management {
         ini_set('memory_limit', -1);
         set_time_limit(0);
 
+        $api_modele = !empty(env('EDEN_MODEL_API_URL'));
+
         foreach(self::ETAPES_MIGRATIONS as $etape) {
 
-            if($sur_etape !== null)
-                $sur_etape($etape);
+            $ignoree = !$api_modele && in_array($etape, self::ETAPES_API_MODELE);
 
-            self::$etape();
+            if($sur_etape !== null)
+                $sur_etape($etape, $ignoree);
+
+            if(!$ignoree)
+                self::$etape();
         }
 
         Cache_management::vider_tout();
