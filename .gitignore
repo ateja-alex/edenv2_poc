@@ -27,3 +27,4 @@ yarn-error.log
 # Secrets des clients Kubernetes (appliques a la main) : jamais dans git
 /deploy_k8s/clients/*/secret.env
 /deploy_k8s/plateforme/*/secret.env
+/deploy_k8s/clients/*/storage/
