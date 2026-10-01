@@ -1,0 +1,74 @@
+id,type,name,pool,node,status,template,ha,vcpu,ram_gb,disk_gb,disk_used_gb,cpu_avg,cpu_p95,mem_avg_gb,mem_p95_gb,net_mbps,os,tags,vlan
+1001000,VM,eden-01-sql,EDEN_01,pr-rbx-pve-04,running,0,True,16,32.0,262,174,1.77,5.65,30.9,32.0,442.49,Debian GNU/Linux 12 (bookworm),,1010
+1001101,VM,eden-01-01-capvisio,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,180,133,0.98,2.54,3.2,4.7,236.36,Debian GNU/Linux 12 (bookworm),,1011
+1001102,VM,eden-01-02-confluences,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,11,0.05,0.4,1.9,3.1,2.04,Debian GNU/Linux 12 (bookworm),,1011
+1001103,VM,eden-01-03-aec,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,17,0.17,1.16,2.0,3.2,7.68,Debian GNU/Linux 12 (bookworm),,1011
+1001104,VM,eden-01-04-avril,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,70,25,0.04,0.37,2.9,4.0,1.14,Debian GNU/Linux 12 (bookworm),,1011
+1001105,VM,eden-01-05-diferbat,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,65,27,0.08,1.16,2.7,3.9,1.67,Debian GNU/Linux 12 (bookworm),,1011
+1001106,VM,eden-01-06-tsi,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,85,50,0.05,0.8,2.5,3.2,1.23,Debian GNU/Linux 12 (bookworm),,1011
+1001107,VM,eden-01-07-ateja,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,60,33,0.11,0.87,2.3,4.1,5.93,Debian GNU/Linux 12 (bookworm),,1011
+1001108,VM,eden-01-08-sra,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,60,29,0.82,1.15,3.3,4.3,119.17,Debian GNU/Linux 12 (bookworm),,1011
+1001109,VM,eden-01-09-residences-trigano,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,13,0.07,0.72,1.9,3.4,0.95,Debian GNU/Linux 12 (bookworm),,1011
+1001110,VM,eden-01-10-mtarget,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,24,0.04,0.77,3.2,4.3,1.23,Debian GNU/Linux 12 (bookworm),,1011
+1001111,VM,eden-01-11-topaze,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,10,0.04,0.62,1.8,2.5,1.08,Debian GNU/Linux 11 (bullseye),,1011
+1001112,VM,eden-01-12-tradutours,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,11,0.07,0.33,2.7,3.5,2.39,Debian GNU/Linux 12 (bookworm),,1011
+1001113,VM,eden-01-13-avellana,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,13,0.03,0.66,2.1,3.2,0.55,Debian GNU/Linux 12 (bookworm),,1011
+1001114,VM,eden-01-14-centaure,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,70,39,0.08,1.01,2.5,4.6,1.86,Debian GNU/Linux 12 (bookworm),,1011
+1001115,VM,eden-01-15-louer,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,125,51,0.02,0.14,2.8,3.4,5.03,Debian GNU/Linux 11 (bullseye),,1011
+1001116,VM,eden-01-16-kallfass,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,9,0.02,0.58,2.1,2.7,0.51,Debian GNU/Linux 12 (bookworm),,1011
+1001117,VM,eden-01-17-sined,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,10,0.02,0.1,2.7,3.4,0.44,Debian GNU/Linux 12 (bookworm),,1011
+1001118,VM,eden-01-18-impress,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,15,0.02,0.17,2.5,3.2,0.92,Debian GNU/Linux 11 (bullseye),,1011
+1001119,VM,eden-01-19-inca,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,11,0.03,0.61,2.2,2.9,0.52,Debian GNU/Linux 12 (bookworm),,1011
+1001120,VM,eden-01-20-afeji,EDEN_01,pr-rbx-pve-04,running,0,True,8,6.0,50,11,0.06,0.54,3.1,4.5,1.66,Debian GNU/Linux 11 (bullseye),,1011
+1001999,VM,fw-eden,EDEN_01,pr-rbx-pve-04,running,0,True,2,2.0,20,,0.69,3.07,2.0,2.0,1364.92,,,"1011,1010,2000,1021,1020,1031,1030,2205"
+1002000,VM,eden-02-sql,EDEN_02,pve-pr-02,running,0,True,16,32.0,150,35,0.45,2.47,30.9,32.0,44.41,Debian GNU/Linux 12 (bookworm),,1020
+1002101,VM,eden-02-01-corfu,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,16,0.04,0.58,2.6,3.9,1.16,Debian GNU/Linux 12 (bookworm),,1021
+1002102,VM,eden-02-02-benimar,EDEN_02,pve-pr-03,running,0,True,8,6.0,50,8,0.01,0.33,1.4,1.7,0.11,Debian GNU/Linux 12 (bookworm),,1021
+1002103,VM,eden-02-03-biohab,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,12,0.09,0.84,3.1,4.7,2.19,Debian GNU/Linux 12 (bookworm),,1021
+1002104,VM,eden-02-04-comstick,EDEN_02,pve-pr-03,running,0,True,8,6.0,50,23,0.03,0.62,2.6,4.7,0.66,Debian GNU/Linux 12 (bookworm),,1021
+1002105,VM,eden-02-05-mayejem,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,9,0.03,0.48,3.1,5.0,0.68,Debian GNU/Linux 12 (bookworm),,1021
+1002106,VM,eden-02-06-acs,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,6,0.01,0.58,1.2,2.1,0.15,Debian GNU/Linux 12 (bookworm),,1021
+1002107,VM,eden-02-07-plbs,EDEN_02,pr-rbx-pve-04,running,0,True,8,6.0,50,8,0.07,1.2,2.3,4.4,1.9,Debian GNU/Linux 12 (bookworm),,1021
+1002109,VM,eden-02-09-template,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,18,0.01,0.08,2.6,3.3,0.08,Debian GNU/Linux 12 (bookworm),,1021
+1002110,VM,eden-02-10-reference,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,12,0.02,0.56,2.8,4.5,0.31,Debian GNU/Linux 12 (bookworm),,1021
+1002111,VM,eden-02-11-stockbooking,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,15,0.04,0.25,2.3,2.9,0.92,Debian GNU/Linux 12 (bookworm),,1021
+1002112,VM,eden-02-12-dps,EDEN_02,pve-pr-02,running,0,True,8,6.0,50,11,0.01,0.06,1.8,2.2,0.02,Debian GNU/Linux 11 (bullseye),,1021
+1002113,VM,eden-02-13-leo,EDEN_02,pve-pr-02,stopped,0,True,8,6.0,50,,0,0,0,0.0,0.0,l26,,1021
+1002114,VM,eden-02-14-advineo,EDEN_02,pve-pr-02,stopped,0,True,8,6.0,50,,0,0,0,0.0,0.0,l26,,1021
+1002116,VM,eden-02-16-qualitub,EDEN_02,pve-pr-02,stopped,0,True,8,6.0,50,,0,0,0,0.0,0.0,l26,,1021
+1002117,VM,eden-02-17-poirier,EDEN_02,pve-pr-02,running,0,True,8,6.0,55,28,0.09,0.74,2.1,3.8,1.91,Debian GNU/Linux 12 (bookworm),,1021
+1002120,VM,eden-02-20-mrpompes,EDEN_02,pve-pr-02,running,0,True,8,6.0,100,46,0.36,1.64,2.7,4.3,9.28,Debian GNU/Linux 12 (bookworm),,1021
+1003000,VM,eden-03-sql,EDEN_03,pve-pr-03,running,0,True,16,32.0,195,102,1.22,2.42,29.9,31.4,147.71,Debian GNU/Linux 12 (bookworm),,1030
+1003101,VM,eden-03-01-coallis,EDEN_03,pve-pr-03,running,0,True,8,6.0,50,10,0.05,0.56,2.2,2.9,2.22,Debian GNU/Linux 11 (bullseye),,1031
+1003102,VM,eden-03-02-ealys,EDEN_03,pve-pr-03,running,0,True,8,6.0,50,10,0.03,0.55,2.2,2.8,0.74,Debian GNU/Linux 12 (bookworm),,1031
+1003104,VM,eden-03-04-aana,EDEN_03,pve-pr-03,running,0,True,8,6.0,60,27,0.13,2.33,2.6,3.9,3.54,Debian GNU/Linux 11 (bullseye),,1031
+1003105,VM,eden-03-05-interne,EDEN_03,pve-pr-03,running,0,True,8,6.0,50,12,0.03,0.46,2.9,4.5,0.97,Debian GNU/Linux 12 (bookworm),,1031
+1003106,VM,eden-03-06-ema,EDEN_03,pve-pr-03,running,0,True,8,6.0,50,12,0.2,1.06,2.3,3.8,113.64,Debian GNU/Linux 11 (bullseye),,1031
+1003107,VM,eden-03-07-beaurain,EDEN_03,pve-pr-03,running,0,True,8,6.0,60,30,0.03,0.48,2.0,2.8,1.19,Debian GNU/Linux 12 (bookworm),,1031
+1003119,VM,eden-03-19-calyans,EDEN_03,pve-pr-03,running,0,True,8,6.0,50,10,0.01,0.08,2.2,4.0,0.37,Debian GNU/Linux 11 (bullseye),,1031
+1200000,VM,vm-custom-ateja-sql,ATEJA,pve-pr-03,running,0,True,8,6.0,130,65,0.04,1.17,4.1,4.7,0.17,Windows Server 2019 Standard,,2200
+1200101,VM,vm-custom-ateja-erp,ATEJA,pve-pr-03,running,0,True,4,6.0,80,68,0.38,0.55,5.0,5.6,0.11,Windows Server 2019 Datacenter,,2200
+1200102,VM,vm-custom-ateja-web,ATEJA,pve-pr-03,running,0,True,4,4.0,85,60,0.05,0.76,3.0,3.3,0.08,Windows Server 2019 Standard,,2200
+1200103,VM,vm-custom-ateja-elastic,ATEJA,pve-pr-03,stopped,0,True,4,4.0,70,,0.05,0.08,3.5,3.7,0.01,l26,,2200
+1201000,VM,vm-sage-std-01-sql,SAGE,pve-pr-02,running,0,True,8,8.0,130,77,0.1,0.77,6.0,6.9,0.38,Windows Server 2019 Standard,,2201
+1201102,VM,vm-sage-std-01-02,SAGE,pve-pr-02,running,0,True,4,3.0,70,52,0.03,0.41,2.3,2.5,0.11,Windows Server 2019 Standard,,2201
+1201103,VM,vm-sage-std-01-03,SAGE,pve-pr-02,running,0,True,4,3.0,70,52,0.07,0.42,1.9,2.2,0.09,Windows Server 2019 Standard,,2201
+1201105,VM,vm-sage-std-01-05,SAGE,pve-pr-02,stopped,0,True,4,3.0,70,,0,0,0,0.0,0.0,win10,,2201
+1202005,VM,vm-sage-custom-05,SAGE,pve-pr-02,running,0,True,16,11.99609375,200,131,1.02,4.82,9.8,14.9,0.09,Windows Server 2016 Standard,,2202
+1205001,VM,eden-v1,EDEN_V1,pve-pr-02,running,0,True,2,2.0,200,,0.01,0.05,1.8,2.0,0.0,l26,,2205
+1210000,VM,vm-manage,MANA,pve-pr-02,stopped,0,False,20,11.71875,130,,0,0,0,0.0,0.0,l26,,2000
+1212000,VM,vm-eden-sql,MANA,pve-pr-02,stopped,0,False,8,6.0,150,,0,0,0,0.0,0.0,l26,,2000
+1213000,VM,template-eden-front,,pve-pr-02,stopped,0,False,8,6.0,50,,0,0,0,0.0,0.0,l26,,2254
+1240001,VM,vm-eden-worker-01,EDEN_WORKERS,pve-pr-02,running,0,True,4,1.0,50,3,0.01,0.07,0.1,0.2,3.27,Debian GNU/Linux 12 (bookworm),,2240
+1240999,VM,fw-worker,EDEN_WORKERS,pve-pr-03,running,0,True,2,2.0,20,,0.02,0.05,1.7,1.9,6.83,,,"2000,2240"
+1250999,VM,fw-vpn,MANA,pve-pr-02,running,0,True,2,2.0,20,,0.03,0.1,2.0,2.1,1.87,,,2000
+1253001,VM,vm-sage-cloud-ad,SAGE,pve-pr-03,running,0,True,2,2.0,70,37,0.02,0.39,1.1,1.3,0.02,Windows Server 2019 Datacenter,,2253
+1253002,VM,vm-sage-cloud-ad2,SAGE,pve-pr-03,running,0,True,4,2.0,70,31,0.02,0.11,1.2,1.2,0.01,Windows Server 2019 Standard,,2253
+1253999,VM,fw-sage,SAGE,pve-pr-03,running,0,True,2,2.0,20,,0.03,0.15,2.1,2.3,1.68,,,"2253,2000,2202,2201,2201,2200"
+1254001,VM,eden-cloud-dns,EDEN_CLOUD,pve-pr-02,running,0,True,1,1.0,70,7,0.01,0.02,0.9,0.9,0.03,Debian GNU/Linux 11 (bullseye),,2254
+1254002,VM,eden-cloud-services,EDEN_CLOUD,pve-pr-03,running,0,True,4,8.0,160,50,0.13,0.23,7.3,7.5,0.13,Debian GNU/Linux 13 (trixie),,"2254,2254"
+1254007,VM,eden-cloud-nfs,EDEN_CLOUD,pve-pr-02,running,0,True,1,0.5,50,3,0.0,0.01,0.4,0.4,0.03,Debian GNU/Linux 12 (bookworm),,2254
+1254999,VM,fw-eden-cloud,EDEN_CLOUD,pve-pr-02,running,0,True,2,2.0,20,,0.12,2.18,1.9,2.1,306.49,,,"2254,2000"
+2300000,VM,vm-monitoring,MANA,pr-rbx-pve-04,running,0,True,4,4.0,151,6,0.06,0.17,3.5,3.7,0.53,Debian GNU/Linux 13 (trixie),,2000
+1254005,CT,ct-eden-cloud-ldap,EDEN_CLOUD,pve-pr-02,running,0,True,2,0.5,50,,0.0,0.0,0.1,0.1,0.02,debian,,2254
+1254011,CT,ct-eden-cloud-cron,EDEN_CLOUD,pve-pr-03,running,0,True,8,2.0,76,,0.19,3.64,0.2,0.8,147.28,debian,,2254
