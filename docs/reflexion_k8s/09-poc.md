@@ -82,7 +82,9 @@ Projet `eden_poc` (dépôt `ateja-alex/edenv2_poc`), branche `feat/poc-multipod`
 - **Tests de montée en charge sur le cluster (01/10, TSI, k6 `montee`, 120 VUs, rythme ×3 ≈ 115× le pic réel)** :
   - 1er passage (HPA 2→6, 8 workers FPM) : HPA bloqué à 6 dès 20 VUs, 2 nœuds saturés, autoscaler de nœuds jamais déclenché ; p95 pages 8,1 s, médiane 194 ms, 43 req/s, 0 % d'erreur.
   - 2e passage (HPA 2→15, 4 workers FPM `ondemand`) : 2→15 pods, **nœuds ajoutés automatiquement** (3e ~3 min après les premiers pods en attente, puis 4e) ; p95 2,6 s, médiane 140 ms, 48,6 req/s, 0 % d'erreur. MariaDB jusqu'à ~1,9 cœur (réserve 1 → à relever).
-  - ⚠ **Sessions perdues sous charge** (renvois vers la connexion) : 779 puis 1 731 avec plus de pods ; ni Redis (0 éviction), ni URL de déconnexion. À diagnostiquer avant d'aller plus loin (critère 1 du POC) : test à 1 pod contre plusieurs pods.
+  - ⚠ **Sessions perdues sous charge** (renvois vers la connexion) : 779 puis 1 731 avec plus de pods.
+    - Cause trouvée : un **scale down de nœuds a évincé Redis** (sans persistance) → toutes les sessions perdues. Corrigé : 2 pools de nœuds (`socle` fixe pour MariaDB/Redis/Traefik/worker, `web` autoscalé pour les pods web), Redis et MariaDB `safe-to-evict: false`, Redis persisté (AOF).
+    - Reste un taux faible (3 à 9 pour 1000 requêtes) **indépendant de Kubernetes** : identique avec 1 pod et 6 pods, avec 1 ou 20 comptes, sans redémarrage ni éviction Redis ; doublé par les rafales AJAX parallèles (écrasement de session entre requêtes simultanées, EDEN stocke beaucoup en session ?). À confirmer en jouant le même scénario k6 sur l'existant (VM QA) : si les pertes y sont aussi, c'est un comportement EDEN antérieur au POC (dev).
 
 ## Pistes pour un prochain POC (hors objectif actuel)
 - OPcache est déjà actif en prod : les gains de perf ne viennent pas des conteneurs. Vérifier la même config en QA avant le test de charge.

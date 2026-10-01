@@ -128,6 +128,8 @@ function charger_assets(res) {
 let connecte = false;
 // URLs du parcours qui renvoient vers la connexion (une trace par motif et par VU)
 const motifs_vers_login = new Set();
+// derniere URL repondue normalement (pour trouver celle qui vide la session)
+let derniere_url = '';
 
 export default function () {
   if (!connecte) {
@@ -161,11 +163,13 @@ export default function () {
           motifs_vers_login.add(m);
           console.warn(`vers login : ${m}`);
         }
+        console.warn(`perte apres : ${derniere_url}`);
         connecte = connexion();
         if (!connecte) return;
         continue;
       }
       check(res, { 'statut < 400': (r) => r.status > 0 && r.status < 400 });
+      derniere_url = motif(groupe[j][1]);
       charger_assets(res);
     }
   }
