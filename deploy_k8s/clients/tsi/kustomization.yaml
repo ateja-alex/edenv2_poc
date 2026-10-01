@@ -15,9 +15,9 @@ labels:
 # Version deployee : tag sha-xxxxxxx produit par la CI (jamais latest)
 images:
   - name: ghcr.io/ateja-alex/edenv2_poc-app
-    newTag: sha-XXXXXXX
+    newTag: sha-d5df91f
   - name: ghcr.io/ateja-alex/edenv2_poc-web
-    newTag: sha-XXXXXXX
+    newTag: sha-d5df91f
 
 configMapGenerator:
   - name: eden-config

@@ -26,6 +26,8 @@ spec:
             # POC sur noeuds B3-16 : a redimensionner avec les mesures VictoriaMetrics
             - --innodb-buffer-pool-size=4G
             - --max-connections=500
+            # EDEN stocke des mails avec pieces jointes en base (lignes > 16 Mo)
+            - --max-allowed-packet=256M
           env:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom: { secretKeyRef: { name: mariadb-root, key: MARIADB_ROOT_PASSWORD } }
