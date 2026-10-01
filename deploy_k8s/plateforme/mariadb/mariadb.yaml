@@ -23,7 +23,8 @@ spec:
         - name: mariadb
           image: mariadb:10.11
           args:
-            - --innodb-buffer-pool-size=8G
+            # POC sur noeuds B3-16 : a redimensionner avec les mesures VictoriaMetrics
+            - --innodb-buffer-pool-size=4G
             - --max-connections=500
           env:
             - name: MARIADB_ROOT_PASSWORD
@@ -41,8 +42,8 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 30
           resources:
-            requests: { cpu: "2", memory: 10Gi }
-            limits: { memory: 12Gi }
+            requests: { cpu: "1", memory: 5Gi }
+            limits: { memory: 6Gi }
           volumeMounts:
             - name: donnees
               mountPath: /var/lib/mysql
