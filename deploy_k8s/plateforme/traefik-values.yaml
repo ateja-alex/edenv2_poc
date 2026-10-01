@@ -14,10 +14,22 @@ ports:
           to: websecure
           scheme: https
           permanent: true
-  # websecure : TLS active par defaut ; sans certificat, certificat auto-signe de Traefik (POC)
+    # IP reelle du client : le LB Octavia l'envoie en proxy protocol v2 (voir service)
+    proxyProtocol:
+      trustedIPs: ["10.10.0.0/16", "10.2.0.0/16"]   # reseau prive (LB) et pods
+  websecure:
+    # TLS active par defaut ; sans certificat, certificat auto-signe de Traefik (POC)
+    proxyProtocol:
+      trustedIPs: ["10.10.0.0/16", "10.2.0.0/16"]
 
-# IP reelle du client a travers le LB OVH : a verifier (proxy protocol ou
-# externalTrafficPolicy: Local) avant le filtrage par IP
+# Sans proxy protocol, Traefik voit une IP interne (10.2.x.0) : pas de filtrage par IP
+# possible. Guide OVH "Getting the source IP behind the LoadBalancer".
+service:
+  annotations:
+    loadbalancer.openstack.org/proxy-protocol: "v2"
+  spec:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
 
 podDisruptionBudget:
   enabled: true

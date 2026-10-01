@@ -37,3 +37,14 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: tsi.poc.ateja.corp
+      # filtre IP (Middleware ip-autorisees du namespace du client)
+      - op: add
+        path: /metadata/annotations/traefik.ingress.kubernetes.io~1router.middlewares
+        value: eden-tsi-ip-autorisees@kubernetescrd
+  - target: { kind: Middleware, name: ip-autorisees }
+    patch: |-
+      - op: replace
+        path: /spec/ipAllowList/sourceRange
+        value:
+          - 82.64.66.20/32    # Alex
+          - 51.68.96.67/32    # session Claude (tests, k6)

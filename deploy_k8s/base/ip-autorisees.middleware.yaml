@@ -1,0 +1,11 @@
+# Filtre des IP autorisees sur l'ingress du client (Traefik). Ferme par defaut :
+# chaque client ouvre ses plages dans son overlay. L'IP reelle arrive par le
+# proxy protocol du LB OVH (plateforme/traefik-values.yaml).
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: ip-autorisees
+spec:
+  ipAllowList:
+    sourceRange:
+      - 127.0.0.1/32
