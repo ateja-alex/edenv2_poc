@@ -7,8 +7,8 @@ metadata:
   name: eden-fichiers
 spec:
   accessModes: [ReadWriteMany]
-  # Classe RWX du cluster, a verifier : kubectl get storageclass
-  storageClassName: csi-manila-nfs
+  # Partage OVH File Storage commun, sous-dossier du client (plateforme/stockage)
+  storageClassName: eden-nfs
   resources:
     requests:
-      storage: 150Gi   # minimum d'un partage OVH File Storage
+      storage: 50Gi   # indicatif : pas de quota par sous-dossier sur NFS

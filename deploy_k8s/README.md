@@ -37,10 +37,20 @@ Les secrets ne sont jamais dans git : `secret.env` (ignoré) à côté de chaque
    kubectl top nodes                        # metrics-server présent (requis par le HPA)
    kubectl get nodes -o wide
    ```
-   Reporter les noms de classes dans `base/fichiers.pvc.yaml` et `plateforme/mariadb/mariadb.yaml`,
-   et le réseau des pods dans `TRUSTED_PROXIES` (`clients/*/client.env`).
-3. Traefik : voir l'en-tête de `plateforme/traefik-values.yaml`.
-4. MariaDB commune :
+   Cluster POC (01/10) : MKS 1.35, r3-32, pods `10.2.0.0/16` (→ `TRUSTED_PROXIES`), services `10.3.0.0/16`,
+   block `csi-cinder-high-speed-gen2` (défaut), aucune classe RWX ni ingress fournis.
+3. Volumes RWX : un partage OVH File Storage (créé dans l'interface, même réseau privé que les nœuds,
+   accès en écriture pour leur sous-réseau), branché par `csi-driver-nfs` (pas installé par défaut sur MKS) :
+   ```bash
+   helm install csi-driver-nfs csi-driver-nfs --repo https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts \
+     --namespace kube-system --version 4.13.4
+   kubectl apply -f deploy_k8s/plateforme/stockage/storageclass.yaml   # adresse du partage dans ce fichier
+   ```
+   Classe `eden-nfs` : un sous-dossier par namespace client, `Retain` (supprimer un PVC ne supprime pas les fichiers).
+   Testé le 01/10 : NFS 4.1, pas de root squash, écriture 93 Mo/s, lecture 398 Mo/s, réécriture vue immédiatement par l'autre nœud.
+   (Helm sans installation locale : `docker run --rm --network host -v $KUBECONFIG:/root/.kube/config:ro alpine/helm:latest …`)
+4. Traefik : voir l'en-tête de `plateforme/traefik-values.yaml`.
+5. MariaDB commune :
    ```bash
    cp deploy_k8s/plateforme/mariadb/secret.env.example deploy_k8s/plateforme/mariadb/secret.env   # puis remplir
    kubectl apply -k deploy_k8s/plateforme/mariadb

@@ -1,0 +1,22 @@
+# Volumes RWX des clients sur le partage OVH File Storage (NFS), via csi-driver-nfs :
+# un seul partage, un sous-dossier par client (namespace). Pas d'identifiant OpenStack.
+#   helm install csi-driver-nfs csi-driver-nfs/csi-driver-nfs -n kube-system --version 4.13.4
+#   kubectl apply -f deploy_k8s/plateforme/stockage/storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: eden-nfs
+  labels:
+    app.kubernetes.io/part-of: eden
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: 10.10.0.141
+  share: /shares/share-b754e5a3-c291-41f3-8cc1-074a1d6d033f
+  subDir: ${pvc.metadata.namespace}   # eden-<client>
+  onDelete: retain                    # supprimer le PVC ne supprime jamais les fichiers
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.1
+  - hard
