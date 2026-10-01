@@ -60,7 +60,8 @@ spec:
             # passe par PHP : un pod dont FPM ne repond pas sort du Service
             httpGet: { path: /, port: http }
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 10      # un pod charge ne doit pas sortir du Service
+            failureThreshold: 3
           livenessProbe:
             httpGet: { path: /healthz, port: http }
             periodSeconds: 20
@@ -83,8 +84,9 @@ spec:
             - configMapRef: { name: eden-config }
             - secretRef: { name: eden-secrets }
           env:
+            # 4 workers pour 500m reserves : la charge se repartit en pods (HPA), pas en workers
             - name: FPM_MAX_CHILDREN
-              value: "8"
+              value: "4"
           ports:
             - name: fpm
               containerPort: 9000
@@ -148,7 +150,7 @@ spec:
     kind: Deployment
     name: eden-web
   minReplicas: 2
-  maxReplicas: 6
+  maxReplicas: 15   # au-dela des noeuds disponibles : pods en attente -> autoscaler de noeuds
   metrics:
     - type: ContainerResource
       containerResource:
