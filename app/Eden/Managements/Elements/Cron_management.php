@@ -87,7 +87,17 @@ class Cron_management extends Element_management {
                 return false;
         }
 
-        management('cron', $cron->id, $cron)->enregistre_modele(['en_cours' => 1,'derniere_execution' => date('Y-m-d H:i:s')]);
+        // Verrou atomique : une seule exécution gagne, même lancée en même temps
+        // depuis plusieurs pods (lecture puis écriture séparées = deux gagnants possibles)
+        $verrou_pris = DB::table('cron')
+            ->where('id', $cron->id)
+            ->where(fn($requete) => $requete->where('en_cours', 0)->orWhereNull('en_cours'))
+            ->update(['en_cours' => 1, 'derniere_execution' => date('Y-m-d H:i:s')]);
+
+        if($verrou_pris !== 1)
+            return false;
+
+        $cron->en_cours = 1;
 
         return true;
     }

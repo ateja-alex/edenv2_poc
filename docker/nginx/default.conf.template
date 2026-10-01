@@ -26,6 +26,11 @@ server {
         return 200 "ok\n";
     }
 
+    # Taches cron : lancees par des CronJobs (php artisan eden:cron), jamais par HTTP
+    location ^~ /eden/cron/ {
+        return 404;
+    }
+
     # Fichiers publics (volume partage) : servis en statique, jamais executes
     location ^~ /storage/ {
         try_files $uri =404;
