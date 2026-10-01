@@ -4939,8 +4939,9 @@ class Element_management {
      */
     public function maj_index_recherche($ids_elements = null): bool
     {
-        $escapeSQL = function(string $value) : string {
-            return str_replace("'", "''", $value);
+        // Libellé absent (ex. traduction manquante d'une liste préformatée) : chaîne vide
+        $escapeSQL = function(?string $value) : string {
+            return str_replace("'", "''", (string) $value);
         };
 
         try {

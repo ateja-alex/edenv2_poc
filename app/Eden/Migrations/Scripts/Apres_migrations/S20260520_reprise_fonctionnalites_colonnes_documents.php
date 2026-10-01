@@ -13,8 +13,11 @@ class S20260520_reprise_fonctionnalites_colonnes_documents implements Script{
 
         $fonctionnalites_storage = include(storage_path('app/eden_fonctionnalites.php'));
 
-        $fonctionnalites_storage['documents_colonnes_a_afficher_vente'] = $fonctionnalites_storage['documents_colonnes_a_afficher'];
-        $fonctionnalites_storage['documents_colonnes_a_afficher_achat'] = $fonctionnalites_storage['documents_colonnes_a_afficher'];
+        // Clé absente (jamais paramétrée, ou déjà reprise) : rien à recopier
+        if(isset($fonctionnalites_storage['documents_colonnes_a_afficher'])){
+            $fonctionnalites_storage['documents_colonnes_a_afficher_vente'] = $fonctionnalites_storage['documents_colonnes_a_afficher'];
+            $fonctionnalites_storage['documents_colonnes_a_afficher_achat'] = $fonctionnalites_storage['documents_colonnes_a_afficher'];
+        }
 
         if(isset($fonctionnalites_storage['fonctionnalites_par_profil']['documents_colonnes_a_afficher'])){
             $fonctionnalites_storage['fonctionnalites_par_profil']['documents_colonnes_a_afficher_vente'] = $fonctionnalites_storage['fonctionnalites_par_profil']['documents_colonnes_a_afficher'];

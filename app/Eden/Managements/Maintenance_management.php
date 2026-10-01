@@ -2745,7 +2745,7 @@ class Maintenance_management {
         if($derniere_version_ajouter == null)
             $derniere_version_ajouter = 0;
 
-        $versions = json_decode(file_get_contents('../app/Eden/Versioning.json'), true);
+        $versions = json_decode(file_get_contents(base_path('app/Eden/Versioning.json')), true);
 
         $aujourdhui = date('Y-m-d');
 

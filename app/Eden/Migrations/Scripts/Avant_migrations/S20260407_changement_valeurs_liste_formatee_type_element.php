@@ -11,9 +11,21 @@ use App\Eden\Migrations\Scripts\Script;
 use App\Eden\Models\Formulaires_champs;
 use App\Eden\Models\Table_libre;
 use DB;
+use Schema;
 
 class S20260407_changement_valeurs_liste_formatee_type_element implements Script{
     public function execute(){
+
+        // Tout ou rien : un echec au milieu laisserait des champs deja passes en
+        // liste 71 (plus selectionnes au relancement) avec des valeurs non converties
+        return DB::transaction(fn() => $this->conversion());
+    }
+
+    private function conversion(){
+
+        // type_reference est ajoutee par l'etape de structure (apres les scripts avant) :
+        // si elle n'existe pas encore, aucun champ multiple ne peut y faire reference
+        $avec_multiples = Schema::hasColumn('eden_champslibres', 'type_reference');
 
         $id_tables_documents = Table_libre::whereIn('type_element', Variables::$documents_gescom)->pluck('id', 'nom_table_sql')->toArray();
 
@@ -42,9 +54,11 @@ class S20260407_changement_valeurs_liste_formatee_type_element implements Script
         $this->changement_valeur_simple($champs, $association_valeurs);
 
         // même logique mais pour les champs multiples
-        $champs_multi = Champ_libre::where('type', 10)->where('type_reference', 20)->where('liste_choix', 82)->get();
+        if($avec_multiples) {
+            $champs_multi = Champ_libre::where('type', 10)->where('type_reference', 20)->where('liste_choix', 82)->get();
 
-        $this->changement_valeur_multiple($champs_multi, $association_valeurs);
+            $this->changement_valeur_multiple($champs_multi, $association_valeurs);
+        }
 
         // on fait pareil mais pour liste_choix 118. On change une valeur dans $assocuations_valeurs  : 14 qui correspond au bon_retour_vente dans ce cas
 
@@ -52,9 +66,11 @@ class S20260407_changement_valeurs_liste_formatee_type_element implements Script
 
         $this->changement_valeur_simple($champs, $association_valeurs);
 
-        $champs_multi = Champ_libre::where('type', 10)->where('type_reference', 20)->where('liste_choix', 118)->get();
+        if($avec_multiples) {
+            $champs_multi = Champ_libre::where('type', 10)->where('type_reference', 20)->where('liste_choix', 118)->get();
 
-        $this->changement_valeur_multiple($champs_multi, $association_valeurs);
+            $this->changement_valeur_multiple($champs_multi, $association_valeurs);
+        }
 
         $this->changement_champ_formulaire('transformation_document_temps_modele', 'type_document');
 
