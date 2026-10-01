@@ -38,6 +38,8 @@ Hors fichiers : MariaDB (y compris la table `jobs`) et **Redis** (sessions et ca
 
 ## ⚠ Sécurité (vaut aussi pour la prod actuelle)
 - **Routes sans authentification** : `migrations_installation` (déclenche `composer update`) et les 43 routes `cron`. Il faut au minimum les filtrer par IP sur les VMs actuelles.
+- **Mots de passe utilisateurs en MD5** : `md5('easy'.$mot_de_passe.'dev')` (`Authentification_management::connexion`), sans sel par utilisateur → cassables rapidement en cas de fuite de la base. Passer à `password_hash()` (bcrypt/argon2) avec migration à la connexion.
+- **Commande shell non échappée** : `Pdf_service.php` appelle `gs` avec des noms de fichiers concaténés (sans `escapeshellarg`).
 - **Secrets versionnés dans le code** : clés Google Places et Maps, clé Stripe (test), un mot de passe en dur (`Maintenance_management.php`). Les mots de passe d'intégration sont en base64 dans `storage/app/eden_fonctionnalites.php` → sortir des sources et faire une rotation.
 
 ## Effort

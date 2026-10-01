@@ -30,9 +30,11 @@ Voir **`09-poc.md`** : 5 clients EDEN en 2 pods sur RWX, sous charge, 8 critère
 
 Coexistence des deux infras pendant 1 à 3 mois : prévoir ce surcoût temporaire.
 
+Temps d'admin visé après stabilisation : ~20–25 h/mois (estimation, à mesurer après 3 mois de run).
+
 ## 3. Après le POC : interface d'admin (réflexion du 2026-09-30)
-- **Rancher écarté** : Manager = un cluster de plus à maintenir, simple tableau de bord sur MKS importé ; RKE2 = plan de contrôle à notre charge.
-- **Cible** : k9s (admin) + **Headlamp** en pod (logs, shell, redémarrage) + **Grafana/VictoriaLogs** pour les logs des collègues (y compris des pods redémarrés).
+- **Rancher écarté** (30/09) : Manager = un cluster de plus à maintenir, simple tableau de bord sur MKS importé ; RKE2 = plan de contrôle à notre charge.
+- **À réévaluer (01/10) : OVH Managed Rancher Service** — Rancher hébergé et exploité par OVH (installation, mises à jour, HA, sauvegardes), import et création de clusters MKS. Lève l'objection « cluster de plus à maintenir », et simplifie l'accès des collègues (fournisseurs d'identité Entra ID / GitHub intégrés, droits par projet). À vérifier : prix (non affiché sur la page publique), doublon avec ArgoCD/Fleet si GitOps. RKE2 reste écarté.
+- **Cible si Rancher n'est pas retenu** : k9s (admin) + **Headlamp** en pod (logs, shell, redémarrage) + **Grafana/VictoriaLogs** pour les logs des collègues (y compris des pods redémarrés).
 - **Authentification** : OIDC sur MKS et Headlamp, RBAC par groupe (collègues : lecture + logs ; devs : shell en QA ; admin : tout). Entra ID (app déclarée en Terraform `azuread`, secret à renouveler tous les 24 mois max) ou GitHub via Dex si seuls les devs ont besoin d'accès.
 - Pas dans le POC.
-Temps d'admin visé après stabilisation : ~20–25 h/mois (estimation, à mesurer après 3 mois de run).
