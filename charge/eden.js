@@ -74,6 +74,9 @@ function motif(url) {
 
 function connexion() {
   const page = http.get(`${BASE_URL}/eden/login`, { tags: { name: '/eden/login', type: 'page' } });
+  // Deja connecte : /eden/login redirige vers l'application, pas de formulaire
+  if (page.status === 200 && page.url && !page.url.includes('/eden/login'))
+    return true;
   const jeton = (page.body || '').match(/name="_token"\s+value="([^"]+)"|name="csrf-token"\s+content="([^"]+)"/);
   if (!jeton) {
     check(page, { 'jeton CSRF trouve': () => false });
@@ -112,6 +115,8 @@ function charger_assets(res) {
 }
 
 let connecte = false;
+// URLs du parcours qui renvoient vers la connexion (une trace par motif et par VU)
+const motifs_vers_login = new Set();
 
 export default function () {
   if (!connecte) {
@@ -135,10 +140,16 @@ export default function () {
     const reponses = http.batch(groupe.map(([, url]) =>
       ['GET', BASE_URL + url, null, { tags: { name: motif(url), type: 'page' }, redirects: 5 }]));
 
-    for (const res of reponses) {
-      // session perdue (ex. Redis redemarre) : on se reconnecte et on continue
+    for (let j = 0; j < reponses.length; j++) {
+      const res = reponses[j];
+      // renvoi vers la connexion (session perdue, ou URL qui l'exige) : on se reconnecte et on continue
       if (res.url && res.url.includes('/eden/login')) {
-        reconnexions.add(1);
+        const m = motif(groupe[j][1]);
+        reconnexions.add(1, { motif: m });
+        if (!motifs_vers_login.has(m)) {
+          motifs_vers_login.add(m);
+          console.warn(`vers login : ${m}`);
+        }
         connecte = connexion();
         if (!connecte) return;
         continue;
