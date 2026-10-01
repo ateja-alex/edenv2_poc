@@ -1,27 +1,23 @@
-# Traefik, ingress du cluster (chart Helm officiel, version a epingler a l'installation) :
-#   helm repo add traefik https://traefik.github.io/charts
-#   helm upgrade --install traefik traefik/traefik -n traefik --create-namespace \
-#     --version <x.y.z> -f deploy_k8s/plateforme/traefik-values.yaml
+# Traefik, ingress du cluster (chart Helm officiel, valeurs pour la version 41.6.1 / Traefik 3.7) :
+#   helm upgrade --install traefik traefik --repo https://traefik.github.io/charts \
+#     -n traefik --create-namespace --version 41.6.1 -f deploy_k8s/plateforme/traefik-values.yaml
+# Le Service LoadBalancer cree un LB Octavia OVH (1 IP publique pour tous les clients).
 deployment:
   replicas: 2
 
 ports:
   web:
-    # Toute requete HTTP est redirigee en HTTPS : l'application ne verifie plus le HTTPS
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
-  websecure:
-    tls:
-      enabled: true
+    http:
+      # Toute requete HTTP est redirigee en HTTPS : l'application ne verifie plus le HTTPS
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  # websecure : TLS active par defaut ; sans certificat, certificat auto-signe de Traefik (POC)
 
-service:
-  type: LoadBalancer   # LB Octavia OVH, 1 IP publique pour tous les clients
-
-# Garde l'IP du client (X-Forwarded-For) au travers du LB
-# (a verifier avec le LB OVH : proxy protocol ou externalTrafficPolicy Local)
+# IP reelle du client a travers le LB OVH : a verifier (proxy protocol ou
+# externalTrafficPolicy: Local) avant le filtrage par IP
 
 podDisruptionBudget:
   enabled: true
