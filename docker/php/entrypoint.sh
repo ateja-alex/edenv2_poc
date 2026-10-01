@@ -2,6 +2,7 @@
 set -e
 
 export FPM_MAX_CHILDREN="${FPM_MAX_CHILDREN:-16}"
+export FPM_IDLE_TIMEOUT="${FPM_IDLE_TIMEOUT:-10s}"
 
 cd /var/www
 
