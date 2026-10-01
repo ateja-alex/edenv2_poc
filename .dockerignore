@@ -21,3 +21,8 @@ tests
 Dockerfile
 docker-compose.build.yml
 docker-compose.multipod.yml
+
+# Dumps de base locaux (donnees clients) : jamais dans l image
+/*.sql
+/*.sql.gz
+/.local

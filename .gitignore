@@ -16,3 +16,10 @@ yarn-error.log
 .ai/**
 .composer/**
 .idea/**
+
+# Dumps de base locaux (donnees clients) : jamais dans git
+/*.sql
+/*.sql.gz
+
+# Donnees clients locales (dumps, fichiers de prod) : jamais dans git
+/.local/

@@ -5,6 +5,12 @@
 #   docker compose -f docker-compose.multipod.yml up --build
 #   https://localhost:8443 (certificat auto-signe) ; http://localhost:8080 redirige
 #   docker compose -f docker-compose.multipod.yml logs -f web1 web2
+# Client reel (donnees locales, ignorees par git et Docker) :
+#   ./bdd.sql                  dump charge a la creation du volume db
+#   ./.local/<client>/Migrations, ./.local/<client>/storage_app (optionnel)
+#   ./.local/<client>/.env      EDEN_MODEL_API_URL, EDEN_MODEL_API_KEY... (optionnel)
+#   CLIENT=tsi docker compose -f docker-compose.multipod.yml up -d
+#   repartir de zero : docker compose -f docker-compose.multipod.yml down -v
 name: eden-poc-multipod
 
 x-app: &app
@@ -25,6 +31,11 @@ x-app: &app
     CACHE_DRIVER: redis
     SESSION_DRIVER: redis
     QUEUE_CONNECTION: database
+  # Variables propres au client, a remplir soi-meme (ignore par git) :
+  # EDEN_MODEL_API_URL / EDEN_MODEL_API_KEY (traductions, licences, utilisateurs)
+  env_file:
+    - path: ./.local/${CLIENT:-aucun}/.env
+      required: false
   volumes: &shared
     - storage_app:/var/www/storage/app
     - migrations:/var/www/app/Migrations
@@ -61,6 +72,30 @@ services:
     depends_on:
       db: { condition: service_healthy }
       redis: { condition: service_started }
+      fichiers: { condition: service_completed_successfully }
+
+  # Copie les fichiers du client dans les volumes partages (= restauration RWX),
+  # seulement si le volume est vide : les modifications faites ensuite sont conservees
+  fichiers:
+    image: busybox:1.37
+    restart: "no"
+    volumes:
+      - ./.local/${CLIENT:-aucun}:/src:ro
+      - storage_app:/dst/storage_app
+      - migrations:/dst/migrations
+    command:
+      - sh
+      - -c
+      - |
+        for d in migrations:Migrations storage_app:storage_app; do
+          dst=/dst/$${d%%:*}; src=/src/$${d##*:}
+          if [ -d "$$src" ] && [ -z "$$(ls -A "$$dst" | grep -v '^public$$')" ]; then
+            cp -a "$$src/." "$$dst/" && echo "copie $$src -> $$dst"
+          fi
+        done
+        chown -R 33:33 /dst
+        # dossiers lisibles par nginx (crees en 0700 par les anciennes versions)
+        find /dst/storage_app -type d -exec chmod 755 {} +
 
   worker:
     <<: *app
@@ -86,7 +121,7 @@ services:
     depends_on: [web1, web2]
 
   db:
-    image: mariadb:11
+    image: mariadb:10.11   # version de la prod
     environment:
       MARIADB_DATABASE: eden
       MARIADB_USER: eden
@@ -94,10 +129,13 @@ services:
       MARIADB_RANDOM_ROOT_PASSWORD: "1"
     volumes:
       - db:/var/lib/mysql
+      # charge une seule fois, a la creation du volume (absent : base vide)
+      - ./bdd.sql:/docker-entrypoint-initdb.d/bdd.sql:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 5s
+      interval: 10s
       retries: 30
+      start_period: 30m   # import d'un gros dump
   redis:
     image: redis:7-alpine
 
