@@ -14,6 +14,8 @@
 //   PROFIL         reference | montee | stress   (voir PROFILS)
 //   ACCELERATION   divise les pauses entre pages (defaut 1 = rythme reel)
 //   ASSETS         1 (defaut) : charge JS/CSS/images des pages HTML, avec cache par VU
+//   PARALLELE      1 (defaut) : rafales AJAX en parallele ; 0 : une requete a la fois
+//   EDEN_COMPTES   N : un compte par VU (EDEN_EMAIL_MODELE, defaut k6-{n}@poc.invalid)
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { SharedArray } from 'k6/data';
@@ -22,6 +24,15 @@ import { Counter } from 'k6/metrics';
 const BASE_URL = (__ENV.BASE_URL || 'https://localhost:8443').replace(/\/$/, '');
 const ACCELERATION = parseFloat(__ENV.ACCELERATION || '1');
 const AVEC_ASSETS = (__ENV.ASSETS || '1') === '1';
+// PARALLELE=0 : une requete a la fois par session (diagnostic des ecritures de session concurrentes)
+const PARALLELE = (__ENV.PARALLELE || '1') === '1';
+// EDEN_COMPTES=N : un compte par VU (EDEN_EMAIL_MODELE, {n} = 01..N), sinon EDEN_EMAIL pour toutes
+const COMPTES = parseInt(__ENV.EDEN_COMPTES || '0', 10);
+function email_du_vu() {
+  if (COMPTES <= 0) return __ENV.EDEN_EMAIL;
+  const n = String(((__VU - 1) % COMPTES) + 1).padStart(2, '0');
+  return (__ENV.EDEN_EMAIL_MODELE || 'k6-{n}@poc.invalid').replace('{n}', n);
+}
 const PROFIL = __ENV.PROFIL || 'reference';
 
 const sessions = new SharedArray('sessions', () => JSON.parse(open(__ENV.PARCOURS || '../.local/tsi/parcours.json')).sessions);
@@ -84,7 +95,7 @@ function connexion() {
   }
   const res = http.post(`${BASE_URL}/eden/login`, {
     _token: jeton[1] || jeton[2],
-    email: __ENV.EDEN_EMAIL,
+    email: email_du_vu(),
     password: __ENV.EDEN_PASSWORD,
   }, { tags: { name: 'POST /eden/login', type: 'page' } });
 
@@ -130,7 +141,7 @@ export default function () {
   let i = 0;
   while (i < session.length) {
     const groupe = [session[i]];
-    while (i + groupe.length < session.length && session[i + groupe.length][0] === 0)
+    while (PARALLELE && i + groupe.length < session.length && session[i + groupe.length][0] === 0)
       groupe.push(session[i + groupe.length]);
     i += groupe.length;
 
