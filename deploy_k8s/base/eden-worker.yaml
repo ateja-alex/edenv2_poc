@@ -15,6 +15,8 @@ spec:
       labels:
         app.kubernetes.io/name: eden-worker
     spec:
+      # pas de variables injectees pour les Services (REDIS_PORT=tcp://... casse Laravel)
+      enableServiceLinks: false
       imagePullSecrets:
         - name: ghcr
       # laisse finir le job en cours (queue:work s'arrete proprement sur SIGTERM)

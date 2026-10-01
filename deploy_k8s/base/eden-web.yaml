@@ -19,6 +19,8 @@ spec:
       labels:
         app.kubernetes.io/name: eden-web
     spec:
+      # pas de variables injectees pour les Services (REDIS_PORT=tcp://... casse Laravel)
+      enableServiceLinks: false
       imagePullSecrets:
         - name: ghcr
       terminationGracePeriodSeconds: 60

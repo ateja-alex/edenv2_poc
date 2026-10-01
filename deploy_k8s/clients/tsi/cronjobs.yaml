@@ -23,6 +23,7 @@ spec:
           labels:
             app.kubernetes.io/name: eden-cron
         spec:
+          enableServiceLinks: false   # REDIS_PORT=tcp://... casse Laravel
           restartPolicy: Never
           imagePullSecrets:
             - name: ghcr
@@ -69,6 +70,7 @@ spec:
           labels:
             app.kubernetes.io/name: eden-cron
         spec:
+          enableServiceLinks: false   # REDIS_PORT=tcp://... casse Laravel
           restartPolicy: Never
           imagePullSecrets:
             - name: ghcr
