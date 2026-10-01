@@ -17,7 +17,12 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: mariadb
+      annotations:
+        # le socle (2-3 noeuds) peut descendre : jamais sur le noeud de MariaDB
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
     spec:
+      nodeSelector:
+        nodepool: poc-k8s-v2-socle
       terminationGracePeriodSeconds: 120
       containers:
         - name: mariadb

@@ -17,6 +17,8 @@ spec:
     spec:
       # pas de variables injectees pour les Services (REDIS_PORT=tcp://... casse Laravel)
       enableServiceLinks: false
+      nodeSelector:
+        nodepool: poc-k8s-v2-socle   # pool fixe : ne bouge pas au scale down
       imagePullSecrets:
         - name: ghcr
       # laisse finir le job en cours (queue:work s'arrete proprement sur SIGTERM)

@@ -5,6 +5,10 @@
 deployment:
   replicas: 2
 
+# Pool fixe : le LB (externalTrafficPolicy: Local) n'envoie le trafic qu'aux noeuds du socle
+nodeSelector:
+  nodepool: poc-k8s-v2-socle
+
 ports:
   web:
     http:

@@ -24,6 +24,7 @@ spec:
             app.kubernetes.io/name: eden-cron
         spec:
           enableServiceLinks: false   # REDIS_PORT=tcp://... casse Laravel
+          nodeSelector: { nodepool: poc-k8s-v2-socle }
           restartPolicy: Never
           imagePullSecrets:
             - name: ghcr
@@ -71,6 +72,7 @@ spec:
             app.kubernetes.io/name: eden-cron
         spec:
           enableServiceLinks: false   # REDIS_PORT=tcp://... casse Laravel
+          nodeSelector: { nodepool: poc-k8s-v2-socle }
           restartPolicy: Never
           imagePullSecrets:
             - name: ghcr

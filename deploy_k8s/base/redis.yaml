@@ -1,7 +1,8 @@
 # Redis propre au client : sessions (base 0) et cache (base 1).
 # Pas partage entre clients : EDEN vide le cache avec Cache::flush() (FLUSHDB),
 # ce qui viderait le cache de tous les clients d'un Redis commun.
-# Sans persistance : un redemarrage deconnecte les utilisateurs (acceptable pour le POC).
+# Persistance AOF sur un petit disque : les sessions survivent a un redemarrage ou a un
+# deplacement (montee de version MKS). Sur le pool socle, jamais evince par l'autoscaler.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,6 +11,8 @@ metadata:
     app.kubernetes.io/name: redis
 spec:
   replicas: 1
+  strategy:
+    type: Recreate   # disque RWO : l'ancien pod libere le volume avant le nouveau
   selector:
     matchLabels:
       app.kubernetes.io/name: redis
@@ -17,13 +20,18 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: redis
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
     spec:
+      nodeSelector:
+        nodepool: poc-k8s-v2-socle
       containers:
         - name: redis
           image: redis:7-alpine
           # volatile-lru : n'evince que les cles avec expiration (sessions, cache),
           # jamais eden.version (Cache::forever)
-          args: ["--save", "", "--appendonly", "no", "--maxmemory", "400mb", "--maxmemory-policy", "volatile-lru"]
+          args: ["--save", "", "--appendonly", "yes", "--appendfsync", "everysec", "--dir", "/data",
+                 "--maxmemory", "400mb", "--maxmemory-policy", "volatile-lru"]
           ports:
             - name: redis
               containerPort: 6379
@@ -38,6 +46,24 @@ spec:
           resources:
             requests: { cpu: 50m, memory: 128Mi }
             limits: { memory: 512Mi }
+          volumeMounts:
+            - name: donnees
+              mountPath: /data
+      volumes:
+        - name: donnees
+          persistentVolumeClaim:
+            claimName: redis-donnees
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-donnees
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: csi-cinder-high-speed-gen2
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

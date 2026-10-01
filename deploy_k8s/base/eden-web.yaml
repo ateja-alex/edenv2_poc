@@ -21,6 +21,9 @@ spec:
     spec:
       # pas de variables injectees pour les Services (REDIS_PORT=tcp://... casse Laravel)
       enableServiceLinks: false
+      # pool autoscale (1-N noeuds) : seul composant qui suit la charge
+      nodeSelector:
+        nodepool: poc-k8s-v2-web
       imagePullSecrets:
         - name: ghcr
       terminationGracePeriodSeconds: 60
